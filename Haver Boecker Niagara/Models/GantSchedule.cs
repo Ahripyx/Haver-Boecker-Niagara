@@ -2,6 +2,7 @@
 {
     public class GanttSchedule
     {
+        public int GanttID { get; set; }
         public int OrderID { get; set; }
         public string OrderNumber { get; set; }
         public int CustomerID { get; set; }

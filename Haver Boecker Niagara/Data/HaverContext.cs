@@ -7,7 +7,7 @@ namespace Haver_Boecker_Niagara.Data;
 
 public class HaverContext : DbContext
 {
-    public HaverContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public HaverContext(DbContextOptions<HaverContext> options) : base(options) { }
 
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Vendor> Vendors { get; set; }
@@ -28,20 +28,47 @@ public class HaverContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Customer>().ToTable("Customers");
-        modelBuilder.Entity<Vendor>().ToTable("Vendors");
-        modelBuilder.Entity<Engineer>().ToTable("Engineers");
-        modelBuilder.Entity<OperationsSchedule>().ToTable("Operations_Schedule");
-        modelBuilder.Entity<ProcurementLog>().ToTable("Procurement_Log");
-        modelBuilder.Entity<QualityLog>().ToTable("Quality_Log");
-        modelBuilder.Entity<AssemblyLog>().ToTable("Assembly_Log");
-        modelBuilder.Entity<GanttSchedule>().ToTable("Gantt_Schedule");
-        modelBuilder.Entity<Milestone>().ToTable("Milestone");
-        modelBuilder.Entity<KickoffMeeting>().ToTable("Kickoff_Meeting");
-        modelBuilder.Entity<ApprovalDrawing>().ToTable("Approval_Drawing");
-        modelBuilder.Entity<ProgressLog>().ToTable("Progress_Log");
-        modelBuilder.Entity<BOM>().ToTable("BOM");
-        modelBuilder.Entity<NCR>().ToTable("NCR");
+        modelBuilder.Entity<Customer>()
+            .HasKey(c => c.CustomerID); 
+
+        modelBuilder.Entity<Vendor>()
+            .HasKey(v => v.VendorID);
+
+        modelBuilder.Entity<Engineer>()
+            .HasKey(e => e.EngineerID);
+
+        modelBuilder.Entity<OperationsSchedule>()
+            .HasKey(o => o.OperarionsID);  
+
+        modelBuilder.Entity<ProcurementLog>()
+            .HasKey(p => p.ProcurementLogID); 
+
+        modelBuilder.Entity<QualityLog>()
+            .HasKey(q => q.QualityLogID); 
+
+        modelBuilder.Entity<AssemblyLog>()
+            .HasKey(a => a.AssemblyLogID); 
+
+        modelBuilder.Entity<GanttSchedule>()
+            .HasKey(g => g.GanttID);  
+
+        modelBuilder.Entity<Milestone>()
+            .HasKey(m => m.MilestoneID);  
+
+        modelBuilder.Entity<KickoffMeeting>()
+            .HasKey(k => k.MeetingID); 
+
+        modelBuilder.Entity<ApprovalDrawing>()
+            .HasKey(a => a.DrawingID); 
+
+        modelBuilder.Entity<ProgressLog>()
+            .HasKey(p => p.LogID);
+
+        modelBuilder.Entity<BOM>()
+            .HasKey(b => b.BOM_ID); 
+
+        modelBuilder.Entity<NCR>()
+            .HasKey(n => n.NCR_ID); 
 
 
         modelBuilder.Entity<OperationsSchedule>()
@@ -55,6 +82,7 @@ public class HaverContext : DbContext
             .WithMany()
             .HasForeignKey(o => o.EngineerID)
             .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<ProcurementLog>()
             .HasOne(p => p.Vendor)
             .WithMany()
