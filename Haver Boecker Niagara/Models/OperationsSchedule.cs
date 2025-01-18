@@ -2,26 +2,29 @@
 {
     public class OperationsSchedule
     {
-        public int OperarionsID { get; set; }
-        public int OrderID { get; set; }
-        public int CustomerID { get; set; }
-        public int EngineerID { get; set; }
-        public string MachineDetails { get; set; }
-        public DateTime? PODueDate { get; set; }
-        public DateTime? ApprovalDrawingRelease { get; set; }
+        public int OperationsID { get; set; }
+        public string SalesOrder { get; set; }
+        public int CustomerID { get; set; } 
+        public string CustomerName { get; set; } 
+        public string MachineDescription { get; set; }
+        public string SerialNumber { get; set; }
         public DateTime? PackageReleaseDate { get; set; }
-        public string ITPRequirements { get; set; }
-        public string PreOrderInfo { get; set; }
-        public int? BudgetedAssemblyHours { get; set; }
-        public int? ActualAssemblyHours { get; set; }
-        public int? ReworkHours { get; set; }
-        public string ProductionOrderNumber { get; set; }
-        public string NameplateStatus { get; set; }
-        public string PackagingStatus { get; set; }
-        public string Status { get; set; }
+        public int VendorID { get; set; } 
+        public string VendorName { get; set; } 
+        public string PurchaseOrderNumber { get; set; }
+        public DateTime? PODueDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
+
+        public string Media { get; set; }
+        public string SparePartsMedia { get; set; }
+        public string Base { get; set; }
+        public string AirSeal { get; set; }
+        public string CoatingOrLining { get; set; }
+        public string Disassembly { get; set; }
+
         public string Notes { get; set; }
 
         public Customer Customer { get; set; }
-        public Engineer Engineer { get; set; }
+        public Vendor Vendor { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.FMMigrations
+namespace Haver_Boecker_Niagara.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -123,31 +123,30 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                 name: "OperationsSchedules",
                 columns: table => new
                 {
-                    OperarionsID = table.Column<int>(type: "int", nullable: false)
+                    OperationsID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
+                    SalesOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomerID = table.Column<int>(type: "int", nullable: false),
-                    EngineerID = table.Column<int>(type: "int", nullable: false),
-                    MachineDetails = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PODueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ApprovalDrawingRelease = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MachineDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PackageReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ITPRequirements = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PreOrderInfo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BudgetedAssemblyHours = table.Column<int>(type: "int", nullable: true),
-                    ActualAssemblyHours = table.Column<int>(type: "int", nullable: true),
-                    ReworkHours = table.Column<int>(type: "int", nullable: true),
-                    ProductionOrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NameplateStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PackagingStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerID1 = table.Column<int>(type: "int", nullable: true),
-                    EngineerID1 = table.Column<int>(type: "int", nullable: true)
+                    VendorID = table.Column<int>(type: "int", nullable: false),
+                    VendorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PurchaseOrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PODueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Media = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SparePartsMedia = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Base = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AirSeal = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CoatingOrLining = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Disassembly = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OperationsSchedules", x => x.OperarionsID);
+                    table.PrimaryKey("PK_OperationsSchedules", x => x.OperationsID);
                     table.ForeignKey(
                         name: "FK_OperationsSchedules_Customers_CustomerID",
                         column: x => x.CustomerID,
@@ -155,21 +154,11 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                         principalColumn: "CustomerID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OperationsSchedules_Customers_CustomerID1",
-                        column: x => x.CustomerID1,
-                        principalTable: "Customers",
-                        principalColumn: "CustomerID");
-                    table.ForeignKey(
-                        name: "FK_OperationsSchedules_Engineers_EngineerID",
-                        column: x => x.EngineerID,
-                        principalTable: "Engineers",
-                        principalColumn: "EngineerID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_OperationsSchedules_Engineers_EngineerID1",
-                        column: x => x.EngineerID1,
-                        principalTable: "Engineers",
-                        principalColumn: "EngineerID");
+                        name: "FK_OperationsSchedules_Vendors_VendorID",
+                        column: x => x.VendorID,
+                        principalTable: "Vendors",
+                        principalColumn: "VendorID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -314,91 +303,9 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "AssemblyLogs",
-                columns: table => new
-                {
-                    AssemblyLogID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    AssemblyStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AssemblyEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ActualAssemblyHours = table.Column<int>(type: "int", nullable: true),
-                    ReworkHours = table.Column<int>(type: "int", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AssemblyLogs", x => x.AssemblyLogID);
-                    table.ForeignKey(
-                        name: "FK_AssemblyLogs_OperationsSchedules_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "OperationsSchedules",
-                        principalColumn: "OperarionsID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProcurementLogs",
-                columns: table => new
-                {
-                    ProcurementLogID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    VendorID = table.Column<int>(type: "int", nullable: false),
-                    PONumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProcurementLogs", x => x.ProcurementLogID);
-                    table.ForeignKey(
-                        name: "FK_ProcurementLogs_OperationsSchedules_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "OperationsSchedules",
-                        principalColumn: "OperarionsID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProcurementLogs_Vendors_VendorID",
-                        column: x => x.VendorID,
-                        principalTable: "Vendors",
-                        principalColumn: "VendorID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "QualityLogs",
-                columns: table => new
-                {
-                    QualityLogID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    ProductionOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    QualityChecks = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IssuesFound = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReworkRequired = table.Column<bool>(type: "bit", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QualityLogs", x => x.QualityLogID);
-                    table.ForeignKey(
-                        name: "FK_QualityLogs_OperationsSchedules_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "OperationsSchedules",
-                        principalColumn: "OperarionsID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_ApprovalDrawings_OrderID",
                 table: "ApprovalDrawings",
-                column: "OrderID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AssemblyLogs_OrderID",
-                table: "AssemblyLogs",
                 column: "OrderID");
 
             migrationBuilder.CreateIndex(
@@ -447,38 +354,13 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                 column: "CustomerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OperationsSchedules_CustomerID1",
+                name: "IX_OperationsSchedules_VendorID",
                 table: "OperationsSchedules",
-                column: "CustomerID1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OperationsSchedules_EngineerID",
-                table: "OperationsSchedules",
-                column: "EngineerID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OperationsSchedules_EngineerID1",
-                table: "OperationsSchedules",
-                column: "EngineerID1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProcurementLogs_OrderID",
-                table: "ProcurementLogs",
-                column: "OrderID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProcurementLogs_VendorID",
-                table: "ProcurementLogs",
                 column: "VendorID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProgressLogs_OrderID",
                 table: "ProgressLogs",
-                column: "OrderID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QualityLogs_OrderID",
-                table: "QualityLogs",
                 column: "OrderID");
         }
 
@@ -487,9 +369,6 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
         {
             migrationBuilder.DropTable(
                 name: "ApprovalDrawings");
-
-            migrationBuilder.DropTable(
-                name: "AssemblyLogs");
 
             migrationBuilder.DropTable(
                 name: "BOMs");
@@ -504,22 +383,16 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                 name: "NCRs");
 
             migrationBuilder.DropTable(
-                name: "ProcurementLogs");
+                name: "OperationsSchedules");
 
             migrationBuilder.DropTable(
                 name: "ProgressLogs");
-
-            migrationBuilder.DropTable(
-                name: "QualityLogs");
 
             migrationBuilder.DropTable(
                 name: "Vendors");
 
             migrationBuilder.DropTable(
                 name: "GanttSchedules");
-
-            migrationBuilder.DropTable(
-                name: "OperationsSchedules");
 
             migrationBuilder.DropTable(
                 name: "Customers");

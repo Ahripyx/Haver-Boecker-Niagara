@@ -7,7 +7,6 @@
         public string Initials { get; set; }
         public string Email { get; set; }
 
-        public ICollection<OperationsSchedule> OperationsSchedules { get; set; }
         public ICollection<GanttSchedule> GanttSchedules { get; set; }
     }
 }

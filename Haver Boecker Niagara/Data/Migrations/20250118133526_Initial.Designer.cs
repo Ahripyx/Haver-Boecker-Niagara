@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.FMMigrations
+namespace Haver_Boecker_Niagara.Data.Migrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250117232313_Initial")]
+    [Migration("20250118133526_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -51,40 +51,6 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                     b.HasIndex("OrderID");
 
                     b.ToTable("ApprovalDrawings");
-                });
-
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.AssemblyLog", b =>
-                {
-                    b.Property<int>("AssemblyLogID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AssemblyLogID"));
-
-                    b.Property<int?>("ActualAssemblyHours")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("AssemblyEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("AssemblyStartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("OrderID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ReworkHours")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AssemblyLogID");
-
-                    b.HasIndex("OrderID");
-
-                    b.ToTable("AssemblyLogs");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.BOM", b =>
@@ -367,42 +333,43 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.OperationsSchedule", b =>
                 {
-                    b.Property<int>("OperarionsID")
+                    b.Property<int>("OperationsID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OperarionsID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OperationsID"));
 
-                    b.Property<int?>("ActualAssemblyHours")
-                        .HasColumnType("int");
+                    b.Property<string>("AirSeal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ApprovalDrawingRelease")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Base")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("BudgetedAssemblyHours")
-                        .HasColumnType("int");
+                    b.Property<string>("CoatingOrLining")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CustomerID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CustomerID1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EngineerID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EngineerID1")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ITPRequirements")
+                    b.Property<string>("CustomerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MachineDetails")
+                    b.Property<DateTime?>("DeliveryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Disassembly")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NameplateStatus")
+                    b.Property<string>("MachineDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Media")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -410,79 +377,42 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("PODueDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("PackageReleaseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PackagingStatus")
+                    b.Property<string>("PurchaseOrderNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PreOrderInfo")
+                    b.Property<string>("SalesOrder")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductionOrderNumber")
+                    b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ReworkHours")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("OperarionsID");
-
-                    b.HasIndex("CustomerID");
-
-                    b.HasIndex("CustomerID1");
-
-                    b.HasIndex("EngineerID");
-
-                    b.HasIndex("EngineerID1");
-
-                    b.ToTable("OperationsSchedules");
-                });
-
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.ProcurementLog", b =>
-                {
-                    b.Property<int>("ProcurementLogID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcurementLogID"));
-
-                    b.Property<int>("OrderID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PONumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ReleaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("SparePartsMedia")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("VendorID")
                         .HasColumnType("int");
 
-                    b.HasKey("ProcurementLogID");
+                    b.Property<string>("VendorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("OrderID");
+                    b.HasKey("OperationsID");
+
+                    b.HasIndex("CustomerID");
 
                     b.HasIndex("VendorID");
 
-                    b.ToTable("ProcurementLogs");
+                    b.ToTable("OperationsSchedules");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.ProgressLog", b =>
@@ -521,43 +451,6 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                     b.HasIndex("OrderID");
 
                     b.ToTable("ProgressLogs");
-                });
-
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.QualityLog", b =>
-                {
-                    b.Property<int>("QualityLogID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QualityLogID"));
-
-                    b.Property<string>("IssuesFound")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrderID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductionOrder")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QualityChecks")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ReworkRequired")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("QualityLogID");
-
-                    b.HasIndex("OrderID");
-
-                    b.ToTable("QualityLogs");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Vendor", b =>
@@ -633,17 +526,6 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                     b.Navigation("GanttSchedule");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.AssemblyLog", b =>
-                {
-                    b.HasOne("Haver_Boecker_Niagara.Models.OperationsSchedule", "OperationsSchedule")
-                        .WithMany()
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OperationsSchedule");
-                });
-
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.BOM", b =>
                 {
                     b.HasOne("Haver_Boecker_Niagara.Models.GanttSchedule", "GanttSchedule")
@@ -717,35 +599,8 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.OperationsSchedule", b =>
                 {
                     b.HasOne("Haver_Boecker_Niagara.Models.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("OperationsSchedules")
                         .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Haver_Boecker_Niagara.Models.Customer", null)
-                        .WithMany("OperationsSchedules")
-                        .HasForeignKey("CustomerID1");
-
-                    b.HasOne("Haver_Boecker_Niagara.Models.Engineer", "Engineer")
-                        .WithMany()
-                        .HasForeignKey("EngineerID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Haver_Boecker_Niagara.Models.Engineer", null)
-                        .WithMany("OperationsSchedules")
-                        .HasForeignKey("EngineerID1");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Engineer");
-                });
-
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.ProcurementLog", b =>
-                {
-                    b.HasOne("Haver_Boecker_Niagara.Models.OperationsSchedule", "OperationsSchedule")
-                        .WithMany()
-                        .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -755,7 +610,7 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OperationsSchedule");
+                    b.Navigation("Customer");
 
                     b.Navigation("Vendor");
                 });
@@ -771,17 +626,6 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
                     b.Navigation("GanttSchedule");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.QualityLog", b =>
-                {
-                    b.HasOne("Haver_Boecker_Niagara.Models.OperationsSchedule", "OperationsSchedule")
-                        .WithMany()
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OperationsSchedule");
-                });
-
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Customer", b =>
                 {
                     b.Navigation("GanttSchedules");
@@ -792,8 +636,6 @@ namespace Haver_Boecker_Niagara.Data.FMMigrations
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Engineer", b =>
                 {
                     b.Navigation("GanttSchedules");
-
-                    b.Navigation("OperationsSchedules");
                 });
 #pragma warning restore 612, 618
         }

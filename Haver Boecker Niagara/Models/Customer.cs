@@ -19,5 +19,4 @@
         public ICollection<OperationsSchedule> OperationsSchedules { get; set; }
         public ICollection<GanttSchedule> GanttSchedules { get; set; }
     }
-
 }
