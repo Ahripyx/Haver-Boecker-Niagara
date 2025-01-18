@@ -1,5 +1,9 @@
 ﻿using Haver_Boecker_Niagara.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Haver_Boecker_Niagara.Data
 {
@@ -7,12 +11,27 @@ namespace Haver_Boecker_Niagara.Data
     {
         public static void Initialize(HaverContext context)
         {
-            context.Database.EnsureCreated();
-            if (context.Customers.Any() || context.Vendors.Any() || context.OperationsSchedules.Any())
+            try
             {
-                return; 
-            }
+                context.Database.Migrate();
 
+                if (context.Customers.Any() || context.Vendors.Any() || context.OperationsSchedules.Any())
+                {
+                    return; 
+                }
+
+                SeedCustomers(context);
+                SeedVendors(context);
+                SeedOperationsSchedules(context);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred while initializing the database: {ex.GetBaseException().Message}");
+            }
+        }
+
+        private static void SeedCustomers(HaverContext context)
+        {
             var customers = new List<Customer>();
             for (int i = 1; i <= 10; i++)
             {
@@ -33,7 +52,10 @@ namespace Haver_Boecker_Niagara.Data
             }
             context.Customers.AddRange(customers);
             context.SaveChanges();
+        }
 
+        private static void SeedVendors(HaverContext context)
+        {
             var vendors = new List<Vendor>();
             for (int i = 1; i <= 10; i++)
             {
@@ -48,7 +70,7 @@ namespace Haver_Boecker_Niagara.Data
                     State = "Vendor State",
                     Country = "Vendor Country",
                     PostalCode = $"54321{i}",
-                    Rating = i % 5 + 1, 
+                    Rating = i % 5 + 1,
                     Description = $"Description for Vendor {i}",
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
@@ -56,6 +78,12 @@ namespace Haver_Boecker_Niagara.Data
             }
             context.Vendors.AddRange(vendors);
             context.SaveChanges();
+        }
+
+        private static void SeedOperationsSchedules(HaverContext context)
+        {
+            var customers = context.Customers.ToList();
+            var vendors = context.Vendors.ToList();
 
             var operationsSchedules = new List<OperationsSchedule>();
             foreach (var customer in customers)
