@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +21,9 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: OperationsSchedules
         public async Task<IActionResult> Index()
         {
-            var haverContext = _context.OperationsSchedules.Include(o => o.Customer).Include(o => o.Vendor);
+            var haverContext = _context.OperationsSchedules
+                .Include(o => o.Customer)
+                .Include(o => o.Vendor);
             return View(await haverContext.ToListAsync());
         }
 
@@ -49,14 +50,12 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: OperationsSchedules/Create
         public IActionResult Create()
         {
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerID");
-            ViewData["VendorID"] = new SelectList(_context.Vendors, "VendorID", "VendorID");
+            ViewData["CustomerName"] = new SelectList(_context.Customers, "CustomerID", "Name");
+            ViewData["VendorName"] = new SelectList(_context.Vendors, "VendorID", "Name");
             return View();
         }
 
         // POST: OperationsSchedules/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OperationsID,SalesOrder,CustomerID,VendorID,MachineDescription,SerialNumber,PackageReleaseDate,PurchaseOrderNumber,PODueDate,DeliveryDate,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,Notes")] OperationsSchedule operationsSchedule)
@@ -67,8 +66,9 @@ namespace Haver_Boecker_Niagara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerID", operationsSchedule.CustomerID);
-            ViewData["VendorID"] = new SelectList(_context.Vendors, "VendorID", "VendorID", operationsSchedule.VendorID);
+
+            ViewData["CustomerName"] = new SelectList(_context.Customers, "CustomerID", "Name", operationsSchedule.CustomerID);
+            ViewData["VendorName"] = new SelectList(_context.Vendors, "VendorID", "Name", operationsSchedule.VendorID);
             return View(operationsSchedule);
         }
 
@@ -85,14 +85,13 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerID", operationsSchedule.CustomerID);
-            ViewData["VendorID"] = new SelectList(_context.Vendors, "VendorID", "VendorID", operationsSchedule.VendorID);
+
+            ViewData["CustomerName"] = new SelectList(_context.Customers, "CustomerID", "Name", operationsSchedule.CustomerID);
+            ViewData["VendorName"] = new SelectList(_context.Vendors, "VendorID", "Name", operationsSchedule.VendorID);
             return View(operationsSchedule);
         }
 
         // POST: OperationsSchedules/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OperationsID,SalesOrder,CustomerID,VendorID,MachineDescription,SerialNumber,PackageReleaseDate,PurchaseOrderNumber,PODueDate,DeliveryDate,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,Notes")] OperationsSchedule operationsSchedule)
@@ -122,8 +121,10 @@ namespace Haver_Boecker_Niagara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerID", operationsSchedule.CustomerID);
-            ViewData["VendorID"] = new SelectList(_context.Vendors, "VendorID", "VendorID", operationsSchedule.VendorID);
+
+            // If there is an error, keep the selected values in the dropdowns
+            ViewData["CustomerName"] = new SelectList(_context.Customers, "CustomerID", "Name", operationsSchedule.CustomerID);
+            ViewData["VendorName"] = new SelectList(_context.Vendors, "VendorID", "Name", operationsSchedule.VendorID);
             return View(operationsSchedule);
         }
 

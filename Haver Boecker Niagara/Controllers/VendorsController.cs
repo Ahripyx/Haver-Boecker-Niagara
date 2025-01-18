@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
@@ -22,7 +21,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: Vendors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vendors.ToListAsync());
+            var vendors = await _context.Vendors.ToListAsync();
+            return View(vendors);
         }
 
         // GET: Vendors/Details/5
@@ -33,8 +33,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 return NotFound();
             }
 
-            var vendor = await _context.Vendors
-                .FirstOrDefaultAsync(m => m.VendorID == id);
+            var vendor = await _context.Vendors.FirstOrDefaultAsync(m => m.VendorID == id);
             if (vendor == null)
             {
                 return NotFound();
@@ -50,14 +49,14 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // POST: Vendors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Rating,Description,CreatedAt,UpdatedAt")] Vendor vendor)
+        public async Task<IActionResult> Create([Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Rating")] Vendor vendor)
         {
             if (ModelState.IsValid)
             {
+                vendor.CreatedAt = DateTime.Now;
+                vendor.UpdatedAt = DateTime.Now;
                 _context.Add(vendor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -82,11 +81,9 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // POST: Vendors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Rating,Description,CreatedAt,UpdatedAt")] Vendor vendor)
+        public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Rating")] Vendor vendor)
         {
             if (id != vendor.VendorID)
             {
@@ -97,7 +94,26 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 try
                 {
-                    _context.Update(vendor);
+                    var existingVendor = await _context.Vendors.FindAsync(id);
+                    if (existingVendor == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Update properties manually, excluding CreatedAt.
+                    existingVendor.Name = vendor.Name;
+                    existingVendor.ContactPerson = vendor.ContactPerson;
+                    existingVendor.PhoneNumber = vendor.PhoneNumber;
+                    existingVendor.Email = vendor.Email;
+                    existingVendor.Address = vendor.Address;
+                    existingVendor.City = vendor.City;
+                    existingVendor.State = vendor.State;
+                    existingVendor.Country = vendor.Country;
+                    existingVendor.PostalCode = vendor.PostalCode;
+                    existingVendor.Rating = vendor.Rating;
+                    existingVendor.UpdatedAt = DateTime.Now; // Automatically update UpdatedAt.
+
+                    _context.Update(existingVendor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

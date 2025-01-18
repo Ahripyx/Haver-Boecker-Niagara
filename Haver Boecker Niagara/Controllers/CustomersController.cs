@@ -34,6 +34,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var customer = await _context.Customers
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.CustomerID == id);
             if (customer == null)
             {
@@ -50,14 +51,15 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // POST: Customers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Description,CreatedAt,UpdatedAt")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Description")] Customer customer)
         {
             if (ModelState.IsValid)
             {
+                customer.CreatedAt = DateTime.UtcNow;
+                customer.UpdatedAt = DateTime.UtcNow;
+
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -82,11 +84,9 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // POST: Customers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Description,CreatedAt,UpdatedAt")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Description")] Customer customer)
         {
             if (id != customer.CustomerID)
             {
@@ -97,6 +97,7 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 try
                 {
+                    customer.UpdatedAt = DateTime.UtcNow;
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }
@@ -125,6 +126,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var customer = await _context.Customers
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.CustomerID == id);
             if (customer == null)
             {
@@ -143,9 +145,8 @@ namespace Haver_Boecker_Niagara.Controllers
             if (customer != null)
             {
                 _context.Customers.Remove(customer);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -16,6 +16,9 @@
                 @Html.DisplayNameFor(model => model.SalesOrder)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Customer.Name)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.MachineDescription)
             </th>
             <th>
@@ -25,13 +28,10 @@
                 @Html.DisplayNameFor(model => model.PackageReleaseDate)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Vendor.Name)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.PurchaseOrderNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PODueDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeliveryDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Media)
@@ -51,75 +51,59 @@
             <th>
                 @Html.DisplayNameFor(model => model.Disassembly)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Notes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vendor)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SalesOrder)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MachineDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SerialNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PackageReleaseDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PurchaseOrderNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PODueDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeliveryDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Media)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SparePartsMedia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Base)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AirSeal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CoatingOrLining)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Disassembly)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Notes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.CustomerID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Vendor.VendorID)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.OperationsID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OperationsID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OperationsID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SalesOrder)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachineDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PackageReleaseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vendor.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PurchaseOrderNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Media)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SparePartsMedia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Base)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AirSeal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CoatingOrLining)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Disassembly)
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.OperationsID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.OperationsID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.OperationsID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
