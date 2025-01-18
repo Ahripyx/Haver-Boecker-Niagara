@@ -66,11 +66,9 @@ namespace Haver_Boecker_Niagara.Data
                     operationsSchedules.Add(new OperationsSchedule
                     {
                         SalesOrder = $"SO-{customer.Name}-{i}",
-                        CustomerName = customer.Name,
                         MachineDescription = $"Machine Type {i} for {customer.Name}",
                         SerialNumber = $"SN-{customer.Name}-{i:000}",
                         PackageReleaseDate = DateTime.UtcNow.AddDays(i * 10),
-                        VendorName = vendor.Name,
                         PurchaseOrderNumber = $"PO-{vendor.Name}-{i}",
                         PODueDate = DateTime.UtcNow.AddDays(i * 5),
                         DeliveryDate = DateTime.UtcNow.AddDays(i * 15),

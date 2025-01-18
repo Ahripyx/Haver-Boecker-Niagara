@@ -15,20 +15,20 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    CustomerID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CustomerID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    ContactPerson = table.Column<string>(type: "TEXT", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    City = table.Column<string>(type: "TEXT", nullable: false),
+                    State = table.Column<string>(type: "TEXT", nullable: false),
+                    Country = table.Column<string>(type: "TEXT", nullable: false),
+                    PostalCode = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,11 +39,11 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "Engineers",
                 columns: table => new
                 {
-                    EngineerID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Initials = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    EngineerID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Initials = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,21 +54,21 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "Vendors",
                 columns: table => new
                 {
-                    VendorID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rating = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    VendorID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    ContactPerson = table.Column<string>(type: "TEXT", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    City = table.Column<string>(type: "TEXT", nullable: false),
+                    State = table.Column<string>(type: "TEXT", nullable: false),
+                    Country = table.Column<string>(type: "TEXT", nullable: false),
+                    PostalCode = table.Column<string>(type: "TEXT", nullable: false),
+                    Rating = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,18 +79,18 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "GanttSchedules",
                 columns: table => new
                 {
-                    GanttID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    OrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerID = table.Column<int>(type: "int", nullable: false),
-                    EngineerID = table.Column<int>(type: "int", nullable: false),
-                    MachineDetails = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PromiseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeadlineDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerID1 = table.Column<int>(type: "int", nullable: true),
-                    EngineerID1 = table.Column<int>(type: "int", nullable: true)
+                    GanttID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrderNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    CustomerID = table.Column<int>(type: "INTEGER", nullable: false),
+                    EngineerID = table.Column<int>(type: "INTEGER", nullable: false),
+                    MachineDetails = table.Column<string>(type: "TEXT", nullable: false),
+                    PromiseDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DeadlineDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
+                    CustomerID1 = table.Column<int>(type: "INTEGER", nullable: true),
+                    EngineerID1 = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -123,26 +123,26 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "OperationsSchedules",
                 columns: table => new
                 {
-                    OperationsID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SalesOrder = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerID = table.Column<int>(type: "int", nullable: false),
-                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MachineDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PackageReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    VendorID = table.Column<int>(type: "int", nullable: false),
-                    VendorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PurchaseOrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PODueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Media = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SparePartsMedia = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Base = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AirSeal = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CoatingOrLining = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Disassembly = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    OperationsID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SalesOrder = table.Column<string>(type: "TEXT", nullable: false),
+                    CustomerID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CustomerName = table.Column<string>(type: "TEXT", nullable: false),
+                    MachineDescription = table.Column<string>(type: "TEXT", nullable: false),
+                    SerialNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    PackageReleaseDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    VendorID = table.Column<int>(type: "INTEGER", nullable: false),
+                    VendorName = table.Column<string>(type: "TEXT", nullable: false),
+                    PurchaseOrderNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    PODueDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    DeliveryDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Media = table.Column<string>(type: "TEXT", nullable: false),
+                    SparePartsMedia = table.Column<string>(type: "TEXT", nullable: false),
+                    Base = table.Column<string>(type: "TEXT", nullable: false),
+                    AirSeal = table.Column<string>(type: "TEXT", nullable: false),
+                    CoatingOrLining = table.Column<string>(type: "TEXT", nullable: false),
+                    Disassembly = table.Column<string>(type: "TEXT", nullable: false),
+                    Notes = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -165,12 +165,12 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "ApprovalDrawings",
                 columns: table => new
                 {
-                    DrawingID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    IssuedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    DrawingID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    IssuedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ReceivedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,11 +187,11 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "BOMs",
                 columns: table => new
                 {
-                    BOM_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    BOM_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BOM_Details = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BOM_ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    BOM_Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    BOM_Details = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,13 +208,13 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "KickoffMeetings",
                 columns: table => new
                 {
-                    MeetingID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    MeetingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Participants = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KeyDiscussions = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    MeetingID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    MeetingDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Participants = table.Column<string>(type: "TEXT", nullable: false),
+                    KeyDiscussions = table.Column<string>(type: "TEXT", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -231,16 +231,16 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "Milestones",
                 columns: table => new
                 {
-                    MilestoneID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    MilestoneName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlannedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ActualDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProjectedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SpecialNotes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateChanged = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    MilestoneID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    MilestoneName = table.Column<string>(type: "TEXT", nullable: false),
+                    PlannedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ActualDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ProjectedDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
+                    SpecialNotes = table.Column<string>(type: "TEXT", nullable: false),
+                    DateChanged = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -257,15 +257,15 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "NCRs",
                 columns: table => new
                 {
-                    NCR_ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: true),
-                    NCR_Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateIssued = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ResolutionStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IssuedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResolutionDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    NCR_ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderID = table.Column<int>(type: "INTEGER", nullable: true),
+                    NCR_Number = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    DateIssued = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ResolutionStatus = table.Column<string>(type: "TEXT", nullable: false),
+                    IssuedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    ResolutionDate = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -282,15 +282,15 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "ProgressLogs",
                 columns: table => new
                 {
-                    LogID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    MeetingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProgressNotes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LateFlag = table.Column<bool>(type: "bit", nullable: false),
-                    DoneFlag = table.Column<bool>(type: "bit", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateChanged = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LogID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    MeetingDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ProgressNotes = table.Column<string>(type: "TEXT", nullable: false),
+                    LateFlag = table.Column<bool>(type: "INTEGER", nullable: false),
+                    DoneFlag = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
+                    DateChanged = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
