@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
@@ -22,157 +20,89 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index(string? SearchName, string? SearchContact,
-            string? SearchPhone, string? SearchEmail, int? page, int? pageSizeID, string? actionButton,
-            string sortDirection = "asc", string sortField = "Customer")
+        public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchPhone, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
-            //List of sort options
-            string[] sortOptions = new[] { "Name", "ContactPerson", "PhoneNumber", "Email" };
-
-            //Number of filters applied
+            string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode", "Description" };
             ViewData["Filtering"] = "btn-outline-secondary";
-            int numberFilters = 0;
+            int filterCount = 0;
 
-            var customers = _context.Customers
-                .AsNoTracking();
+            var customers = _context.Customers.AsNoTracking();
 
-            if (!String.IsNullOrEmpty(SearchName))
+            if (!string.IsNullOrEmpty(searchName))
             {
-                customers = customers.Where( c => c.Name.Contains(SearchName));
-                numberFilters++;
+                customers = customers.Where(c => EF.Functions.Like(c.Name, $"%{searchName}%"));
+                filterCount++;
             }
-            if (!String.IsNullOrEmpty(SearchContact))
+            if (!string.IsNullOrEmpty(searchContact))
             {
-                customers = customers.Where( c=> c.ContactPerson.Contains(SearchContact));
-                numberFilters++;
+                customers = customers.Where(c => EF.Functions.Like(c.ContactPerson, $"%{searchContact}%"));
+                filterCount++;
             }
-            if (!String.IsNullOrEmpty(SearchPhone))
+            if (!string.IsNullOrEmpty(searchPhone))
             {
-                customers = customers.Where( c => c.PhoneNumber.Contains(SearchPhone));
-                numberFilters++;
+                customers = customers.Where(c => EF.Functions.Like(c.PhoneNumber, $"%{searchPhone}%"));
+                filterCount++;
             }
-            if (!String.IsNullOrEmpty(SearchEmail))
+            if (!string.IsNullOrEmpty(searchEmail))
             {
-                customers = customers.Where( c => c.Email.Contains(SearchEmail));
-                numberFilters++;
-            }
-            //Give feedback about the state of the filters
-            if (numberFilters != 0)
-            {
-                //Toggle the Open/Closed state of the collapse depending on if we are filtering
-                ViewData["Filtering"] = " btn-danger";
-                //Show how many filters have been applied
-                ViewData["numberFilters"] = "(" + numberFilters.ToString()
-                    + " Filter" + (numberFilters > 1 ? "s" : "") + " Applied)";
-                //Keep the Bootstrap collapse open
-                @ViewData["ShowFilter"] = " show";
-
+                customers = customers.Where(c => EF.Functions.Like(c.Email, $"%{searchEmail}%"));
+                filterCount++;
             }
 
-            //See if we have called for a change of filtering or sorting
-            if (!String.IsNullOrEmpty(actionButton))
+            if (filterCount > 0)
             {
-                page = 1;//Reset page to start
-
-                if (sortOptions.Contains(actionButton))//Change of sort is requested
-                {
-                    if (actionButton == sortField) //Reverse order on same field
-                    {
-                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
-                    }
-                    sortField = actionButton;//Sort by the button clicked
-                }
+                ViewData["Filtering"] = "btn-danger";
+                ViewData["NumberFilters"] = $"({filterCount} Filter{(filterCount > 1 ? "s" : "")} Applied)";
+                ViewData["ShowFilter"] = "show";
             }
 
-            //Handling sorting
-            if (sortField == "Name")
+            if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
             {
-                if (sortDirection == "asc")
+                page = 1;
+                if (actionButton == sortField)
                 {
-                    customers = customers
-                        .OrderBy(c => c.Name);
+                    sortDirection = sortDirection == "asc" ? "desc" : "asc";
                 }
-                else
-                {
-                    customers = customers
-                        .OrderByDescending(c => c.Name);
-                }
+                sortField = actionButton;
             }
-            else if (sortField == "ContactPerson")
-            {
-                if (sortDirection == "asc")
-                {
-                    customers = customers
-                        .OrderBy(c => c.Email);
-                }
-                else
-                {
-                    customers = customers
-                        .OrderByDescending(c => c.Email);
-                }
-            }
-            else if (sortField == "PhoneNumber")
-            {
-                if (sortDirection == "asc")
-                {
-                    customers = customers
-                        .OrderBy(c => c.PhoneNumber);
-                }
-                else
-                {
-                    customers = customers
-                        .OrderByDescending(c => c.PhoneNumber);
-                }
-            }
-            else //Sorting by email
-            {
-                if (sortDirection == "asc")
-                {
-                    customers = customers
-                        .OrderBy(c => c.Email);
-                }
-                else
-                {
-                    customers = customers
-                        .OrderByDescending(c => c.Email);
-                }
-            }
-            //Setting sort for next time
-            ViewData["sortField"] = sortField;
-            ViewData["sortDirection"] = sortDirection;
 
-            //Handle Paging
+            customers = sortField switch
+            {
+                "Name" => sortDirection == "asc" ? customers.OrderBy(c => c.Name) : customers.OrderByDescending(c => c.Name),
+                "ContactPerson" => sortDirection == "asc" ? customers.OrderBy(c => c.ContactPerson) : customers.OrderByDescending(c => c.ContactPerson),
+                "PhoneNumber" => sortDirection == "asc" ? customers.OrderBy(c => c.PhoneNumber) : customers.OrderByDescending(c => c.PhoneNumber),
+                "Email" => sortDirection == "asc" ? customers.OrderBy(c => c.Email) : customers.OrderByDescending(c => c.Email),
+                "Address" => sortDirection == "asc" ? customers.OrderBy(c => c.Address) : customers.OrderByDescending(c => c.Address),
+                "City" => sortDirection == "asc" ? customers.OrderBy(c => c.City) : customers.OrderByDescending(c => c.City),
+                "State" => sortDirection == "asc" ? customers.OrderBy(c => c.State) : customers.OrderByDescending(c => c.State),
+                "Country" => sortDirection == "asc" ? customers.OrderBy(c => c.Country) : customers.OrderByDescending(c => c.Country),
+                "PostalCode" => sortDirection == "asc" ? customers.OrderBy(c => c.PostalCode) : customers.OrderByDescending(c => c.PostalCode),
+                "Description" => sortDirection == "asc" ? customers.OrderBy(c => c.Description) : customers.OrderByDescending(c => c.Description),
+                _ => sortDirection == "asc" ? customers.OrderBy(c => c.Name) : customers.OrderByDescending(c => c.Name),
+            };
+
+            ViewData["SortField"] = sortField;
+            ViewData["SortDirection"] = sortDirection;
+
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
-            ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
-            var pagedData = await PaginatedList<Customer>.CreateAsync(customers.AsNoTracking(), page ?? 1, pageSize);
+            ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+            var pagedData = await PaginatedList<Customer>.CreateAsync(customers, page ?? 1, pageSize);
 
             return View(pagedData);
         }
 
+
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var customer = await _context.Customers
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.CustomerID == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
+            var customer = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(m => m.CustomerID == id);
+            return customer == null ? NotFound() : View(customer);
         }
 
         // GET: Customers/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
         // POST: Customers/Create
         [HttpPost]
@@ -194,17 +124,10 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            return View(customer);
+            return customer == null ? NotFound() : View(customer);
         }
 
         // POST: Customers/Edit/5
@@ -212,10 +135,7 @@ namespace Haver_Boecker_Niagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Description")] Customer customer)
         {
-            if (id != customer.CustomerID)
-            {
-                return NotFound();
-            }
+            if (id != customer.CustomerID) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -227,14 +147,8 @@ namespace Haver_Boecker_Niagara.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.CustomerID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!_context.Customers.Any(e => e.CustomerID == id)) return NotFound();
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -244,20 +158,10 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var customer = await _context.Customers
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.CustomerID == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
+            var customer = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(m => m.CustomerID == id);
+            return customer == null ? NotFound() : View(customer);
         }
 
         // POST: Customers/Delete/5
@@ -272,11 +176,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CustomerExists(int id)
-        {
-            return _context.Customers.Any(e => e.CustomerID == id);
         }
     }
 }

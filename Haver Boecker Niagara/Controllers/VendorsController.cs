@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
+using Haver_Boecker_Niagara.Utilities;
+using Haver_Boecker_Niagara.CustomControllers;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    public class VendorsController : Controller
+    public class VendorsController : ElephantController
     {
         private readonly HaverContext _context;
 
@@ -19,34 +20,90 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Vendors
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchPhone, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
-            var vendors = await _context.Vendors.ToListAsync();
-            return View(vendors);
+            string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode", "Description" };
+            ViewData["Filtering"] = "btn-outline-secondary";
+            int filterCount = 0;
+
+            var vendors = _context.Vendors.AsNoTracking(); // Changed from _context.Customers to _context.Vendors
+
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                vendors = vendors.Where(v => EF.Functions.Like(v.Name, $"%{searchName}%"));
+                filterCount++;
+            }
+            if (!string.IsNullOrEmpty(searchContact))
+            {
+                vendors = vendors.Where(v => EF.Functions.Like(v.ContactPerson, $"%{searchContact}%"));
+                filterCount++;
+            }
+            if (!string.IsNullOrEmpty(searchPhone))
+            {
+                vendors = vendors.Where(v => EF.Functions.Like(v.PhoneNumber, $"%{searchPhone}%"));
+                filterCount++;
+            }
+            if (!string.IsNullOrEmpty(searchEmail))
+            {
+                vendors = vendors.Where(v => EF.Functions.Like(v.Email, $"%{searchEmail}%"));
+                filterCount++;
+            }
+
+            if (filterCount > 0)
+            {
+                ViewData["Filtering"] = "btn-danger";
+                ViewData["NumberFilters"] = $"({filterCount} Filter{(filterCount > 1 ? "s" : "")} Applied)";
+                ViewData["ShowFilter"] = "show";
+            }
+
+            if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
+            {
+                page = 1;
+                if (actionButton == sortField)
+                {
+                    sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                }
+                sortField = actionButton;
+            }
+
+            vendors = sortField switch
+            {
+                "Name" => sortDirection == "asc" ? vendors.OrderBy(v => v.Name) : vendors.OrderByDescending(v => v.Name),
+                "ContactPerson" => sortDirection == "asc" ? vendors.OrderBy(v => v.ContactPerson) : vendors.OrderByDescending(v => v.ContactPerson),
+                "PhoneNumber" => sortDirection == "asc" ? vendors.OrderBy(v => v.PhoneNumber) : vendors.OrderByDescending(v => v.PhoneNumber),
+                "Email" => sortDirection == "asc" ? vendors.OrderBy(v => v.Email) : vendors.OrderByDescending(v => v.Email),
+                "Address" => sortDirection == "asc" ? vendors.OrderBy(v => v.Address) : vendors.OrderByDescending(v => v.Address),
+                "City" => sortDirection == "asc" ? vendors.OrderBy(v => v.City) : vendors.OrderByDescending(v => v.City),
+                "State" => sortDirection == "asc" ? vendors.OrderBy(v => v.State) : vendors.OrderByDescending(v => v.State),
+                "Country" => sortDirection == "asc" ? vendors.OrderBy(v => v.Country) : vendors.OrderByDescending(v => v.Country),
+                "PostalCode" => sortDirection == "asc" ? vendors.OrderBy(v => v.PostalCode) : vendors.OrderByDescending(v => v.PostalCode),
+                "Description" => sortDirection == "asc" ? vendors.OrderBy(v => v.Description) : vendors.OrderByDescending(v => v.Description),
+                _ => sortDirection == "asc" ? vendors.OrderBy(v => v.Name) : vendors.OrderByDescending(v => v.Name),
+            };
+
+            ViewData["SortField"] = sortField;
+            ViewData["SortDirection"] = sortDirection;
+
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+            var pagedData = await PaginatedList<Vendor>.CreateAsync(vendors, page ?? 1, pageSize);
+
+            return View(pagedData);
         }
 
         // GET: Vendors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var vendor = await _context.Vendors.FirstOrDefaultAsync(m => m.VendorID == id);
-            if (vendor == null)
-            {
-                return NotFound();
-            }
+            var vendor = await _context.Vendors.AsNoTracking().FirstOrDefaultAsync(m => m.VendorID == id);
+            if (vendor == null) return NotFound();
 
             return View(vendor);
         }
 
         // GET: Vendors/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
         // POST: Vendors/Create
         [HttpPost]
@@ -55,8 +112,9 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             if (ModelState.IsValid)
             {
-                vendor.CreatedAt = DateTime.Now;
-                vendor.UpdatedAt = DateTime.Now;
+                vendor.CreatedAt = DateTime.UtcNow;
+                vendor.UpdatedAt = DateTime.UtcNow;
+
                 _context.Add(vendor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -67,16 +125,11 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: Vendors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var vendor = await _context.Vendors.FindAsync(id);
-            if (vendor == null)
-            {
-                return NotFound();
-            }
+            if (vendor == null) return NotFound();
+
             return View(vendor);
         }
 
@@ -85,47 +138,20 @@ namespace Haver_Boecker_Niagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Rating")] Vendor vendor)
         {
-            if (id != vendor.VendorID)
-            {
-                return NotFound();
-            }
+            if (id != vendor.VendorID) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var existingVendor = await _context.Vendors.FindAsync(id);
-                    if (existingVendor == null)
-                    {
-                        return NotFound();
-                    }
-
-                    // Update properties manually, excluding CreatedAt.
-                    existingVendor.Name = vendor.Name;
-                    existingVendor.ContactPerson = vendor.ContactPerson;
-                    existingVendor.PhoneNumber = vendor.PhoneNumber;
-                    existingVendor.Email = vendor.Email;
-                    existingVendor.Address = vendor.Address;
-                    existingVendor.City = vendor.City;
-                    existingVendor.State = vendor.State;
-                    existingVendor.Country = vendor.Country;
-                    existingVendor.PostalCode = vendor.PostalCode;
-                    existingVendor.Rating = vendor.Rating;
-                    existingVendor.UpdatedAt = DateTime.Now; // Automatically update UpdatedAt.
-
-                    _context.Update(existingVendor);
+                    vendor.UpdatedAt = DateTime.UtcNow;
+                    _context.Update(vendor);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VendorExists(vendor.VendorID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!_context.Vendors.Any(e => e.VendorID == id)) return NotFound();
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -135,17 +161,10 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: Vendors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var vendor = await _context.Vendors
-                .FirstOrDefaultAsync(m => m.VendorID == id);
-            if (vendor == null)
-            {
-                return NotFound();
-            }
+            var vendor = await _context.Vendors.AsNoTracking().FirstOrDefaultAsync(m => m.VendorID == id);
+            if (vendor == null) return NotFound();
 
             return View(vendor);
         }
@@ -159,15 +178,9 @@ namespace Haver_Boecker_Niagara.Controllers
             if (vendor != null)
             {
                 _context.Vendors.Remove(vendor);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool VendorExists(int id)
-        {
-            return _context.Vendors.Any(e => e.VendorID == id);
         }
     }
 }

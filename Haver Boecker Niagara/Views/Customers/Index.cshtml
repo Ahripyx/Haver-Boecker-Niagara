@@ -11,10 +11,8 @@
 </p>
 
 <form asp-action="Index" method="get">
-    <!--Sorting values-->
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
-    <!--Filter Box-->
     <div class="form-horizontal">
         <button class="btn @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
                 data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
@@ -49,43 +47,72 @@
         </div>
     </div>
     <table class="table">
-        <!--Index Headings-->
         <thead>
             <tr>
                 <th>
-                    <input type="submit" name="actionButton" value="Name" class="btn btn-link" />
+                    <button type="submit" name="actionButton" value="Name" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "Name", sortDirection = (ViewData["SortField"] as string == "Name" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </button>
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="ContactPerson" class="btn btn-link" />
+                    <button type="submit" name="actionButton" value="ContactPerson" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "ContactPerson", sortDirection = (ViewData["SortField"] as string == "ContactPerson" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.ContactPerson)
+                    </button>
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="PhoneNumber" class="btn btn-link" />
+                    <button type="submit" name="actionButton" value="PhoneNumber" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "PhoneNumber", sortDirection = (ViewData["SortField"] as string == "PhoneNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                    </button>
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Email" class="btn btn-link" />
+                    <button type="submit" name="actionButton" value="Email" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "Email", sortDirection = (ViewData["SortField"] as string == "Email" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </button>
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Address" class="btn btn-toolbar" />
+                    <button type="submit" name="actionButton" value="Address" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "Address", sortDirection = (ViewData["SortField"] as string == "Address" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.Address)
+                    </button>
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="City" class="btn btn-toolbar" />
+                    <button type="submit" name="actionButton" value="City" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "City", sortDirection = (ViewData["SortField"] as string == "City" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.City)
+                    </button>
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="State" class="btn btn-toolbar" />
+                    <button type="submit" name="actionButton" value="State" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "State", sortDirection = (ViewData["SortField"] as string == "State" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.State)
+                    </button>
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Country" class="btn btn-toolbar" />
+                    <button type="submit" name="actionButton" value="Country" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "Country", sortDirection = (ViewData["SortField"] as string == "Country" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.Country)
+                    </button>
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Postal Code" class="btn btn-toolbar" />
+                    <button type="submit" name="actionButton" value="PostalCode" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "PostalCode", sortDirection = (ViewData["SortField"] as string == "PostalCode" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.PostalCode)
+                    </button>
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Description" class="btn btn-toolbar" />
+                    <button type="submit" name="actionButton" value="Description" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "Description", sortDirection = (ViewData["SortField"] as string == "Description" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.Description)
+                    </button>
                 </th>
                 <th></th>
             </tr>
         </thead>
-        <!--Index Data-->
+
         <tbody>
             @foreach (var item in Model)
             {
