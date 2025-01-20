@@ -1,61 +1,84 @@
-html {
-    font-size: 14px;
-    min-height: 100%;
-}
-
-.navbar {
-    background-color: #002f5f;
-    padding: 30px 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center; 
-    position: relative;
-}
-
-.navbar-brand {
-    display: flex;
-    align-items: center;
-    position: absolute; 
-}
-
-
-
-.navbar-collapse {
-    display: flex;
-    width: 100%;
-}
-
-.navbar-nav {
-    display: flex;
-    padding-left: 0;
-    margin-bottom: 0;
-}
-
-.nav-item {
-    margin-left: 15px;
-}
-
-.nav-link {
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-    .nav-link:hover {
-        color: white;
-        transform: translateY(-5px);
-    }
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-
-    .navbar-nav {
-        justify-content: center; 
-    }
-}
-
 body {
-    margin-bottom: 60px;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    background-color: #002F5F;
+    margin-bottom: 2.613rem;
+}
+
+#side-menu {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #002F5F;
+    color: #fff;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.3s;
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+
+    #side-menu a {
+        padding: 10px 15px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        color: #fff;
+        display: block;
+        transition: 0.2s;
+    }
+
+        #side-menu a:hover {
+            background-color: #ADB5BD;
+            color: #fff;
+        }
+
+    #side-menu .close-btn {
+        position: absolute;
+        top: 5px;
+        right: 3px;
+        font-size: 2rem;
+        text-decoration: none;
+        color: #fff;
+        cursor: pointer;
+        padding: 0;
+    }
+
+        #side-menu .close-btn:hover {
+            color: #002F5F;
+        }
+
+
+    #side-menu.open {
+        left: 0;
+    }
+
+.hamburger-icon {
+    font-size: 2rem;
+    color: #001f3f;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+    .hamburger-icon:hover {
+        color: #ff5722;
+    }
+
+
+#menu-toggle .hamburger-icon {
+    color: white;
+}
+
+.haver-logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.haver-logo {
+    width: 80%;
 }

@@ -6,34 +6,41 @@
     <title>@ViewData["Title"] - Haver_Boecker_Niagara</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/menu.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="~/Haver_Boecker_Niagara.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body id="body">
     <header>
-        <nav class="navbar navbar-expand-sm ">
-            <div class="container-fluid">
+        <nav>
+           <div class="haver-logo-container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/Logo.png" alt="Haver_Boecker_Niagara" />
+                    <img src="~/Logo.png" alt="Haver_Boecker_Niagara" class="haver-logo" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+            </div>
+                <button class="btn" id="menu-toggle">
+                    <i class="bi bi-list hamburger-icon"></i>
                 </button>
-                <div class="navbar-collapse collapse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="OperationsSchedules" asp-action="Index">Operations</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Vendors" asp-action="Index">Vendors</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+           
+            <div id="side-menu">
+                <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">&times;</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index">
+                    Home
+                    <i class="bi bi-house-door"></i> 
+                </a>
+                <a asp-area="" asp-controller="Customers" asp-action="Index">
+                    Customers
+                    <i class="bi bi-people"></i></a>
+                <a asp-area="" asp-controller="OperationsSchedules" asp-action="Index">
+                    Operations
+                    <i class="bi bi-gear"></i></a>
+                <a asp-area="" asp-controller="Vendors" asp-action="Index">
+                    Vendors
+                    <i class="bi bi-cart"></i></a>
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">
+                    Privacy
+                    <i class="bi bi-shield-lock"></i></a>
+                <div class="container-fluid">
                 </div>
             </div>
         </nav>
@@ -49,9 +56,28 @@
             &copy; 2025 - Haver_Boecker_Niagara - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sideMenu = document.getElementById('side-menu');
+            const closeButton = document.querySelector('.close-btn');
+
+            menuToggle.addEventListener('click', function () {
+                sideMenu.classList.add('open');
+            });
+
+            closeButton.addEventListener('click', function () {
+                sideMenu.classList.remove('open');
+            });
+
+
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
