@@ -9,6 +9,7 @@ namespace Haver_Boecker_Niagara.Models
         public string SalesOrder { get; set; }
         public int CustomerID { get; set; }
         public int VendorID { get; set; }
+
         [DisplayName("Machine Description")]
         public string MachineDescription { get; set; }
         [DisplayName("Serial №")]
