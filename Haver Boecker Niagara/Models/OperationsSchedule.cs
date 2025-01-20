@@ -25,7 +25,6 @@ namespace Haver_Boecker_Niagara.Models
         public DateTime? DeliveryDate { get; set; }
         public string Media { get; set; }
         [DisplayName("Spare Parts")]
-
         public string SparePartsMedia { get; set; }
         public string Base { get; set; }
         [DisplayName("Air Seal")]
