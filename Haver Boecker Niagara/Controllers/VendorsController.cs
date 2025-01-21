@@ -22,11 +22,11 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: Vendors
         public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchPhone, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
-            string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode", "Description" };
+            string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode" };
             ViewData["Filtering"] = "btn-outline-secondary";
             int filterCount = 0;
 
-            var vendors = _context.Vendors.AsNoTracking(); // Changed from _context.Customers to _context.Vendors
+            var vendors = _context.Vendors.AsNoTracking();
 
             if (!string.IsNullOrEmpty(searchName))
             {
@@ -77,7 +77,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 "State" => sortDirection == "asc" ? vendors.OrderBy(v => v.State) : vendors.OrderByDescending(v => v.State),
                 "Country" => sortDirection == "asc" ? vendors.OrderBy(v => v.Country) : vendors.OrderByDescending(v => v.Country),
                 "PostalCode" => sortDirection == "asc" ? vendors.OrderBy(v => v.PostalCode) : vendors.OrderByDescending(v => v.PostalCode),
-                "Description" => sortDirection == "asc" ? vendors.OrderBy(v => v.Description) : vendors.OrderByDescending(v => v.Description),
                 _ => sortDirection == "asc" ? vendors.OrderBy(v => v.Name) : vendors.OrderByDescending(v => v.Name),
             };
 
@@ -108,7 +107,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Vendors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Rating")] Vendor vendor)
+        public async Task<IActionResult> Create([Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Vendor vendor)
         {
             if (ModelState.IsValid)
             {
@@ -136,7 +135,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Vendors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Rating")] Vendor vendor)
+        public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Vendor vendor)
         {
             if (id != vendor.VendorID) return NotFound();
 

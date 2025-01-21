@@ -104,12 +104,6 @@
                         @Html.DisplayNameFor(model => model.PostalCode)
                     </button>
                 </th>
-                <th>
-                    <button type="submit" name="actionButton" value="Description" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "Description", sortDirection = (ViewData["SortField"] as string == "Description" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                        @Html.DisplayNameFor(model => model.Description)
-                    </button>
-                </th>
                 <th></th>
             </tr>
         </thead>
@@ -144,9 +138,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PostalCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.VendorID">Edit</a> |
