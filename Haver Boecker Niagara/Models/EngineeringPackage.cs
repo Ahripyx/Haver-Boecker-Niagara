@@ -1,8 +1,8 @@
 ﻿namespace Haver_Boecker_Niagara.Models
 {
-    public class PackageRelease
+    public class EngineeringPackage
     {
-        public int DrawingID { get; set; }
+        public int EngineeringPackageID { get; set; }
         
         public int EngineerID { get; set; }
 
@@ -11,6 +11,11 @@
 
 
         // this model will later allow document upload (approval drawing)
+
+        public Engineer Engineer { get; set; }
+
+        public ICollection<OperationsSchedule> OperationsSchedules { get; set; } = new HashSet<OperationsSchedule>();
+
 
     }
 }

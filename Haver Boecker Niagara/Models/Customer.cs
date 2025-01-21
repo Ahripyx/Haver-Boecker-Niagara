@@ -23,7 +23,6 @@ namespace Haver_Boecker_Niagara.Models
         [DisplayName("Street Address")]
         public string? Address { get; set; } 
         public string? City { get; set; } 
-        public string? State { get; set; } 
         public string? Country { get; set; } 
         [DisplayName("Postal Code")]
         public string? PostalCode { get; set; } 
@@ -33,6 +32,6 @@ namespace Haver_Boecker_Niagara.Models
         [DisplayName("Last Updated")]
         public DateTime UpdatedAt { get; set; } 
 
-        public ICollection<OperationsSchedule> OperationsSchedules { get; set; }
+        public ICollection<SalesOrder> SaleOrders { get; set; }
     }
 }

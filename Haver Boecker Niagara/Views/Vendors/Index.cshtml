@@ -86,12 +86,7 @@
                         @Html.DisplayNameFor(model => model.City)
                     </button>
                 </th>
-                <th>
-                    <button type="submit" name="actionButton" value="State" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "State", sortDirection = (ViewData["SortField"] as string == "State" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                        @Html.DisplayNameFor(model => model.State)
-                    </button>
-                </th>
+
                 <th>
                     <button type="submit" name="actionButton" value="Country" class="btn btn-toolbar"
                             formaction="@Url.Action("Index", new { sortField = "Country", sortDirection = (ViewData["SortField"] as string == "Country" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
@@ -129,9 +124,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.State)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Country)

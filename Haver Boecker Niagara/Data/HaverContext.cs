@@ -11,18 +11,10 @@ namespace Haver_Boecker_Niagara.Data
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<Engineer> Engineers { get; set; }
         public DbSet<OperationsSchedule> OperationsSchedules { get; set; }
-        public DbSet<PackageRelease> ApprovalDrawings { get; set; }
-
-        #region FUTURE TABLES (GANTT)
-
-
-        //public DbSet<GanttSchedule> GanttSchedules { get; set; }
-        //public DbSet<Milestone> Milestones { get; set; }
-        //public DbSet<KickoffMeeting> KickoffMeetings { get; set; }
-        //public DbSet<ProgressLog> ProgressLogs { get; set; }
-        //public DbSet<BOM> BOMs { get; set; }
-        //public DbSet<NCR> NCRs { get; set; }
-        #endregion
+        public DbSet<EngineeringPackage> EngineeringPackages { get; set; }
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public DbSet<Machine> Machines { get; set; }
+        public DbSet<SalesOrder> SalesOrders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,76 +24,52 @@ namespace Haver_Boecker_Niagara.Data
             modelBuilder.Entity<Vendor>().HasKey(v => v.VendorID);
             modelBuilder.Entity<Engineer>().HasKey(e => e.EngineerID);
             modelBuilder.Entity<OperationsSchedule>().HasKey(o => o.OperationsID);
-            
-            modelBuilder.Entity<PackageRelease>().HasKey(a => a.DrawingID);
+            modelBuilder.Entity<EngineeringPackage>().HasKey(ep => ep.EngineeringPackageID);
+            modelBuilder.Entity<PurchaseOrder>().HasKey(po => po.PurchaseOrderID);
+            modelBuilder.Entity<Machine>().HasKey(m => m.MachineID);
+            modelBuilder.Entity<SalesOrder>().HasKey(so => so.SalesOrderID);
 
-            #region FUTURE TABLES (GANTT)
-            //modelBuilder.Entity<GanttSchedule>().HasKey(g => g.GanttID);
-            //modelBuilder.Entity<Milestone>().HasKey(m => m.MilestoneID);
-            //modelBuilder.Entity<KickoffMeeting>().HasKey(k => k.MeetingID);
-            //modelBuilder.Entity<ProgressLog>().HasKey(p => p.LogID);
-            //modelBuilder.Entity<BOM>().HasKey(b => b.BOM_ID);
-            //modelBuilder.Entity<NCR>().HasKey(n => n.NCR_ID);
-            #endregion
+            modelBuilder.Entity<SalesOrder>()
+                .HasOne(so => so.Customer)
+                .WithMany(c => c.SaleOrders)
+                .HasForeignKey(so => so.CustomerID)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<OperationsSchedule>()
-                .HasOne(o => o.Customer)
-                .WithMany(c => c.OperationsSchedules)
-                .HasForeignKey(o => o.CustomerID)
+            modelBuilder.Entity<Machine>()
+                .HasOne(m => m.SalesOrder)
+                .WithMany(so => so.Machines)
+                .HasForeignKey(m => m.SalesOrderID)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<OperationsSchedule>()
-                .HasOne(o => o.Vendor)
+                .HasOne(os => os.SalesOrder)
+                .WithMany(so => so.OperationsSchedules)
+                .HasForeignKey(os => os.SalesOrderID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<OperationsSchedule>()
+                .HasOne(os => os.EngineeringPackage)
                 .WithMany()
-                .HasForeignKey(o => o.VendorID)
+                .HasForeignKey(os => os.EngineeringPackageID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<PurchaseOrder>()
+                .HasOne(po => po.Vendor)
+                .WithMany(v => v.PurchaseOrders)
+                .HasForeignKey(po => po.VendorID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            #region FUTURE TABLES (GANTT)
+            modelBuilder.Entity<PurchaseOrder>()
+                .HasOne(po => po.OperationsSchedule)
+                .WithMany(os => os.PurchaseOrders)
+                .HasForeignKey(po => po.OperationsID)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<GanttSchedule>()
-            //    .HasOne(g => g.Customer)
-            //    .WithMany()
-            //    .HasForeignKey(g => g.CustomerID)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<GanttSchedule>()
-            //    .HasOne(g => g.Engineer)
-            //    .WithMany()
-            //    .HasForeignKey(g => g.EngineerID)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //modelBuilder.Entity<Milestone>()
-            //    .HasOne(m => m.GanttSchedule)
-            //    .WithMany()
-            //    .HasForeignKey(m => m.OrderID)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<KickoffMeeting>()
-            //    .HasOne(k => k.GanttSchedule)
-            //    .WithMany()
-            //    .HasForeignKey(k => k.OrderID)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<ProgressLog>()
-            //    .HasOne(p => p.GanttSchedule)
-            //    .WithMany()
-            //    .HasForeignKey(p => p.OrderID)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<BOM>()
-            //    .HasOne(b => b.GanttSchedule)
-            //    .WithMany()
-            //    .HasForeignKey(b => b.OrderID)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            //modelBuilder.Entity<NCR>()
-            //    .HasOne(n => n.GanttSchedule)
-            //    .WithMany()
-            //    .HasForeignKey(n => n.OrderID)
-            //    .OnDelete(DeleteBehavior.Cascade);
-
-            #endregion
-
+            modelBuilder.Entity<EngineeringPackage>()
+                .HasOne(ep => ep.Engineer)
+                .WithMany(e => e.EngineeringPackages)
+                .HasForeignKey(ep => ep.EngineerID)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

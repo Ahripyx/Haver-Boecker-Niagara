@@ -6,62 +6,20 @@ namespace Haver_Boecker_Niagara.Models
     {
         public int OperationsID { get; set; }
 
-        public SalesOrder PrimarySalesOrder { get; set; }
-
-        public ICollection<SalesOrder> SalesOrders { get; set; } = new HashSet<SalesOrder>();
-
-        public int CustomerID { get; set; } // -> i presume will have 'make new customer' modal and dropdown
-        
-
-        [DisplayName("Machine Description")]
-        public string MachineDescription { get; set; }
-
-        [DisplayName("Quantity")]
-        public int MachineQuantity { get; set; } = 1;
+        public int SalesOrderID { get; set; }
         
         [DisplayName("Serial №")]
-        public string SerialNumber { get; set; } // fine
+        public string SerialNumber { get; set; } 
         
 
         [DisplayName("Engineering Package")]
-        public int? EngineeringPackageID {  get; set; }
-        
-        // primary vendor is bolded one in excel
-        public int PrimaryVendorID { get; set; }
+        public int? EngineeringPackageID {  get; set; }  
 
-        public ICollection<OperationsVendors> OperationsVendors { get; set; } = new HashSet<OperationsVendors>();
-
-        // keep track of PO#s
         public ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
 
 
-        [DisplayName("Purchase Order Due Date")]
-        public DateTime? PODueDate { get; set; }
-
-
-        [DisplayName("Purchase Order Delivery Date")]
+        [DisplayName("Delivery Date")]
         public DateTime? DeliveryDate { get; set; }
-
-
-        public bool Media { get; set; } = false;
-
-
-        [DisplayName("Spare Parts")]
-        public bool SparePartsMedia { get; set; } = false;
-
-
-        public bool Base { get; set; } = false;
-
-
-        [DisplayName("Air Seal")]
-        public bool AirSeal { get; set; } = false;
-
-
-        [DisplayName("Coating / Lining")]
-        public bool CoatingOrLining { get; set; } = false;
-
-
-        public bool Disassembly { get; set; } = false;
 
 
         [DisplayName("Pre-Order")]
@@ -85,10 +43,9 @@ namespace Haver_Boecker_Niagara.Models
         [DisplayName("Comments/Notes")]
         public string ExtraNotes { get; set; }
 
-        // maybe a feature to make a note 'important' -> in the excel, they highlight some text red to indicate importance
-        public Vendor Vendor { get; set; }
+        public SalesOrder SalesOrder { get; set; }
 
-        public Customer Customer { get; set; }
+        public EngineeringPackage EngineeringPackage { get; set; }
 
     }
 }

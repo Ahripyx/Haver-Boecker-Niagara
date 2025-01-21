@@ -74,7 +74,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 "Email" => sortDirection == "asc" ? vendors.OrderBy(v => v.Email) : vendors.OrderByDescending(v => v.Email),
                 "Address" => sortDirection == "asc" ? vendors.OrderBy(v => v.Address) : vendors.OrderByDescending(v => v.Address),
                 "City" => sortDirection == "asc" ? vendors.OrderBy(v => v.City) : vendors.OrderByDescending(v => v.City),
-                "State" => sortDirection == "asc" ? vendors.OrderBy(v => v.State) : vendors.OrderByDescending(v => v.State),
                 "Country" => sortDirection == "asc" ? vendors.OrderBy(v => v.Country) : vendors.OrderByDescending(v => v.Country),
                 "PostalCode" => sortDirection == "asc" ? vendors.OrderBy(v => v.PostalCode) : vendors.OrderByDescending(v => v.PostalCode),
                 _ => sortDirection == "asc" ? vendors.OrderBy(v => v.Name) : vendors.OrderByDescending(v => v.Name),
