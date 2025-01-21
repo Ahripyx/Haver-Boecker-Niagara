@@ -1,10 +1,6 @@
 ﻿using Haver_Boecker_Niagara.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics;
 
 namespace Haver_Boecker_Niagara.Data
 {
@@ -30,7 +26,7 @@ namespace Haver_Boecker_Niagara.Data
                     {
                         if (DeleteDatabase)
                         {
-                            context.Database.EnsureDeleted(); 
+                            context.Database.EnsureDeleted();
                         }
                         context.Database.Migrate();
                     }
@@ -38,8 +34,8 @@ namespace Haver_Boecker_Niagara.Data
                     {
                         if (DeleteDatabase)
                         {
-                            context.Database.EnsureDeleted(); 
-                            context.Database.EnsureCreated(); 
+                            context.Database.EnsureDeleted();
+                            context.Database.EnsureCreated();
                         }
                     }
                 }
@@ -50,75 +46,186 @@ namespace Haver_Boecker_Niagara.Data
                 #endregion
 
                 #region Seed Required Data
-                try
-                {
-                    if (!context.Vendors.Any())
-                    {
-                        context.Vendors.AddRange(
-                            new Vendor { Name = "Vendor 1", ContactPerson = "John Doe", PhoneNumber = "123-456-7890", Email = "vendor1@example.com", Address = "123 Vendor St", City = "Vendor City", State = "State A", Country = "Country A", PostalCode = "12345", Rating = 5, Description = "Top Vendor", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                            new Vendor { Name = "Vendor 2", ContactPerson = "Jane Doe", PhoneNumber = "123-456-7891", Email = "vendor2@example.com", Address = "456 Vendor Ave", City = "Vendor City", State = "State B", Country = "Country B", PostalCode = "12346", Rating = 4, Description = "Reliable Vendor", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
-                        );
-                        context.SaveChanges();
-                    }
-
-                    if (!context.Customers.Any())
-                    {
-                        context.Customers.AddRange(
-                            new Customer { Name = "Customer 1", ContactPerson = "Alice Cooper", PhoneNumber = "234-567-8901", Email = "customer1@example.com", Address = "1 Customer Rd", City = "Customer City", State = "State A", Country = "Country A", PostalCode = "23456", Description = "Important customer", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                            new Customer { Name = "Customer 2", ContactPerson = "Bob Dylan", PhoneNumber = "234-567-8902", Email = "customer2@example.com", Address = "2 Customer Ave", City = "Customer City", State = "State B", Country = "Country B", PostalCode = "23457", Description = "Key customer", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
-                        );
-                        context.SaveChanges();
-                    }
-
-                    if (!context.OperationsSchedules.Any())
-                    {
-                        var vendorsList = context.Vendors.ToList();
-                        var customersList = context.Customers.ToList();
-
-                        foreach (var customer in customersList)
-                        {
-                            for (int i = 1; i <= 3; i++)
-                            {
-                                var vendor = vendorsList[new Random().Next(0, vendorsList.Count)];
-                                context.OperationsSchedules.Add(new OperationsSchedule
-                                {
-                                    SalesOrder = $"SO-{customer.CustomerID}-{i}",
-                                    CustomerID = customer.CustomerID,
-                                    VendorID = vendor.VendorID,
-                                    MachineDescription = $"Machine Description {i}",
-                                    SerialNumber = $"SN-{customer.CustomerID}-{i}",
-                                    PackageReleaseDate = DateTime.UtcNow.AddDays(new Random().Next(0, 10)),
-                                    PurchaseOrderNumber = $"PO-{i}",
-                                    PODueDate = DateTime.UtcNow.AddDays(new Random().Next(1, 10)),
-                                    DeliveryDate = DateTime.UtcNow.AddDays(new Random().Next(10, 20)),
-                                    Media = "Standard",
-                                    SparePartsMedia = "Standard",
-                                    Base = "Base Description",
-                                    AirSeal = "AirSeal Description",
-                                    CoatingOrLining = "Coating Description",
-                                    Disassembly = "Disassembly Description",
-                                    Notes = $"Notes for SO-{i}",
-                                    Customer = customer,
-                                    Vendor = vendor
-                                });
-                            }
-                        }
-                        context.SaveChanges();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.GetBaseException().Message);
-                }
+                //empty for now
                 #endregion
 
                 #region Seed Sample Data
                 if (SeedSampleData)
                 {
-                    Random random = new Random();
 
                     try
                     {
+                        #region Customers
+                        if (!context.Customers.Any())
+                        {
+                            context.Customers.AddRange(
+                                new Customer
+                                {
+                                    Name = "Acme Corporation",
+                                    ContactPerson = "John Doe",
+                                    PhoneNumber = "123-456-7890",
+                                    Email = "contact@acmecorp.com",
+                                    Address = "123 Acme St.",
+                                    City = "Metropolis",
+                                    Country = "USA",
+                                    PostalCode = "12345",
+                                    CreatedAt = DateTime.UtcNow,
+                                    UpdatedAt = DateTime.UtcNow
+                                },
+                                new Customer
+                                {
+                                    Name = "Beta Industries",
+                                    ContactPerson = "Jane Smith",
+                                    PhoneNumber = "987-654-3210",
+                                    Email = "support@betaind.com",
+                                    Address = "456 Beta Ave.",
+                                    City = "Gotham",
+                                    Country = "USA",
+                                    PostalCode = "67890",
+                                    CreatedAt = DateTime.UtcNow,
+                                    UpdatedAt = DateTime.UtcNow
+                                }
+                            );
+                            context.SaveChanges();
+                        }
+                        #endregion
+
+                        #region Vendors
+                        if (!context.Vendors.Any())
+                        {
+                            context.Vendors.AddRange(
+                                new Vendor
+                                {
+                                    Name = "Global Parts Inc.",
+                                    ContactPerson = "Tom Green",
+                                    PhoneNumber = "111-222-3333",
+                                    Email = "sales@globalparts.com",
+                                    Address = "789 Global Rd.",
+                                    City = "Sunnyvale",
+                                    Country = "USA",
+                                    PostalCode = "24680",
+                                    CreatedAt = DateTime.UtcNow,
+                                    UpdatedAt = DateTime.UtcNow
+                                }
+                            );
+                            context.SaveChanges();
+                        }
+                        #endregion
+
+                        #region Engineers
+                        if (!context.Engineers.Any())
+                        {
+                            context.Engineers.AddRange(
+                                new Engineer
+                                {
+                                    Name = "Alice Johnson",
+                                    Initials = "AJ",
+                                    Email = "alice.johnson@hbn.com"
+                                },
+                                new Engineer
+                                {
+                                    Name = "Bob Martin",
+                                    Initials = "BM",
+                                    Email = "bob.martin@hbn.com"
+                                }
+                            );
+                            context.SaveChanges();
+                        }
+                        #endregion
+
+                        #region Sales Orders
+                        if (!context.SalesOrders.Any())
+                        {
+                            var customer = context.Customers.FirstOrDefault();
+                            context.SalesOrders.AddRange(
+                                new SalesOrder
+                                {
+                                    OrderNumber = "SO-1001",
+                                    Price = 5000.00M,
+                                    Status = "Confirmed",
+                                    CustomerID = customer.CustomerID
+                                },
+                                new SalesOrder
+                                {
+                                    OrderNumber = "SO-1002",
+                                    Price = 12000.00M,
+                                    Status = "Pending",
+                                    CustomerID = customer.CustomerID
+                                }
+                            );
+                            context.SaveChanges();
+                        }
+                        #endregion
+
+                        #region Operations Schedules
+                        if (!context.OperationsSchedules.Any())
+                        {
+                            var salesOrder = context.SalesOrders.FirstOrDefault();
+                            context.OperationsSchedules.AddRange(
+                                new OperationsSchedule
+                                {
+                                    SalesOrderID = salesOrder.SalesOrderID,
+                                    SerialNumber = "SN12345",
+                                    DeliveryDate = DateTime.UtcNow.AddMonths(1),
+                                    ExtraNotes = "Initial assembly scheduled.",
+                                    NamePlateStatus = false
+                                }
+                            );
+                            context.SaveChanges();
+                        }
+                        #endregion
+
+                        #region Machines
+                        if (!context.Machines.Any())
+                        {
+                            var salesOrder = context.SalesOrders.FirstOrDefault();
+                            context.Machines.AddRange(
+                                new Machine
+                                {
+                                    SerialNumber = "M12345",
+                                    MachineSize = 2,
+                                    MachineClass = "Heavy Duty",
+                                    MachineSizeDesc = "Large",
+                                    SalesOrderID = salesOrder.SalesOrderID
+                                }
+                            );
+                            context.SaveChanges();
+                        }
+                        #endregion
+
+                        #region Purchase Orders
+                        if (!context.PurchaseOrders.Any())
+                        {
+                            var operationsSchedule = context.OperationsSchedules.FirstOrDefault();
+                            var vendor = context.Vendors.FirstOrDefault();
+                            context.PurchaseOrders.AddRange(
+                                new PurchaseOrder
+                                {
+                                    OperationsID = operationsSchedule.OperationsID,
+                                    PurchaseOrderNumber = "PO-1001",
+                                    PODueDate = DateTime.UtcNow.AddDays(30),
+                                    VendorID = vendor.VendorID
+                                }
+                            );
+                            context.SaveChanges();
+                        }
+                        #endregion
+
+                        #region Engineering Packages
+                        if (!context.EngineeringPackages.Any())
+                        {
+                            var engineer = context.Engineers.FirstOrDefault();
+                            context.EngineeringPackages.AddRange(
+                                new EngineeringPackage
+                                {
+                                    EngineerID = engineer.EngineerID,
+                                    PackageReleaseDate = DateTime.UtcNow,
+                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
+                                }
+                            );
+                            context.SaveChanges();
+                        }
+                        #endregion
                     }
                     catch (Exception ex)
                     {
@@ -130,4 +237,3 @@ namespace Haver_Boecker_Niagara.Data
         }
     }
 }
-

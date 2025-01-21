@@ -22,7 +22,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: Customers
         public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchPhone, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
-            string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode", "Description" };
+            string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode" };
             ViewData["Filtering"] = "btn-outline-secondary";
             int filterCount = 0;
 
@@ -74,10 +74,8 @@ namespace Haver_Boecker_Niagara.Controllers
                 "Email" => sortDirection == "asc" ? customers.OrderBy(c => c.Email) : customers.OrderByDescending(c => c.Email),
                 "Address" => sortDirection == "asc" ? customers.OrderBy(c => c.Address) : customers.OrderByDescending(c => c.Address),
                 "City" => sortDirection == "asc" ? customers.OrderBy(c => c.City) : customers.OrderByDescending(c => c.City),
-                "State" => sortDirection == "asc" ? customers.OrderBy(c => c.State) : customers.OrderByDescending(c => c.State),
                 "Country" => sortDirection == "asc" ? customers.OrderBy(c => c.Country) : customers.OrderByDescending(c => c.Country),
                 "PostalCode" => sortDirection == "asc" ? customers.OrderBy(c => c.PostalCode) : customers.OrderByDescending(c => c.PostalCode),
-                "Description" => sortDirection == "asc" ? customers.OrderBy(c => c.Description) : customers.OrderByDescending(c => c.Description),
                 _ => sortDirection == "asc" ? customers.OrderBy(c => c.Name) : customers.OrderByDescending(c => c.Name),
             };
 
@@ -90,7 +88,6 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(pagedData);
         }
-
 
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -107,7 +104,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Customers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Description")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -133,7 +130,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Customers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode,Description")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Customer customer)
         {
             if (id != customer.CustomerID) return NotFound();
 
