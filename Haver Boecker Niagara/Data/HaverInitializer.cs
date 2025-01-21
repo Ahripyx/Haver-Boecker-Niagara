@@ -55,8 +55,8 @@ namespace Haver_Boecker_Niagara.Data
                     if (!context.Vendors.Any())
                     {
                         context.Vendors.AddRange(
-                            new Vendor { Name = "Vendor 1", ContactPerson = "John Doe", PhoneNumber = "123-456-7890", Email = "vendor1@example.com", Address = "123 Vendor St", City = "Vendor City", State = "State A", Country = "Country A", PostalCode = "12345", Rating = 5, Description = "Top Vendor", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                            new Vendor { Name = "Vendor 2", ContactPerson = "Jane Doe", PhoneNumber = "123-456-7891", Email = "vendor2@example.com", Address = "456 Vendor Ave", City = "Vendor City", State = "State B", Country = "Country B", PostalCode = "12346", Rating = 4, Description = "Reliable Vendor", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+                            new Vendor { Name = "Vendor 1", ContactPerson = "John Doe", PhoneNumber = "123-456-7890", Email = "vendor1@example.com", Address = "123 Vendor St", City = "Vendor City", State = "State A", Country = "Country A", PostalCode = "12345",  CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                            new Vendor {Name = "Vendor 2", ContactPerson = "Jane Doe", PhoneNumber = "123-456-7891", Email = "vendor2@example.com", Address = "456 Vendor Ave", City = "Vendor City", State = "State B", Country = "Country B", PostalCode = "12346", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
                         );
                         context.SaveChanges();
                     }
@@ -64,8 +64,8 @@ namespace Haver_Boecker_Niagara.Data
                     if (!context.Customers.Any())
                     {
                         context.Customers.AddRange(
-                            new Customer { Name = "Customer 1", ContactPerson = "Alice Cooper", PhoneNumber = "234-567-8901", Email = "customer1@example.com", Address = "1 Customer Rd", City = "Customer City", State = "State A", Country = "Country A", PostalCode = "23456", Description = "Important customer", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                            new Customer { Name = "Customer 2", ContactPerson = "Bob Dylan", PhoneNumber = "234-567-8902", Email = "customer2@example.com", Address = "2 Customer Ave", City = "Customer City", State = "State B", Country = "Country B", PostalCode = "23457", Description = "Key customer", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+                            new Customer { Name = "Customer 1", ContactPerson = "Alice Cooper", PhoneNumber = "234-567-8901", Email = "customer1@example.com", Address = "1 Customer Rd", City = "Customer City", State = "State A", Country = "Country A", PostalCode = "23456",  CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                            new Customer { Name = "Customer 2", ContactPerson = "Bob Dylan", PhoneNumber = "234-567-8902", Email = "customer2@example.com", Address = "2 Customer Ave", City = "Customer City", State = "State B", Country = "Country B", PostalCode = "23457", CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
                         );
                         context.SaveChanges();
                     }
