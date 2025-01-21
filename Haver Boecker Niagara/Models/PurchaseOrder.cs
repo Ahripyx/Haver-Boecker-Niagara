@@ -12,5 +12,10 @@ namespace Haver_Boecker_Niagara.Models
         
         public DateTime? PODueDate { get; set; } // ask if they all should be shared or if they are independent
 
+        public int VendorsID { get; set; }
+
+        public Vendor Vendor { get; set; }
+
+
     }
 }
