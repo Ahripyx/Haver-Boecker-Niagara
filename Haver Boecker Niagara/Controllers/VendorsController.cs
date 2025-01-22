@@ -65,11 +65,12 @@ namespace Haver_Boecker_Niagara.Controllers
                 }
                 sortField = actionButton;
             }
-
             vendors = sortField switch
             {
-                "Name" => sortDirection == "asc" ? vendors.OrderBy(v => v.Name) : vendors.OrderByDescending(v => v.Name),
-                "ContactPerson" => sortDirection == "asc" ? vendors.OrderBy(v => v.ContactPerson) : vendors.OrderByDescending(v => v.ContactPerson),
+                "Name" => sortDirection == "asc" ? vendors.OrderBy(c => c.Name) : vendors.OrderByDescending(c => c.Name),
+                "ContactPerson" => sortDirection == "asc"
+                    ? vendors.OrderBy(c => c.ContactFirstName).ThenBy(c => c.ContactLastName)
+                    : vendors.OrderByDescending(c => c.ContactFirstName).ThenByDescending(c => c.ContactLastName),
                 "PhoneNumber" => sortDirection == "asc" ? vendors.OrderBy(v => v.PhoneNumber) : vendors.OrderByDescending(v => v.PhoneNumber),
                 "Email" => sortDirection == "asc" ? vendors.OrderBy(v => v.Email) : vendors.OrderByDescending(v => v.Email),
                 "Address" => sortDirection == "asc" ? vendors.OrderBy(v => v.Address) : vendors.OrderByDescending(v => v.Address),

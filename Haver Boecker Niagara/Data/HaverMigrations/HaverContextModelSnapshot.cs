@@ -44,7 +44,10 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<string>("City")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ContactPerson")
+                    b.Property<string>("ContactFirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContactLastName")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Country")
@@ -86,11 +89,11 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Initials")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -104,6 +107,12 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<int>("EngineeringPackageID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ActualApprovalDrawingDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ActualPackageReleaseDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ApprovalDrawingDate")
                         .HasColumnType("TEXT");
@@ -133,6 +142,11 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
                     b.Property<bool>("Disassembly")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("InternalPONumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MachineClass")
                         .IsRequired()
@@ -292,7 +306,10 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<string>("City")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ContactPerson")
+                    b.Property<string>("ContactFirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContactLastName")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Country")

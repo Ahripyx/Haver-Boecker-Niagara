@@ -8,7 +8,7 @@ namespace Haver_Boecker_Niagara.Models
         
         public DateTime? PackageReleaseDate { get; set; }
         public DateTime? ApprovalDrawingDate { get; set; }
-
+        // will be available document upload
         public DateTime? ActualPackageReleaseDate { get; set; }
         public DateTime? ActualApprovalDrawingDate { get; set; }
 
