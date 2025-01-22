@@ -3,11 +3,23 @@
     public class Engineer
     {
         public int EngineerID { get; set; }
-        public string Name { get; set; }
-        public string Initials { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Name
+        {
+            get => $"{FirstName} {LastName}".Trim();
+        }
+
+        public string Initials
+        {
+            get => $"{FirstName?[0]}{LastName?[0]}".ToUpper();
+        }
+
         public string Email { get; set; }
 
         public ICollection<EngineeringPackage> EngineeringPackages { get; set; } = new HashSet<EngineeringPackage>();
-
     }
 }

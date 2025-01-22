@@ -6,13 +6,6 @@ namespace Haver_Boecker_Niagara.Data
 {
     public static class HaverInitializer
     {
-        /// <summary>
-        /// Prepares the Database and seeds data as required
-        /// </summary>
-        /// <param name="serviceProvider">DI Container</param>
-        /// <param name="DeleteDatabase">Delete the database and start from scratch</param>
-        /// <param name="UseMigrations">Use Migrations or EnsureCreated</param>
-        /// <param name="SeedSampleData">Add optional sample data</param>
         public static void Initialize(IServiceProvider serviceProvider,
             bool DeleteDatabase = false, bool UseMigrations = true, bool SeedSampleData = true)
         {
@@ -46,13 +39,12 @@ namespace Haver_Boecker_Niagara.Data
                 #endregion
 
                 #region Seed Required Data
-                //empty for now
+                // Empty for now
                 #endregion
 
                 #region Seed Sample Data
                 if (SeedSampleData)
                 {
-
                     try
                     {
                         #region Customers
@@ -62,7 +54,8 @@ namespace Haver_Boecker_Niagara.Data
                                 new Customer
                                 {
                                     Name = "Acme Corporation",
-                                    ContactPerson = "John Doe",
+                                    ContactFirstName = "John",
+                                    ContactLastName = "Doe",
                                     PhoneNumber = "123-456-7890",
                                     Email = "contact@acmecorp.com",
                                     Address = "123 Acme St.",
@@ -75,7 +68,8 @@ namespace Haver_Boecker_Niagara.Data
                                 new Customer
                                 {
                                     Name = "Beta Industries",
-                                    ContactPerson = "Jane Smith",
+                                    ContactFirstName = "Jane",
+                                    ContactLastName = "Smith",
                                     PhoneNumber = "987-654-3210",
                                     Email = "support@betaind.com",
                                     Address = "456 Beta Ave.",
@@ -97,7 +91,8 @@ namespace Haver_Boecker_Niagara.Data
                                 new Vendor
                                 {
                                     Name = "Global Parts Inc.",
-                                    ContactPerson = "Tom Green",
+                                    ContactFirstName = "Tom",
+                                    ContactLastName = "Green",
                                     PhoneNumber = "111-222-3333",
                                     Email = "sales@globalparts.com",
                                     Address = "789 Global Rd.",
@@ -118,14 +113,14 @@ namespace Haver_Boecker_Niagara.Data
                             context.Engineers.AddRange(
                                 new Engineer
                                 {
-                                    Name = "Alice Johnson",
-                                    Initials = "AJ",
+                                    FirstName = "Alice",
+                                    LastName = "Johnson",
                                     Email = "alice.johnson@hbn.com"
                                 },
                                 new Engineer
                                 {
-                                    Name = "Bob Martin",
-                                    Initials = "BM",
+                                    FirstName = "Bob",
+                                    LastName = "Martin",
                                     Email = "bob.martin@hbn.com"
                                 }
                             );
@@ -219,7 +214,7 @@ namespace Haver_Boecker_Niagara.Data
                                 context.EngineeringPackages.AddRange(
                                     new EngineeringPackage
                                     {
-                                        Engineers = new List<Engineer> { engineer }, 
+                                        Engineers = new List<Engineer> { engineer },
                                         PackageReleaseDate = DateTime.UtcNow,
                                         ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
                                     }

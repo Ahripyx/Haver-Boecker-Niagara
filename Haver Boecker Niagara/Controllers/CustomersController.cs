@@ -19,7 +19,6 @@ namespace Haver_Boecker_Niagara.Controllers
             _context = context;
         }
 
-        // GET: Customers
         public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchPhone, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
             string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode" };
@@ -69,7 +68,9 @@ namespace Haver_Boecker_Niagara.Controllers
             customers = sortField switch
             {
                 "Name" => sortDirection == "asc" ? customers.OrderBy(c => c.Name) : customers.OrderByDescending(c => c.Name),
-                "ContactPerson" => sortDirection == "asc" ? customers.OrderBy(c => c.ContactPerson) : customers.OrderByDescending(c => c.ContactPerson),
+                "ContactPerson" => sortDirection == "asc"
+                    ? customers.OrderBy(c => c.ContactFirstName).ThenBy(c => c.ContactLastName)
+                    : customers.OrderByDescending(c => c.ContactFirstName).ThenByDescending(c => c.ContactLastName),
                 "PhoneNumber" => sortDirection == "asc" ? customers.OrderBy(c => c.PhoneNumber) : customers.OrderByDescending(c => c.PhoneNumber),
                 "Email" => sortDirection == "asc" ? customers.OrderBy(c => c.Email) : customers.OrderByDescending(c => c.Email),
                 "Address" => sortDirection == "asc" ? customers.OrderBy(c => c.Address) : customers.OrderByDescending(c => c.Address),

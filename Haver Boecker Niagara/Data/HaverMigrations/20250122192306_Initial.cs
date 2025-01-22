@@ -18,7 +18,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     CustomerID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    ContactPerson = table.Column<string>(type: "TEXT", nullable: true),
+                    ContactFirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    ContactLastName = table.Column<string>(type: "TEXT", nullable: true),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Address = table.Column<string>(type: "TEXT", nullable: true),
@@ -40,7 +41,9 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PackageReleaseDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ApprovalDrawingDate = table.Column<DateTime>(type: "TEXT", nullable: true)
+                    ApprovalDrawingDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ActualPackageReleaseDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ActualApprovalDrawingDate = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,8 +56,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 {
                     EngineerID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Initials = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -69,7 +72,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     VendorID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    ContactPerson = table.Column<string>(type: "TEXT", nullable: true),
+                    ContactFirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    ContactLastName = table.Column<string>(type: "TEXT", nullable: true),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Address = table.Column<string>(type: "TEXT", nullable: true),
@@ -150,6 +154,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     MachineID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     SerialNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    InternalPONumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     MachineSize = table.Column<int>(type: "INTEGER", nullable: false),
                     MachineClass = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     MachineSizeDesc = table.Column<string>(type: "TEXT", nullable: false),
