@@ -69,7 +69,7 @@ namespace Haver_Boecker_Niagara.Data
                 .HasMany(ep => ep.Engineers)
                 .WithMany(e => e.EngineeringPackages)
                 .UsingEntity<Dictionary<string, object>>(
-                    "EngineeringPackageEngineer",
+                    "EngineeringSpeciality",
                     j => j.HasOne<Engineer>().WithMany(),
                     j => j.HasOne<EngineeringPackage>().WithMany());
         }

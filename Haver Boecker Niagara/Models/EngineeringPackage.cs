@@ -12,7 +12,6 @@ namespace Haver_Boecker_Niagara.Models
         public DateTime? ActualPackageReleaseDate { get; set; }
         public DateTime? ActualApprovalDrawingDate { get; set; }
 
-
         public ICollection<Engineer> Engineers { get; set; } = new HashSet<Engineer>();
 
 
