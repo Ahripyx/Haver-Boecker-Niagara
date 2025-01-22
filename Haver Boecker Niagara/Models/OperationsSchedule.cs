@@ -7,10 +7,6 @@ namespace Haver_Boecker_Niagara.Models
         public int OperationsID { get; set; }
 
         public int SalesOrderID { get; set; }
-        
-        [DisplayName("Serial №")]
-        public string SerialNumber { get; set; } 
-        
 
         [DisplayName("Engineering Package")]
         public int? EngineeringPackageID {  get; set; }  
