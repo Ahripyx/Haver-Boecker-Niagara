@@ -6,11 +6,13 @@ namespace Haver_Boecker_Niagara.Models
     {
         public int EngineeringPackageID { get; set; }
         
-        public DateTime? PackageReleaseDate { get; set; } // kickoff meeting
-        public DateTime? ApprovalDrawingDate { get; set; } // "A" in excel
+        public DateTime? PackageReleaseDate { get; set; }
+        public DateTime? ApprovalDrawingDate { get; set; }
+
+        public DateTime? ActualPackageReleaseDate { get; set; }
+        public DateTime? ActualApprovalDrawingDate { get; set; }
 
 
-        // this model will later allow document upload (approval drawing)
         public ICollection<Engineer> Engineers { get; set; } = new HashSet<Engineer>();
 
 

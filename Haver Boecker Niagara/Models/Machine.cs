@@ -11,6 +11,10 @@ namespace Haver_Boecker_Niagara.Models
         [StringLength(50, ErrorMessage = "Serial number cannot exceed 50 characters.")]
         public string SerialNumber { get; set; }
 
+        [Required]
+        [StringLength(50, ErrorMessage = "Internal PO number cannot exceed 50 characters.")]
+        public string InternalPONumber { get; set; }
+
         [DisplayName("Machine Size")]
         public int MachineSize { get; set; }
 
