@@ -165,7 +165,6 @@ namespace Haver_Boecker_Niagara.Data
                                 new OperationsSchedule
                                 {
                                     SalesOrderID = salesOrder.SalesOrderID,
-                                    SerialNumber = "SN12345",
                                     DeliveryDate = DateTime.UtcNow.AddMonths(1),
                                     ExtraNotes = "Initial assembly scheduled.",
                                     NamePlateStatus = false
@@ -215,15 +214,18 @@ namespace Haver_Boecker_Niagara.Data
                         if (!context.EngineeringPackages.Any())
                         {
                             var engineer = context.Engineers.FirstOrDefault();
-                            context.EngineeringPackages.AddRange(
-                                new EngineeringPackage
-                                {
-                                    EngineerID = engineer.EngineerID,
-                                    PackageReleaseDate = DateTime.UtcNow,
-                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
-                                }
-                            );
-                            context.SaveChanges();
+                            if (engineer != null)
+                            {
+                                context.EngineeringPackages.AddRange(
+                                    new EngineeringPackage
+                                    {
+                                        Engineers = new List<Engineer> { engineer }, 
+                                        PackageReleaseDate = DateTime.UtcNow,
+                                        ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
+                                    }
+                                );
+                                context.SaveChanges();
+                            }
                         }
                         #endregion
                     }

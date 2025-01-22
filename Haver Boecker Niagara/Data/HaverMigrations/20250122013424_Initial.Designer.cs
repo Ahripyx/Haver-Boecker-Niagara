@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.HaverMigrations
+namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250121221623_Initial")]
+    [Migration("20250122013424_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -19,6 +19,21 @@ namespace Haver_Boecker_Niagara.HaverMigrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
+
+            modelBuilder.Entity("EngineeringPackageEngineer", b =>
+                {
+                    b.Property<int>("EngineeringPackagesEngineeringPackageID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EngineersEngineerID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EngineeringPackagesEngineeringPackageID", "EngineersEngineerID");
+
+                    b.HasIndex("EngineersEngineerID");
+
+                    b.ToTable("EngineeringPackageEngineer");
+                });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Customer", b =>
                 {
@@ -96,15 +111,10 @@ namespace Haver_Boecker_Niagara.HaverMigrations
                     b.Property<DateTime?>("ApprovalDrawingDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("EngineerID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime?>("PackageReleaseDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("EngineeringPackageID");
-
-                    b.HasIndex("EngineerID");
 
                     b.ToTable("EngineeringPackages");
                 });
@@ -178,10 +188,7 @@ namespace Haver_Boecker_Niagara.HaverMigrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("EngineeringPackageID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("EngineeringPackageID1")
+                    b.Property<int>("EngineeringPackageID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ExtraNotes")
@@ -200,15 +207,9 @@ namespace Haver_Boecker_Niagara.HaverMigrations
                     b.Property<string>("ScopeNotes")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SerialNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasKey("OperationsID");
 
                     b.HasIndex("EngineeringPackageID");
-
-                    b.HasIndex("EngineeringPackageID1");
 
                     b.HasIndex("SalesOrderID");
 
@@ -252,6 +253,12 @@ namespace Haver_Boecker_Niagara.HaverMigrations
                     b.Property<int>("CustomerID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("EngineeringPackageID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EngineeringPackageID1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("OrderNumber")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -268,6 +275,10 @@ namespace Haver_Boecker_Niagara.HaverMigrations
                     b.HasKey("SalesOrderID");
 
                     b.HasIndex("CustomerID");
+
+                    b.HasIndex("EngineeringPackageID");
+
+                    b.HasIndex("EngineeringPackageID1");
 
                     b.ToTable("SalesOrders");
                 });
@@ -316,15 +327,19 @@ namespace Haver_Boecker_Niagara.HaverMigrations
                     b.ToTable("Vendors");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.EngineeringPackage", b =>
+            modelBuilder.Entity("EngineeringPackageEngineer", b =>
                 {
-                    b.HasOne("Haver_Boecker_Niagara.Models.Engineer", "Engineer")
-                        .WithMany("EngineeringPackages")
-                        .HasForeignKey("EngineerID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", null)
+                        .WithMany()
+                        .HasForeignKey("EngineeringPackagesEngineeringPackageID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Engineer");
+                    b.HasOne("Haver_Boecker_Niagara.Models.Engineer", null)
+                        .WithMany()
+                        .HasForeignKey("EngineersEngineerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Machine", b =>
@@ -343,11 +358,8 @@ namespace Haver_Boecker_Niagara.HaverMigrations
                     b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", "EngineeringPackage")
                         .WithMany()
                         .HasForeignKey("EngineeringPackageID")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", null)
-                        .WithMany("OperationsSchedules")
-                        .HasForeignKey("EngineeringPackageID1");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Haver_Boecker_Niagara.Models.SalesOrder", "SalesOrder")
                         .WithMany("OperationsSchedules")
@@ -387,7 +399,19 @@ namespace Haver_Boecker_Niagara.HaverMigrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", "EngineeringPackage")
+                        .WithMany()
+                        .HasForeignKey("EngineeringPackageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", null)
+                        .WithMany("SalesOrders")
+                        .HasForeignKey("EngineeringPackageID1");
+
                     b.Navigation("Customer");
+
+                    b.Navigation("EngineeringPackage");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Customer", b =>
@@ -395,14 +419,9 @@ namespace Haver_Boecker_Niagara.HaverMigrations
                     b.Navigation("SaleOrders");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.Engineer", b =>
-                {
-                    b.Navigation("EngineeringPackages");
-                });
-
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.EngineeringPackage", b =>
                 {
-                    b.Navigation("OperationsSchedules");
+                    b.Navigation("SalesOrders");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.OperationsSchedule", b =>
