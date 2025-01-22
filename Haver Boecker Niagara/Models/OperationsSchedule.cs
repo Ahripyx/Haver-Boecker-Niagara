@@ -8,13 +8,6 @@ namespace Haver_Boecker_Niagara.Models
 
         public int SalesOrderID { get; set; }
         
-        [DisplayName("Serial №")]
-        public string SerialNumber { get; set; } 
-        
-
-        [DisplayName("Engineering Package")]
-        public int? EngineeringPackageID {  get; set; }  
-
         public ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
 
 

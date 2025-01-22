@@ -47,11 +47,11 @@ namespace Haver_Boecker_Niagara.Data
                 .HasForeignKey(os => os.SalesOrderID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<OperationsSchedule>()
-                .HasOne(os => os.EngineeringPackage)
+            modelBuilder.Entity<SalesOrder>()
+                .HasOne(so => so.EngineeringPackage)
                 .WithMany()
-                .HasForeignKey(os => os.EngineeringPackageID)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(so => so.EngineeringPackageID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PurchaseOrder>()
                 .HasOne(po => po.Vendor)
@@ -66,11 +66,13 @@ namespace Haver_Boecker_Niagara.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<EngineeringPackage>()
-                .HasOne(ep => ep.Engineer)
+                .HasMany(ep => ep.Engineers)
                 .WithMany(e => e.EngineeringPackages)
-                .HasForeignKey(ep => ep.EngineerID)
-                .OnDelete(DeleteBehavior.Restrict);
-
+                .UsingEntity<Dictionary<string, object>>(
+                    "EngineeringPackageEngineer",
+                    j => j.HasOne<Engineer>().WithMany(),
+                    j => j.HasOne<EngineeringPackage>().WithMany());
         }
+
     }
 }

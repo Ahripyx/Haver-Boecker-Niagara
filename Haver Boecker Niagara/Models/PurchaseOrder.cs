@@ -8,8 +8,6 @@ namespace Haver_Boecker_Niagara.Models
     {
         public int PurchaseOrderID { get; set; }
 
-        public int OperationsID { get; set; }
-
         public string PurchaseOrderNumber { get; set; }
 
 
@@ -19,9 +17,9 @@ namespace Haver_Boecker_Niagara.Models
         public int VendorID { get; set; }
 
         public Vendor Vendor { get; set; }
+
+        public int OperationsID { get; set; }
         public OperationsSchedule OperationsSchedule { get; set; }
-
-
 
     }
 }
