@@ -98,8 +98,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     Status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     CustomerID = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false),
-                    EngineeringPackageID1 = table.Column<int>(type: "INTEGER", nullable: true)
+                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,15 +115,10 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         principalTable: "EngineeringPackages",
                         principalColumn: "EngineeringPackageID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SalesOrders_EngineeringPackages_EngineeringPackageID1",
-                        column: x => x.EngineeringPackageID1,
-                        principalTable: "EngineeringPackages",
-                        principalColumn: "EngineeringPackageID");
                 });
 
             migrationBuilder.CreateTable(
-                name: "EngineeringPackageEngineer",
+                name: "EngineeringSpeciality",
                 columns: table => new
                 {
                     EngineeringPackagesEngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false),
@@ -132,15 +126,15 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EngineeringPackageEngineer", x => new { x.EngineeringPackagesEngineeringPackageID, x.EngineersEngineerID });
+                    table.PrimaryKey("PK_EngineeringSpeciality", x => new { x.EngineeringPackagesEngineeringPackageID, x.EngineersEngineerID });
                     table.ForeignKey(
-                        name: "FK_EngineeringPackageEngineer_EngineeringPackages_EngineeringPackagesEngineeringPackageID",
+                        name: "FK_EngineeringSpeciality_EngineeringPackages_EngineeringPackagesEngineeringPackageID",
                         column: x => x.EngineeringPackagesEngineeringPackageID,
                         principalTable: "EngineeringPackages",
                         principalColumn: "EngineeringPackageID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EngineeringPackageEngineer_Engineers_EngineersEngineerID",
+                        name: "FK_EngineeringSpeciality_Engineers_EngineersEngineerID",
                         column: x => x.EngineersEngineerID,
                         principalTable: "Engineers",
                         principalColumn: "EngineerID",
@@ -191,18 +185,11 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     ActualReworkHours = table.Column<string>(type: "TEXT", nullable: true),
                     BudgetedAssemblyHours = table.Column<string>(type: "TEXT", nullable: true),
                     NamePlateStatus = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ExtraNotes = table.Column<string>(type: "TEXT", nullable: false),
-                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false)
+                    ExtraNotes = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OperationsSchedules", x => x.OperationsID);
-                    table.ForeignKey(
-                        name: "FK_OperationsSchedules_EngineeringPackages_EngineeringPackageID",
-                        column: x => x.EngineeringPackageID,
-                        principalTable: "EngineeringPackages",
-                        principalColumn: "EngineeringPackageID",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OperationsSchedules_SalesOrders_SalesOrderID",
                         column: x => x.SalesOrderID,
@@ -240,19 +227,14 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EngineeringPackageEngineer_EngineersEngineerID",
-                table: "EngineeringPackageEngineer",
+                name: "IX_EngineeringSpeciality_EngineersEngineerID",
+                table: "EngineeringSpeciality",
                 column: "EngineersEngineerID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Machines_SalesOrderID",
                 table: "Machines",
                 column: "SalesOrderID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OperationsSchedules_EngineeringPackageID",
-                table: "OperationsSchedules",
-                column: "EngineeringPackageID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OperationsSchedules_SalesOrderID",
@@ -289,7 +271,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EngineeringPackageEngineer");
+                name: "EngineeringSpeciality");
 
             migrationBuilder.DropTable(
                 name: "Machines");

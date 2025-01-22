@@ -10,7 +10,6 @@ namespace Haver_Boecker_Niagara.Models
 
         public ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
 
-
         [DisplayName("Delivery Date")]
         public DateTime? DeliveryDate { get; set; }
 
@@ -37,8 +36,6 @@ namespace Haver_Boecker_Niagara.Models
         public string ExtraNotes { get; set; }
 
         public SalesOrder SalesOrder { get; set; }
-
-        public EngineeringPackage EngineeringPackage { get; set; }
 
     }
 }

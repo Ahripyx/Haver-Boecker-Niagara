@@ -27,7 +27,7 @@ namespace Haver_Boecker_Niagara.Models
         [DisplayName("Engineering Package")]
         public int EngineeringPackageID { get; set; }
 
-        public EngineeringPackage EngineeringPackage { get; set; }
+        public EngineeringPackage EngineeringPackage { get; set; } 
 
         public ICollection<OperationsSchedule> OperationsSchedules { get; set; } = new HashSet<OperationsSchedule>();
 
