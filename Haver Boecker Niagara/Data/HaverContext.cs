@@ -49,7 +49,7 @@ namespace Haver_Boecker_Niagara.Data
 
             modelBuilder.Entity<SalesOrder>()
                 .HasOne(so => so.EngineeringPackage)
-                .WithMany()
+                .WithOne(p => p.SalesOrder)
                 .HasForeignKey(so => so.EngineeringPackageID)
                 .OnDelete(DeleteBehavior.Cascade);
 
