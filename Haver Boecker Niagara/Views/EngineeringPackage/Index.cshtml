@@ -48,6 +48,9 @@
         <thead>
             <tr>
                 <th>
+                    ID
+                </th>
+                <th>
                     <button type="submit" name="actionButton" value="EstimatedRel" class="fw-bold btn p-0"
                             formaction="@Url.Action("Index", new { sortField = "EstimatedRel", sortDirection = (ViewData["SortField"] as string == "EstimatedRel" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
                         @Html.DisplayNameFor(model => model.PackageReleaseDate) <span style="font-size: 10pt;">▼▲</span>
@@ -77,6 +80,9 @@
         <tbody>
             @foreach (var item in Model) {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EngineeringPackageID)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.EstimatedReleaseSummary)
                     </td>
