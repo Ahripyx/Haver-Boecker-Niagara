@@ -79,6 +79,7 @@ nav {
 .haver-logo-container {
     display: flex;
     justify-content: center;
+    margin-left: 2.5rem;
 }
 
 .haver-logo {

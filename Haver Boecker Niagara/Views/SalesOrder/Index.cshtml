@@ -29,11 +29,11 @@
                         <label class="control-label">Search Customer Name</label>
                         @Html.TextBox("searchCustomerName", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-md-3">
                         <label for="minPrice">Min Price:</label>
                         <input type="number" class="form-control" id="minPrice" name="minPrice" step="1" />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-md-3">
                         <label for="maxPrice">Max Price:</label>
                         <input type="number" class="form-control" id="maxPrice" name="maxPrice" step="1" />
                     </div>
@@ -69,14 +69,16 @@
             </th>
             <th>
                     <button type="submit" name="actionButton" value="Name" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "Name" && ViewData["OrderNumber"] as string == "asc") ? "desc" : "asc" })">
-                        @Html.DisplayNameFor(model => model.OrderNumber)
+                            formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "OrderNumber" && ViewData["OrderNumber"] as string == "asc") ? "desc" : "asc" })">
+                        @* @Html.DisplayNameFor(model => model.OrderNumber) *@
+                            OrderNumber
                     </button>
             </th>
             <th>
                     <button type="submit" name="actionButton" value="Name" class="btn btn-toolbar"
                             formaction="@Url.Action("Index", new { sortField = "EngineeringPackage", sortDirection = (ViewData["SortField"] as string == "EngineeringPackage" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                        @Html.DisplayNameFor(model => model.EngineeringPackage)
+                            @* @Html.DisplayNameFor(model => model.EngineeringPackage) *@
+                            EngineeringPackage
                     </button>
             </th>
             <th></th>
