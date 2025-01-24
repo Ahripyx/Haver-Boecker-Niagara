@@ -39,12 +39,12 @@ namespace Haver_Boecker_Niagara.Controllers
 
                 if (nameParts.Length == 1)
                 {
-                    customers = customers.Where(c => EF.Functions.Like(c.ContactFirstName, $"%{searchContact}%")
+                    vendors = vendors.Where(c => EF.Functions.Like(c.ContactFirstName, $"%{searchContact}%")
                                                   || EF.Functions.Like(c.ContactLastName, $"%{searchContact}%"));
                 }
                 else if (nameParts.Length >= 2)
                 {
-                    customers = customers.Where(c => EF.Functions.Like(c.ContactFirstName, $"%{nameParts[0]}%")
+                    vendors = vendors.Where(c => EF.Functions.Like(c.ContactFirstName, $"%{nameParts[0]}%")
                                                   && EF.Functions.Like(c.ContactLastName, $"%{nameParts[1]}%"));
                 }
                 filterCount++;
