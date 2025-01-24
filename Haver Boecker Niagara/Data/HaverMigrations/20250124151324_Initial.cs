@@ -259,12 +259,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
             migrationBuilder.CreateIndex(
                 name: "IX_SalesOrders_EngineeringPackageID",
                 table: "SalesOrders",
-                column: "EngineeringPackageID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SalesOrders_EngineeringPackageID1",
-                table: "SalesOrders",
-                column: "EngineeringPackageID1");
+                column: "EngineeringPackageID",
+                unique: true);
         }
 
         /// <inheritdoc />

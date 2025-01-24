@@ -49,8 +49,8 @@ namespace Haver_Boecker_Niagara.Data
 
             modelBuilder.Entity<SalesOrder>()
                 .HasOne(so => so.EngineeringPackage)
-                .WithOne(p => p.SalesOrder)
-                .HasForeignKey(so => so.EngineeringPackageID)
+                .WithOne(ep => ep.SalesOrder)
+                .HasForeignKey<SalesOrder>(so => so.EngineeringPackageID) 
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PurchaseOrder>()
