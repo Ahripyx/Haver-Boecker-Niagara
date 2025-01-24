@@ -28,5 +28,10 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public IActionResult _Login()
+        {
+            return View();
+        }
+
     }
 }
