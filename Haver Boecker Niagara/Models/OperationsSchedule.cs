@@ -5,41 +5,40 @@ namespace Haver_Boecker_Niagara.Models
     public class OperationsSchedule
     {
         public int OperationsID { get; set; }
-        [DisplayName("Sales Order")]
-        public string SalesOrder { get; set; }
-        public int CustomerID { get; set; }
-        public int VendorID { get; set; }
 
-        [DisplayName("Machine Description")]
-        public string MachineDescription { get; set; }
-        [DisplayName("Serial №")]
-        public string SerialNumber { get; set; }
-        [DisplayName("Package Release")]
-        public DateTime? PackageReleaseDate { get; set; }
-        [DisplayName("PO №")]
-        public string PurchaseOrderNumber { get; set; }
-        [DisplayName("Purchase Order Due Date")]
+        public int SalesOrderID { get; set; }
 
-        public DateTime? PODueDate { get; set; }
-        [DisplayName("Purchase Order Delivery Date")]
+        public ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
 
+        [DisplayName("Delivery Date")]
         public DateTime? DeliveryDate { get; set; }
-        public string Media { get; set; }
-        [DisplayName("Spare Parts")]
-        public string SparePartsMedia { get; set; }
-        public string Base { get; set; }
-        [DisplayName("Air Seal")]
 
-        public string AirSeal { get; set; }
-        [DisplayName("Coating / Lining")]
 
-        public string CoatingOrLining { get; set; }
-        public string Disassembly { get; set; }
+        [DisplayName("Pre-Order")]
+        public string? PreOrderNotes {  get; set; }
+
+        [DisplayName("Scope")]
+        public string? ScopeNotes {  get; set; }
+
+        [DisplayName("Actual Assembly Hours")]
+        public string? ActualAssemblyHours {  get; set; }
+
+        [DisplayName("Actual Rework Hours")]
+        public string? ActualReworkHours {  get; set; }
+
+        [DisplayName("Budgeted Assembly Hours")]
+        public string? BudgetedAssemblyHours {  get; set; }
+
+        [DisplayName("Name Plate Status")]
+        public bool NamePlateStatus { get; set; } = false;
+
         [DisplayName("Comments/Notes")]
+        public string ExtraNotes { get; set; }
 
-        public string Notes { get; set; }
+        public SalesOrder SalesOrder { get; set; }
 
-        public Customer Customer { get; set; }
-        public Vendor Vendor { get; set; }
     }
 }
+
+// other notes:
+// gantt schedule is unimportant for prototype 1 (they even specifically say *don't* program it, so we can mostly ignore it for now

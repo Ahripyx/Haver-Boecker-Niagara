@@ -17,57 +17,28 @@
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/Logo.png" alt="Haver_Boecker_Niagara" class="haver-logo" />
                 </a>
-            </div>
-            <button class="btn" id="menu-toggle">
-                <i class="bi bi-list hamburger-icon"></i>
-            </button>
-            <div id="side-menu">
-                <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">&times;</a>
-                <a asp-area="" asp-controller="Home" asp-action="Index">
-                    Home
-                    <i class="bi bi-house-door"></i>
-                </a>
-                <a asp-area="" asp-controller="Customers" asp-action="Index">
-                    Customers
-                    <i class="bi bi-people"></i>
-                </a>
-                <a asp-area="" asp-controller="OperationsSchedules" asp-action="Index">
-                    Operations
-                    <i class="bi bi-gear"></i>
-                </a>
-                <a asp-area="" asp-controller="Vendors" asp-action="Index">
-                    Vendors
-                    <i class="bi bi-cart"></i>
-                </a>
-                <a asp-area="" asp-controller="Home" asp-action="Privacy">
-                    Privacy
-                    <i class="bi bi-shield-lock"></i>
-                </a>
-                <a href="@Url.Action("_Login", "Home")">Login</a>
-                <div class="container-fluid">
-                    <!-- <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                        <img src="~/Logo.png" alt="Haver_Boecker_Niagara" />
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse">
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="OperationsSchedules" asp-action="Index">Operations</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Vendors" asp-action="Index">Vendors</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                        </ul-->
-
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Engineers" asp-action="Index">Engineers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="OperationsSchedules" asp-action="Index">Operations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Vendors" asp-action="Index">Vendors</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>

@@ -4,6 +4,8 @@
     {
         public int GanttID { get; set; }
         public int OrderID { get; set; }
+
+        // delete this field, should be accessed with OrderID (OperationsSchedule) -> SalesOrder
         public string OrderNumber { get; set; }
         public int CustomerID { get; set; }
         public int EngineerID { get; set; }

@@ -86,12 +86,6 @@
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="State" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "State", sortDirection = (ViewData["SortField"] as string == "State" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                        @Html.DisplayNameFor(model => model.State)
-                    </button>
-                </th>
-                <th>
                     <button type="submit" name="actionButton" value="Country" class="btn btn-toolbar"
                             formaction="@Url.Action("Index", new { sortField = "Country", sortDirection = (ViewData["SortField"] as string == "Country" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
                         @Html.DisplayNameFor(model => model.Country)
@@ -101,12 +95,6 @@
                     <button type="submit" name="actionButton" value="PostalCode" class="btn btn-toolbar"
                             formaction="@Url.Action("Index", new { sortField = "PostalCode", sortDirection = (ViewData["SortField"] as string == "PostalCode" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
                         @Html.DisplayNameFor(model => model.PostalCode)
-                    </button>
-                </th>
-                <th>
-                    <button type="submit" name="actionButton" value="Description" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "Description", sortDirection = (ViewData["SortField"] as string == "Description" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                        @Html.DisplayNameFor(model => model.Description)
                     </button>
                 </th>
                 <th></th>
@@ -135,17 +123,12 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.City)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.State)
-                    </td>
+
                     <td>
                         @Html.DisplayFor(modelItem => item.Country)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PostalCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.CustomerID">Edit</a> |
