@@ -30,13 +30,14 @@ namespace Haver_Boecker_Niagara.Controllers
             string sortDirection = "asc",
             string sortField = "PurchaseOrderNumber")
         {
-            string[] sortOptions = { "PurchaseOrderNumber", "VendorName", "PODueDate" };
+            string[] sortOptions = { "PurchaseOrderNumber", "VendorName", "OrderNumber", "PODueDate" };
             ViewData["Filtering"] = "btn-outline-secondary";
             int filterCount = 0;
 
             var purchaseOrders = _context.PurchaseOrders
                 .Include(p => p.Vendor)
                 .Include(p => p.OperationsSchedule)
+                .ThenInclude(os => os.SalesOrder)
                 .AsNoTracking();
 
             if (!string.IsNullOrEmpty(searchPONumber))
@@ -64,7 +65,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
             {
-                page = 1;
+                page = 1; 
                 if (actionButton == sortField)
                 {
                     sortDirection = sortDirection == "asc" ? "desc" : "asc";
@@ -72,28 +73,56 @@ namespace Haver_Boecker_Niagara.Controllers
                 sortField = actionButton;
             }
 
-            purchaseOrders = sortField switch
+            var query = purchaseOrders.Select(p => new
+            {
+                p.PurchaseOrderID,
+                p.PurchaseOrderNumber,
+                VendorName = p.Vendor.Name,
+                OrderNumber = p.OperationsSchedule.SalesOrder.OrderNumber,
+                p.PODueDate
+            });
+
+            query = sortField switch
             {
                 "PurchaseOrderNumber" => sortDirection == "asc"
-                    ? purchaseOrders.OrderBy(p => p.PurchaseOrderNumber)
-                    : purchaseOrders.OrderByDescending(p => p.PurchaseOrderNumber),
+                    ? query.OrderBy(p => p.PurchaseOrderNumber)
+                    : query.OrderByDescending(p => p.PurchaseOrderNumber),
                 "VendorName" => sortDirection == "asc"
-                    ? purchaseOrders.OrderBy(p => p.Vendor.Name)
-                    : purchaseOrders.OrderByDescending(p => p.Vendor.Name),
+                    ? query.OrderBy(p => p.VendorName)
+                    : query.OrderByDescending(p => p.VendorName),
+                "OrderNumber" => sortDirection == "asc"
+                    ? query.OrderBy(p => p.OrderNumber)
+                    : query.OrderByDescending(p => p.OrderNumber),
                 "PODueDate" => sortDirection == "asc"
-                    ? purchaseOrders.OrderBy(p => p.PODueDate)
-                    : purchaseOrders.OrderByDescending(p => p.PODueDate),
-                _ => purchaseOrders.OrderBy(p => p.PurchaseOrderNumber)
+                    ? query.OrderBy(p => p.PODueDate)
+                    : query.OrderByDescending(p => p.PODueDate),
+                _ => query.OrderBy(p => p.PurchaseOrderNumber)
             };
 
             ViewData["SortField"] = sortField;
             ViewData["SortDirection"] = sortDirection;
+
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
-            var pagedData = await PaginatedList<PurchaseOrder>.CreateAsync(purchaseOrders, page ?? 1, pageSize);
+            var pagedData = await PaginatedList<PurchaseOrder>.CreateAsync(
+                query.Select(p => new PurchaseOrder
+                {
+                    PurchaseOrderID = p.PurchaseOrderID,
+                    PurchaseOrderNumber = p.PurchaseOrderNumber,
+                    PODueDate = p.PODueDate,
+                    Vendor = new Vendor { Name = p.VendorName },
+                    OperationsSchedule = new OperationsSchedule
+                    {
+                        SalesOrder = new SalesOrder { OrderNumber = p.OrderNumber }
+                    }
+                }),
+                page ?? 1,
+                pageSize
+            );
 
             return View(pagedData);
         }
+
 
         // GET: PurchaseOrders/Details/5
         public async Task<IActionResult> Details(int? id)

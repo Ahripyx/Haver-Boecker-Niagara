@@ -25,12 +25,13 @@ namespace Haver_Boecker_Niagara.Models
         public string OrderNumber { get; set; }
 
         [DisplayName("Engineering Package")]
-        public int EngineeringPackageID { get; set; }
+        public int? EngineeringPackageID { get; set; }
 
-        public EngineeringPackage EngineeringPackage { get; set; } 
+        public EngineeringPackage? EngineeringPackage { get; set; }
 
-        public ICollection<OperationsSchedule> OperationsSchedules { get; set; } = new HashSet<OperationsSchedule>();
+        public ICollection<OperationsSchedule>? OperationsSchedules { get; set; } = new HashSet<OperationsSchedule>();  // This property is already here
 
-        public ICollection<Machine> Machines { get; set; } = new HashSet<Machine>();
+        public ICollection<Machine>? Machines { get; set; } = new HashSet<Machine>();
     }
+
 }

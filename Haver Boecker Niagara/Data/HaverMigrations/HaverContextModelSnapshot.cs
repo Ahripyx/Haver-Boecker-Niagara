@@ -259,7 +259,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<int>("CustomerID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EngineeringPackageID")
+                    b.Property<int?>("EngineeringPackageID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("OrderNumber")
@@ -399,8 +399,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", "EngineeringPackage")
                         .WithOne("SalesOrder")
                         .HasForeignKey("Haver_Boecker_Niagara.Models.SalesOrder", "EngineeringPackageID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Customer");
 
