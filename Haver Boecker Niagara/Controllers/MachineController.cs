@@ -22,8 +22,11 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine
-        public async Task<IActionResult> Index(int? pageSizeID, int? page, string? SearchOrderNo, string? SearchSerialNo, string? SearchPONo)
+        public async Task<IActionResult> Index(int? pageSizeID, int? page, string? SearchOrderNo, string? SearchSerialNo, string? SearchPONo, string? actionButton, string sortDirection = "asc", string sortField = "")
         {
+
+            string[] sortOptions = { "OrderNo", "Size", "Class", "Description" };
+            
             // reset state of filter button
             var filterCount = 0;
             ViewData["Filtering"] = "btn-outline-secondary";
@@ -53,6 +56,29 @@ namespace Haver_Boecker_Niagara.Controllers
                 ViewData["NumberFilters"] = $"({filterCount} Filter{(filterCount > 1 ? "s" : "")} Applied)";
                 ViewData["ShowFilter"] = "show";
             }
+
+            // sorting
+            if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
+            {
+                page = 1;
+                if (actionButton == sortField)
+                {
+                    sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                }
+                sortField = actionButton;
+            }
+
+            machines = sortField switch
+            {
+                "OrderNo" => sortDirection == "asc" ? machines.OrderBy(p => p.SalesOrder.OrderNumber) : machines.OrderByDescending(p => p.SalesOrder.OrderNumber),
+                "Size" => sortDirection == "asc" ? machines.OrderBy(p => p.MachineSize) : machines.OrderByDescending(p => p.MachineSize),
+                "Class" => sortDirection == "asc" ? machines.OrderBy(p => p.MachineClass) : machines.OrderByDescending(p => p.MachineClass),
+                "Description" => sortDirection == "asc" ? machines.OrderBy(p => p.MachineSizeDesc) : machines.OrderByDescending(p => p.MachineSizeDesc),
+                _ => machines.OrderBy(p => p.SalesOrder.OrderNumber)
+            };
+
+            ViewData["SortField"] = sortField;
+            ViewData["SortDirection"] = sortDirection;
 
             // pagination
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
