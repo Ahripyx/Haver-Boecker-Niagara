@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Haver_Boecker_Niagara.Models.Machine>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Machines</h1>
+
+ <!--<p>
+     <a asp-action="Create">Create New</a>
+</p>-->
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesOrder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InternalPONumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineSize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineClass)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MachineSizeDesc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Media)
+            </th>
+            <th style="max-width: 6rem">
+                @Html.DisplayNameFor(model => model.SparePartsMedia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Base)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AirSeal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoatingOrLining)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disassembly)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesOrder.OrderNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SerialNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InternalPONumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachineSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachineClass)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MachineSizeDesc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Media)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SparePartsMedia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Base)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AirSeal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoatingOrLining)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Disassembly)
+            </td>
+            
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MachineID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MachineID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MachineID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
