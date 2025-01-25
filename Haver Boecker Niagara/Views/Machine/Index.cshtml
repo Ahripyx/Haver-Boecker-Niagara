@@ -10,6 +10,37 @@
      <a asp-action="Create">Create New</a>
 </p>-->
 <form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="btn mb-2 @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
+                data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            Filter/Search @ViewData["numberFilters"]
+        </button><br />
+        <div class="collapse  @ViewData["ShowFilter"]" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Search by Order Number:</label>
+                        @Html.TextBox("SearchOrderNo", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Search by Serial Number:</label>
+                        @Html.TextBox("SearchSerialNo", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Search by PO Number:</label>
+                        @Html.TextBox("SearchPONo", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group mt-2 col-md-2">
+                    <input type="submit" name="actionButton" value="Filter"
+                           class="btn btn-outline-primary" />
+                    <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <table class="table">
         <thead>
             <tr>

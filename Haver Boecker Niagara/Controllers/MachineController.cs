@@ -22,9 +22,37 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine
-        public async Task<IActionResult> Index(int? pageSizeID, int? page)
+        public async Task<IActionResult> Index(int? pageSizeID, int? page, string? SearchOrderNo, string? SearchSerialNo, string? SearchPONo)
         {
+            // reset state of filter button
+            var filterCount = 0;
+            ViewData["Filtering"] = "btn-outline-secondary";
+
             IQueryable<Machine> machines = _context.Machines.Include(m => m.SalesOrder);
+
+            if (!String.IsNullOrEmpty(SearchOrderNo))
+            {
+                machines = machines.Where(p => p.SalesOrder.OrderNumber.ToLower().Contains(SearchOrderNo.ToLower()));
+                filterCount++;
+            }
+            if (!String.IsNullOrEmpty(SearchSerialNo))
+            {
+                machines = machines.Where(p => p.SerialNumber.ToLower().Contains(SearchSerialNo.ToLower()));
+                filterCount++;
+            }
+            if (!String.IsNullOrEmpty(SearchPONo))
+            {
+                machines = machines.Where(p => p.InternalPONumber.ToLower().Contains(SearchPONo.ToLower()));
+                filterCount++;
+            }
+
+            // set state of filter button if necessary
+            if (filterCount > 0)
+            {
+                ViewData["Filtering"] = "btn-danger";
+                ViewData["NumberFilters"] = $"({filterCount} Filter{(filterCount > 1 ? "s" : "")} Applied)";
+                ViewData["ShowFilter"] = "show";
+            }
 
             // pagination
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
