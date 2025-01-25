@@ -128,24 +128,47 @@ namespace Haver_Boecker_Niagara.Data
                         }
                         #endregion
 
+                        #region Engineering Packages
+                        if (!context.EngineeringPackages.Any())
+                        {
+                            var engineer = context.Engineers.FirstOrDefault();
+                            if (engineer != null)
+                            {
+                                context.EngineeringPackages.AddRange(
+                                    new EngineeringPackage
+                                    {
+                                        Engineers = new List<Engineer> { engineer },
+                                        PackageReleaseDate = DateTime.UtcNow,
+                                        ApprovalDrawingDate = DateTime.UtcNow.AddDays(5),
+
+                                    }
+                                );
+                                context.SaveChanges();
+                            }
+                        }
+                        #endregion
+
                         #region Sales Orders
                         if (!context.SalesOrders.Any())
                         {
                             var customer = context.Customers.FirstOrDefault();
+                            var engPackage = context.EngineeringPackages.FirstOrDefault();
                             context.SalesOrders.AddRange(
                                 new SalesOrder
                                 {
                                     OrderNumber = "SO-1001",
                                     Price = 5000.00M,
                                     Status = "Confirmed",
-                                    CustomerID = customer.CustomerID
+                                    CustomerID = customer.CustomerID,
+                                    EngineeringPackageID = engPackage.EngineeringPackageID
                                 },
                                 new SalesOrder
                                 {
                                     OrderNumber = "SO-1002",
                                     Price = 12000.00M,
                                     Status = "Pending",
-                                    CustomerID = customer.CustomerID
+                                    CustomerID = customer.CustomerID,
+                                    EngineeringPackageID = engPackage.EngineeringPackageID
                                 }
                             );
                             context.SaveChanges();
@@ -180,7 +203,14 @@ namespace Haver_Boecker_Niagara.Data
                                     MachineSize = 2,
                                     MachineClass = "Heavy Duty",
                                     MachineSizeDesc = "Large",
-                                    SalesOrderID = salesOrder.SalesOrderID
+                                    SalesOrderID = salesOrder.SalesOrderID,
+                                    AirSeal = false,
+                                    Base = true,
+                                    CoatingOrLining = true,
+                                    Disassembly = false,
+                                    InternalPONumber = "1234567",
+                                    Media = false,
+                                    SparePartsMedia = true
                                 }
                             );
                             context.SaveChanges();
@@ -205,24 +235,7 @@ namespace Haver_Boecker_Niagara.Data
                         }
                         #endregion
 
-                        #region Engineering Packages
-                        if (!context.EngineeringPackages.Any())
-                        {
-                            var engineer = context.Engineers.FirstOrDefault();
-                            if (engineer != null)
-                            {
-                                context.EngineeringPackages.AddRange(
-                                    new EngineeringPackage
-                                    {
-                                        Engineers = new List<Engineer> { engineer },
-                                        PackageReleaseDate = DateTime.UtcNow,
-                                        ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
-                                    }
-                                );
-                                context.SaveChanges();
-                            }
-                        }
-                        #endregion
+                        
                     }
                     catch (Exception ex)
                     {
