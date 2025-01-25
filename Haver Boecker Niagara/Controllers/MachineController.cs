@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
+using Haver_Boecker_Niagara.CustomControllers;
+using Haver_Boecker_Niagara.Utilities;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    public class MachineController : Controller
+    public class MachineController : ElephantController
     {
         private readonly HaverContext _context;
 
@@ -20,10 +22,16 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageSizeID, int? page)
         {
-            var haverContext = _context.Machines.Include(m => m.SalesOrder);
-            return View(await haverContext.ToListAsync());
+            IQueryable<Machine> machines = _context.Machines.Include(m => m.SalesOrder);
+
+            // pagination
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+            var pagedData = await PaginatedList<Machine>.CreateAsync(machines, page ?? 1, pageSize);
+
+            return View(pagedData);
         }
 
         // GET: Machine/Details/5
