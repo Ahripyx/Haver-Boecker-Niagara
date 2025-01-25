@@ -215,7 +215,7 @@ namespace Haver_Boecker_Niagara.Data
                             context.Machines.AddRange(
                                 new Machine
                                 {
-                                    SerialNumber = "M12345",
+                                    SerialNumber = "50-3964 CDN",
                                     MachineSize = 330,
                                     MachineClass = "T",
                                     MachineSizeDesc = "4' x 10' 1D",
@@ -224,13 +224,13 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = true,
                                     CoatingOrLining = true,
                                     Disassembly = true,
-                                    InternalPONumber = "2837192",
+                                    InternalPONumber = "4500805984",
                                     Media = true,
                                     SparePartsMedia = true
                                 },
                                 new Machine
                                 {
-                                    SerialNumber = "M23456",
+                                    SerialNumber = "DB-1914 CDN",
                                     MachineSize = 800,
                                     MachineClass = "T",
                                     MachineSizeDesc = "6' x 20' 2D",
@@ -239,13 +239,13 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = true,
                                     CoatingOrLining = false,
                                     Disassembly = true,
-                                    InternalPONumber = "0012893",
+                                    InternalPONumber = "4500801585",
                                     Media = false,
                                     SparePartsMedia = true
                                 },
                                 new Machine
                                 {
-                                    SerialNumber = "M34567",
+                                    SerialNumber = "22277 CDN",
                                     MachineSize = 1100,
                                     MachineClass = "L",
                                     MachineSizeDesc = "6' x 16' 3D",
@@ -254,13 +254,13 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = false,
                                     CoatingOrLining = false,
                                     Disassembly = false,
-                                    InternalPONumber = "3812028",
+                                    InternalPONumber = "4500805771",
                                     Media = false,
                                     SparePartsMedia = false
                                 },
                                 new Machine
                                 {
-                                    SerialNumber = "M45678",
+                                    SerialNumber = "DB 1915 CDN",
                                     MachineSize = 300,
                                     MachineClass = "S",
                                     MachineSizeDesc = "5' x 9' 1D",
@@ -269,13 +269,13 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = false,
                                     CoatingOrLining = false,
                                     Disassembly = false,
-                                    InternalPONumber = "8327312",
+                                    InternalPONumber = "4500786536",
                                     Media = true,
                                     SparePartsMedia = true
                                 },
                                 new Machine
                                 {
-                                    SerialNumber = "M45678",
+                                    SerialNumber = "55-1308 CDN",
                                     MachineSize = 880,
                                     MachineClass = "XL",
                                     MachineSizeDesc = "5' x 12' 2D+CP",
@@ -284,7 +284,7 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = true,
                                     CoatingOrLining = false,
                                     Disassembly = false,
-                                    InternalPONumber = "1028317",
+                                    InternalPONumber = "4500798658/799034",
                                     Media = false,
                                     SparePartsMedia = false
                                 }
