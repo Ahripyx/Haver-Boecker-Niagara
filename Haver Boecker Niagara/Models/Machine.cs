@@ -19,7 +19,7 @@ namespace Haver_Boecker_Niagara.Models
         [StringLength(50, ErrorMessage = "Internal PO number cannot exceed 50 characters.")]
         public string InternalPONumber { get; set; }
 
-        [DisplayName("Machine Size")]
+        [DisplayName("Size")]
         public int MachineSize { get; set; }
 
         [Required]
@@ -27,12 +27,12 @@ namespace Haver_Boecker_Niagara.Models
         [StringLength(50, ErrorMessage = "Machine class cannot exceed 50 characters.")]
         public string MachineClass { get; set; }
 
-        [DisplayName("Machine Size Description")]
+        [DisplayName("Description")]
         public string MachineSizeDesc { get; set; }
 
         public bool Media { get; set; } = false;
 
-        [DisplayName("Spare Parts Media")]
+        [DisplayName("Spare Parts / Media")]
         public bool SparePartsMedia { get; set; } = false;
 
         public bool Base { get; set; } = false;
@@ -50,6 +50,6 @@ namespace Haver_Boecker_Niagara.Models
         public int SalesOrderID { get; set; }
 
         [DisplayName("Order #")]
-        public SalesOrder SalesOrder { get; set; }
+        public SalesOrder? SalesOrder { get; set; } // ? is important
     }
 }
