@@ -22,8 +22,17 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine
-        public async Task<IActionResult> Index(int? pageSizeID, int? page, string? SearchOrderNo, string? SearchSerialNo, string? SearchPONo, string? actionButton, string sortDirection = "asc", string sortField = "")
-        {
+        public async Task<IActionResult> Index
+        (
+            int? pageSizeID, 
+            int? page, 
+            string? SearchOrderNo, 
+            string? SearchSerialNo, 
+            string? SearchPONo, 
+            string? actionButton, 
+            string sortDirection = "asc", 
+            string sortField = ""
+        ) {
 
             string[] sortOptions = { "OrderNo", "Size", "Class", "Description" };
             
@@ -31,21 +40,31 @@ namespace Haver_Boecker_Niagara.Controllers
             var filterCount = 0;
             ViewData["Filtering"] = "btn-outline-secondary";
 
-            IQueryable<Machine> machines = _context.Machines.Include(m => m.SalesOrder);
+            IQueryable<Machine> machines = _context
+                                           .Machines
+                                           .Include(m => m.SalesOrder)
+                                           .AsNoTracking();
 
             if (!String.IsNullOrEmpty(SearchOrderNo))
             {
-                machines = machines.Where(p => p.SalesOrder.OrderNumber.ToLower().Contains(SearchOrderNo.ToLower()));
+                machines = machines.Where(p => p.SalesOrder
+                                                .OrderNumber
+                                                .ToLower()
+                                                .Contains(SearchOrderNo.ToLower()));
                 filterCount++;
             }
             if (!String.IsNullOrEmpty(SearchSerialNo))
             {
-                machines = machines.Where(p => p.SerialNumber.ToLower().Contains(SearchSerialNo.ToLower()));
+                machines = machines.Where(p => p.SerialNumber
+                                                .ToLower()
+                                                .Contains(SearchSerialNo.ToLower()));
                 filterCount++;
             }
             if (!String.IsNullOrEmpty(SearchPONo))
             {
-                machines = machines.Where(p => p.InternalPONumber.ToLower().Contains(SearchPONo.ToLower()));
+                machines = machines.Where(p => p.InternalPONumber
+                                                .ToLower()
+                                                .Contains(SearchPONo.ToLower()));
                 filterCount++;
             }
 
@@ -70,10 +89,22 @@ namespace Haver_Boecker_Niagara.Controllers
 
             machines = sortField switch
             {
-                "OrderNo" => sortDirection == "asc" ? machines.OrderBy(p => p.SalesOrder.OrderNumber) : machines.OrderByDescending(p => p.SalesOrder.OrderNumber),
-                "Size" => sortDirection == "asc" ? machines.OrderBy(p => p.MachineSize) : machines.OrderByDescending(p => p.MachineSize),
-                "Class" => sortDirection == "asc" ? machines.OrderBy(p => p.MachineClass) : machines.OrderByDescending(p => p.MachineClass),
-                "Description" => sortDirection == "asc" ? machines.OrderBy(p => p.MachineSizeDesc) : machines.OrderByDescending(p => p.MachineSizeDesc),
+                "OrderNo" => sortDirection == "asc" 
+                ? machines.OrderBy(p => p.SalesOrder.OrderNumber) 
+                : machines.OrderByDescending(p => p.SalesOrder.OrderNumber),
+                
+                "Size" => sortDirection == "asc" 
+                ? machines.OrderBy(p => p.MachineSize) 
+                : machines.OrderByDescending(p => p.MachineSize),
+                
+                "Class" => sortDirection == "asc" 
+                ? machines.OrderBy(p => p.MachineClass) 
+                : machines.OrderByDescending(p => p.MachineClass),
+                
+                "Description" => sortDirection == "asc" 
+                ? machines.OrderBy(p => p.MachineSizeDesc) 
+                : machines.OrderByDescending(p => p.MachineSizeDesc),
+                
                 _ => machines.OrderBy(p => p.SalesOrder.OrderNumber)
             };
 

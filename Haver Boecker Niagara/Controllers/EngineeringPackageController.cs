@@ -23,14 +23,31 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: EngineeringPackage
-        public async Task<IActionResult> Index(DateTime? startDate, DateTime? endDate, string? FilterCriteria, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "ActualAprv")
-        {
-            // filtering/sort variables
+        public async Task<IActionResult> Index
+        (
+            DateTime? startDate,
+            DateTime? endDate,
+            string? FilterCriteria,
+            int? page,
+            int? pageSizeID,
+            string? actionButton,
+            string sortDirection = "asc",
+            string sortField = "ActualAprv"
+        ) { 
+            // reset filter button state & tracking
             string[] sortOptions = { "EstimatedRel", "EstimatedAprv", "ActualRel", "ActualAprv" };
             ViewData["Filtering"] = "btn-outline-secondary";
             int filterCount = 0;
 
-            string[] filterCriterias = { "None", "Estimated Release Date", "Estimated Approval Date", "Actual Release Date", "Actual Approval Date" };
+            // filter criteria dropdown
+            string[] filterCriterias = 
+            { 
+                "None", 
+                "Estimated Release Date", 
+                "Estimated Approval Date", 
+                "Actual Release Date", 
+                "Actual Approval Date" 
+            };
             if (FilterCriteria == null || ViewData["FilterCriteria"] == null) {
       
                ViewData["FilterCriteria"] = new SelectList(filterCriterias, null);
@@ -39,6 +56,7 @@ namespace Haver_Boecker_Niagara.Controllers
                ViewData["SelectedCriteria"] = FilterCriteria;
             }
 
+            // datetime error handling
             if (startDate == null)
             {
                 startDate = DateTime.MinValue;
@@ -54,28 +72,46 @@ namespace Haver_Boecker_Niagara.Controllers
                 ViewData["endDate"] = endDate;
             }
 
+            // edge case handling
             if (startDate > endDate)
             {
                 startDate = endDate;
             }
 
-            var engPackages = _context.EngineeringPackages.AsNoTracking();
+            // grab data and start acting on filters/sorts
+            var engPackages = _context
+                              .EngineeringPackages
+                              .Include(p => p.Engineers)
+                              .AsNoTracking();
 
             if (!String.IsNullOrEmpty(FilterCriteria) && FilterCriteria != "None")
             {
                 filterCount++;
             }
+
+
             engPackages = (FilterCriteria) switch
             {
-                "Estimated Release Date" => engPackages.Where(p => p.PackageReleaseDate.Value >= startDate && p.PackageReleaseDate.Value <= endDate),
-                "Estimated Approval Date" => engPackages.Where(p => p.ApprovalDrawingDate.Value >= startDate && p.ApprovalDrawingDate.Value <= endDate),
-                "Actual Release Date" => engPackages.Where(p => p.ActualPackageReleaseDate.Value >= startDate && p.ActualPackageReleaseDate.Value <= endDate),
-                "Actual Approval Date" => engPackages.Where(p => p.ActualApprovalDrawingDate.Value >= startDate && p.ActualApprovalDrawingDate.Value <= endDate),
+                "Estimated Release Date" => 
+                    engPackages.Where(p => p.PackageReleaseDate.Value >= startDate 
+                                        && p.PackageReleaseDate.Value <= endDate),
+                
+                "Estimated Approval Date" => 
+                    engPackages.Where(p => p.ApprovalDrawingDate.Value >= startDate 
+                                        && p.ApprovalDrawingDate.Value <= endDate),
+                
+                "Actual Release Date" => 
+                    engPackages.Where(p => p.ActualPackageReleaseDate.Value >= startDate 
+                                        && p.ActualPackageReleaseDate.Value <= endDate),
+                
+                "Actual Approval Date" => 
+                    engPackages.Where(p => p.ActualApprovalDrawingDate.Value >= startDate 
+                                        && p.ActualApprovalDrawingDate.Value <= endDate),
+                
                 _ => engPackages
-
-
             };
 
+            // set filter button state if necessary
             if (filterCount > 0)
             {
                 ViewData["Filtering"] = "btn-danger";
@@ -83,7 +119,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 ViewData["ShowFilter"] = "show";
             }
 
-
+            // sorting
             if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
             {
                 page = 1;
@@ -96,10 +132,22 @@ namespace Haver_Boecker_Niagara.Controllers
 
             engPackages = sortField switch
             {
-                "EstimatedRel" => sortDirection == "asc" ? engPackages.OrderBy(c => c.PackageReleaseDate) : engPackages.OrderByDescending(c => c.PackageReleaseDate),
-                "EstimatedAprv" => sortDirection == "asc" ? engPackages.OrderBy(c => c.ApprovalDrawingDate) : engPackages.OrderByDescending(c => c.ApprovalDrawingDate),
-                "ActualRel" => sortDirection == "asc" ? engPackages.OrderBy(c => c.ActualPackageReleaseDate) : engPackages.OrderByDescending(c => c.ActualPackageReleaseDate),
-                "ActualAprv" => sortDirection == "asc" ? engPackages.OrderBy(c => c.ActualApprovalDrawingDate) : engPackages.OrderByDescending(c => c.ActualApprovalDrawingDate),
+                "EstimatedRel" => sortDirection == "asc" 
+                ? engPackages.OrderBy(c => c.PackageReleaseDate) 
+                : engPackages.OrderByDescending(c => c.PackageReleaseDate),
+
+                "EstimatedAprv" => sortDirection == "asc" 
+                ? engPackages.OrderBy(c => c.ApprovalDrawingDate) 
+                : engPackages.OrderByDescending(c => c.ApprovalDrawingDate),
+
+                "ActualRel" => sortDirection == "asc" 
+                ? engPackages.OrderBy(c => c.ActualPackageReleaseDate) 
+                : engPackages.OrderByDescending(c => c.ActualPackageReleaseDate),
+
+                "ActualAprv" => sortDirection == "asc" 
+                ? engPackages.OrderBy(c => c.ActualApprovalDrawingDate) 
+                : engPackages.OrderByDescending(c => c.ActualApprovalDrawingDate),
+
                 _ => engPackages
             };
 
