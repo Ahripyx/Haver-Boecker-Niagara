@@ -1,87 +1,113 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #F0F0F0;
-    height: 100vh;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 0.875rem;
+    min-height: 100%;
+}
+
+.navbar .container-fluid {
+    background-color: #002f5f;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.login-button {
+    font-size: 0.875rem;
+    background-color: white;
+    color: #002f5f;
+    border-radius: 1.25rem;
+    padding: 0.188rem 1.875rem;
+    border: none;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-right: 4.375rem;
+}
+
+    .login-button:hover {
+        background-color: #f0f0f0;
+        color: #001a33;
+    }
+
+.navbar {
+    padding: 0 !important;
+}
+
+.navbar-brand {
+    padding: 0.625rem 4.375rem;
+    text-align: left;
+    justify-content: space-between;
+    display: flex;
+}
+
+
+
+.nav-bottom {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid white; /* line between logo and menu */
+    padding-top: 0.625rem;
+}
+
+.navbar-collapse {
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    list-style: none;
+    padding: 0;
     margin: 0;
 }
 
-nav {
-    background-color: #002F5F;
-    margin-bottom: 2.613rem;
+
+
+.nav-item {
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
 }
 
-#side-menu {
-    position: fixed;
-    left: -250px;
-    top: 0;
-    width: 250px;
-    height: 100%;
-    background-color: #002F5F;
-    color: #fff;
-    overflow-x: hidden;
-    padding-top: 60px;
-    transition: 0.3s;
-    z-index: 1000;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-}
-
-
-    #side-menu a {
-        padding: 10px 15px;
-        text-decoration: none;
-        font-size: 1.2rem;
-        color: #fff;
-        display: block;
-        transition: 0.2s;
-    }
-
-        #side-menu a:hover {
-            background-color: #ADB5BD;
-            color: #fff;
-        }
-
-    #side-menu .close-btn {
-        position: absolute;
-        top: 5px;
-        right: 3px;
-        font-size: 2rem;
-        text-decoration: none;
-        color: #fff;
-        cursor: pointer;
-        padding: 0;
-    }
-
-        #side-menu .close-btn:hover {
-            color: #002F5F;
-        }
-
-
-    #side-menu.open {
-        left: 0;
-    }
-
-.hamburger-icon {
-    font-size: 2rem;
-    color: #001f3f;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-    .hamburger-icon:hover {
-        color: #ff5722;
-    }
-
-
-#menu-toggle .hamburger-icon {
+.nav-link {
     color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
-.haver-logo-container {
-    display: flex;
-    justify-content: center;
-    margin-left: 2.5rem;
+    .nav-link:hover {
+        color: white;
+        transform: translateY(-5px);
+    }
+
+@media (min-width: 768px) {
+    html {
+        font-size: 1rem;
+    }
+
+    .navbar-nav {
+        justify-content: center;
+    }
 }
 
-.haver-logo {
-    width: 80%;
+body {
+    margin-bottom: 3.75rem;
 }

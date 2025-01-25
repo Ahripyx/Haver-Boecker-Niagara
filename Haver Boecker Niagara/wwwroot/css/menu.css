@@ -12,11 +12,6 @@
     position: relative;
 }
 
-.navbar-brand {
-    display: flex;
-    align-items: center;
-    position: absolute;
-}
 
 .navbar-collapse {
     display: flex;

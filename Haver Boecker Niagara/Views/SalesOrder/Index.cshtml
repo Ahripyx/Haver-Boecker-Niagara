@@ -70,15 +70,13 @@
             <th>
                     <button type="submit" name="actionButton" value="Name" class="btn btn-toolbar"
                             formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "OrderNumber" && ViewData["OrderNumber"] as string == "asc") ? "desc" : "asc" })">
-                        @* @Html.DisplayNameFor(model => model.OrderNumber) *@
-                            OrderNumber
+                        @Html.DisplayNameFor(model => model.OrderNumber)
                     </button>
             </th>
             <th>
                     <button type="submit" name="actionButton" value="Name" class="btn btn-toolbar"
                             formaction="@Url.Action("Index", new { sortField = "EngineeringPackage", sortDirection = (ViewData["SortField"] as string == "EngineeringPackage" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                            @* @Html.DisplayNameFor(model => model.EngineeringPackage) *@
-                            EngineeringPackage
+                            @Html.DisplayNameFor(model => model.EngineeringPackage)
                     </button>
             </th>
             <th></th>

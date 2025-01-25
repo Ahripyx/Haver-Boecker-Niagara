@@ -21,12 +21,14 @@ namespace Haver_Boecker_Niagara.Models
         public Customer Customer { get; set; }
 
         [Required]
+        [Display(Name = "Order Number")]
         [StringLength(50, ErrorMessage = "Order number cannot exceed 50 characters.")]
         public string OrderNumber { get; set; }
 
         [DisplayName("Engineering Package")]
         public int EngineeringPackageID { get; set; }
 
+        [Display(Name = "Engineering Package")]
         public EngineeringPackage EngineeringPackage { get; set; } 
 
         public ICollection<OperationsSchedule> OperationsSchedules { get; set; } = new HashSet<OperationsSchedule>();

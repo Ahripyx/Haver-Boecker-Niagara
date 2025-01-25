@@ -27,9 +27,9 @@ main {
     background: #F0F0F0;
     padding: 1.25rem;
     border-radius: 1rem;
-    border-right: groove;
-    border-bottom: groove;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.6);
     width: 31%;
+    margin-top: 5rem;
 }
 
 .main-title {
