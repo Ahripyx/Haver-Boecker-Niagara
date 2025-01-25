@@ -224,7 +224,7 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = true,
                                     CoatingOrLining = true,
                                     Disassembly = true,
-                                    InternalPONumber = "1234567",
+                                    InternalPONumber = "2837192",
                                     Media = true,
                                     SparePartsMedia = true
                                 },
@@ -239,7 +239,7 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = true,
                                     CoatingOrLining = false,
                                     Disassembly = true,
-                                    InternalPONumber = "1234567",
+                                    InternalPONumber = "0012893",
                                     Media = false,
                                     SparePartsMedia = true
                                 },
@@ -254,7 +254,7 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = false,
                                     CoatingOrLining = false,
                                     Disassembly = false,
-                                    InternalPONumber = "1234567",
+                                    InternalPONumber = "3812028",
                                     Media = false,
                                     SparePartsMedia = false
                                 },
@@ -269,7 +269,7 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = false,
                                     CoatingOrLining = false,
                                     Disassembly = false,
-                                    InternalPONumber = "1234567",
+                                    InternalPONumber = "8327312",
                                     Media = true,
                                     SparePartsMedia = true
                                 },
@@ -284,7 +284,7 @@ namespace Haver_Boecker_Niagara.Data
                                     Base = true,
                                     CoatingOrLining = false,
                                     Disassembly = false,
-                                    InternalPONumber = "1234567",
+                                    InternalPONumber = "1028317",
                                     Media = false,
                                     SparePartsMedia = false
                                 }
