@@ -137,7 +137,7 @@ namespace Haver_Boecker_Niagara.Data
                                 },
                                 new EngineeringPackage
                                 {
-                                    Engineers = new List<Engineer> { 
+                                    Engineers = new List<Engineer> {
                                         context.Engineers.Where(p => p.EngineerID == 1).FirstOrDefault(),
                                         context.Engineers.Where(p => p.EngineerID == 2).FirstOrDefault()
                                     },
@@ -146,198 +146,198 @@ namespace Haver_Boecker_Niagara.Data
                                 }
                             );
                             context.SaveChanges();
-                        #endregion
-  
-                        #region Engineering Speciality (Many-to-Many relationship)
-                        if (!context.Set<Dictionary<string, object>>("EngineeringSpeciality").Any())
-                        {
-                            var engineer = context.Engineers.FirstOrDefault();
-                            var engineeringPackage = context.EngineeringPackages.FirstOrDefault();
+                            #endregion
 
-                            if (engineer != null && engineeringPackage != null)
+                            #region Engineering Speciality (Many-to-Many relationship)
+                            if (!context.Set<Dictionary<string, object>>("EngineeringSpeciality").Any())
                             {
-                                context.Set<Dictionary<string, object>>("EngineeringSpeciality").Add(
-                                    new Dictionary<string, object>
-                                    {
+                                var engineer = context.Engineers.FirstOrDefault();
+                                var engineeringPackage = context.EngineeringPackages.FirstOrDefault();
+
+                                if (engineer != null && engineeringPackage != null)
+                                {
+                                    context.Set<Dictionary<string, object>>("EngineeringSpeciality").Add(
+                                        new Dictionary<string, object>
+                                        {
                                         { "EngineerID", engineer.EngineerID },
                                         { "EngineeringPackageID", engineeringPackage.EngineeringPackageID }
-                                    }
-                                );
-                                context.SaveChanges();
-                            }
-                        }
-                        #endregion
-
-                        #region Sales Orders
-                        if (!context.SalesOrders.Any())
-                        {
-                            context.SalesOrders.AddRange(
-                                new SalesOrder
-                                {
-                                    OrderNumber = "SO-1001",
-                                    Price = 5000.00M,
-                                    Status = "Confirmed",
-                                    CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
-                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 1).FirstOrDefault().EngineeringPackageID
-                                },
-                                new SalesOrder
-                                {
-                                    OrderNumber = "SO-1002",
-                                    Price = 12000.00M,
-                                    Status = "Pending",
-                                    CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
-                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 2).FirstOrDefault().EngineeringPackageID
-                                },
-                                new SalesOrder
-                                {
-                                    OrderNumber = "SO-1003",
-                                    Price = 8000.00M,
-                                    Status = "Pending",
-                                    CustomerID = context.Customers.Where(p => p.CustomerID == 2).FirstOrDefault().CustomerID,
-                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 3).FirstOrDefault().EngineeringPackageID
+                                        }
+                                    );
+                                    context.SaveChanges();
                                 }
-                            );
-                            context.SaveChanges();
-                        }
-                        #endregion
+                            }
+                            #endregion
 
-                        #region Operations Schedules
-                        if (!context.OperationsSchedules.Any())
-                        {
-                            var salesOrder = context.SalesOrders.FirstOrDefault();
-
-                            if (salesOrder != null)
+                            #region Sales Orders
+                            if (!context.SalesOrders.Any())
                             {
-                                context.OperationsSchedules.AddRange(
-                                    new OperationsSchedule
+                                context.SalesOrders.AddRange(
+                                    new SalesOrder
                                     {
-                                        SalesOrderID = salesOrder.SalesOrderID,
-                                        DeliveryDate = DateTime.UtcNow.AddMonths(1),
-                                        ExtraNotes = "Initial assembly scheduled.",
-                                        NamePlateStatus = false
+                                        OrderNumber = "SO-1001",
+                                        Price = 5000.00M,
+                                        Status = "Confirmed",
+                                        CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
+                                        EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 1).FirstOrDefault().EngineeringPackageID
+                                    },
+                                    new SalesOrder
+                                    {
+                                        OrderNumber = "SO-1002",
+                                        Price = 12000.00M,
+                                        Status = "Pending",
+                                        CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
+                                        EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 2).FirstOrDefault().EngineeringPackageID
+                                    },
+                                    new SalesOrder
+                                    {
+                                        OrderNumber = "SO-1003",
+                                        Price = 8000.00M,
+                                        Status = "Pending",
+                                        CustomerID = context.Customers.Where(p => p.CustomerID == 2).FirstOrDefault().CustomerID,
+                                        EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 3).FirstOrDefault().EngineeringPackageID
                                     }
                                 );
                                 context.SaveChanges();
                             }
-                            else
-                            {
-                                Debug.WriteLine("No SalesOrder found to associate with OperationsSchedule.");
-                            }
-                        }
-                        #endregion
+                            #endregion
 
-                        #region Machines
-                        if (!context.Machines.Any())
-                        {
-                            context.Machines.AddRange(
-                                new Machine
+                            #region Operations Schedules
+                            if (!context.OperationsSchedules.Any())
+                            {
+                                var salesOrder = context.SalesOrders.FirstOrDefault();
+
+                                if (salesOrder != null)
                                 {
-                                    SerialNumber = "50-3964 CDN",
-                                    MachineSize = 330,
-                                    MachineClass = "T",
-                                    MachineSizeDesc = "4' x 10' 1D",
-                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
-                                    AirSeal = true,
-                                    Base = true,
-                                    CoatingOrLining = true,
-                                    Disassembly = true,
-                                    InternalPONumber = "4500805984",
-                                    Media = true,
-                                    SparePartsMedia = true
-                                },
-                                new Machine
-                                {
-                                    SerialNumber = "DB-1914 CDN",
-                                    MachineSize = 800,
-                                    MachineClass = "T",
-                                    MachineSizeDesc = "6' x 20' 2D",
-                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
-                                    AirSeal = false,
-                                    Base = true,
-                                    CoatingOrLining = false,
-                                    Disassembly = true,
-                                    InternalPONumber = "4500801585",
-                                    Media = false,
-                                    SparePartsMedia = true
-                                },
-                                new Machine
-                                {
-                                    SerialNumber = "22277 CDN",
-                                    MachineSize = 1100,
-                                    MachineClass = "L",
-                                    MachineSizeDesc = "6' x 16' 3D",
-                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
-                                    AirSeal = false,
-                                    Base = false,
-                                    CoatingOrLining = false,
-                                    Disassembly = false,
-                                    InternalPONumber = "4500805771",
-                                    Media = false,
-                                    SparePartsMedia = false
-                                },
-                                new Machine
-                                {
-                                    SerialNumber = "DB 1915 CDN",
-                                    MachineSize = 300,
-                                    MachineClass = "S",
-                                    MachineSizeDesc = "5' x 9' 1D",
-                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
-                                    AirSeal = true,
-                                    Base = false,
-                                    CoatingOrLining = false,
-                                    Disassembly = false,
-                                    InternalPONumber = "4500786536",
-                                    Media = true,
-                                    SparePartsMedia = true
-                                },
-                                new Machine
-                                {
-                                    SerialNumber = "55-1308 CDN",
-                                    MachineSize = 880,
-                                    MachineClass = "XL",
-                                    MachineSizeDesc = "5' x 12' 2D+CP",
-                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 3).FirstOrDefault().SalesOrderID,
-                                    AirSeal = true,
-                                    Base = true,
-                                    CoatingOrLining = false,
-                                    Disassembly = false,
-                                    InternalPONumber = "4500798658/799034",
-                                    Media = false,
-                                    SparePartsMedia = false
+                                    context.OperationsSchedules.AddRange(
+                                        new OperationsSchedule
+                                        {
+                                            SalesOrderID = salesOrder.SalesOrderID,
+                                            DeliveryDate = DateTime.UtcNow.AddMonths(1),
+                                            ExtraNotes = "Initial assembly scheduled.",
+                                            NamePlateStatus = false
+                                        }
+                                    );
+                                    context.SaveChanges();
                                 }
-                            );
-                            context.SaveChanges();
-                        }
-                        #endregion
+                                else
+                                {
+                                    Debug.WriteLine("No SalesOrder found to associate with OperationsSchedule.");
+                                }
+                            }
+                            #endregion
 
-
-
-                        #region Purchase Orders
-                        if (!context.PurchaseOrders.Any())
-                        {
-                            var operationsSchedule = context.OperationsSchedules.FirstOrDefault();
-                            var vendor = context.Vendors.FirstOrDefault();
-
-                            if (operationsSchedule != null && vendor != null)
+                            #region Machines
+                            if (!context.Machines.Any())
                             {
-                                context.PurchaseOrders.AddRange(
-                                    new PurchaseOrder
+                                context.Machines.AddRange(
+                                    new Machine
                                     {
-                                        PurchaseOrderNumber = "PO-1001",
-                                        PODueDate = DateTime.UtcNow.AddDays(30),
-                                        VendorID = vendor.VendorID,
-                                        OperationsID = operationsSchedule.OperationsID
+                                        SerialNumber = "50-3964 CDN",
+                                        MachineSize = 330,
+                                        MachineClass = "T",
+                                        MachineSizeDesc = "4' x 10' 1D",
+                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
+                                        AirSeal = true,
+                                        Base = true,
+                                        CoatingOrLining = true,
+                                        Disassembly = true,
+                                        InternalPONumber = "4500805984",
+                                        Media = true,
+                                        SparePartsMedia = true
+                                    },
+                                    new Machine
+                                    {
+                                        SerialNumber = "DB-1914 CDN",
+                                        MachineSize = 800,
+                                        MachineClass = "T",
+                                        MachineSizeDesc = "6' x 20' 2D",
+                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
+                                        AirSeal = false,
+                                        Base = true,
+                                        CoatingOrLining = false,
+                                        Disassembly = true,
+                                        InternalPONumber = "4500801585",
+                                        Media = false,
+                                        SparePartsMedia = true
+                                    },
+                                    new Machine
+                                    {
+                                        SerialNumber = "22277 CDN",
+                                        MachineSize = 1100,
+                                        MachineClass = "L",
+                                        MachineSizeDesc = "6' x 16' 3D",
+                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
+                                        AirSeal = false,
+                                        Base = false,
+                                        CoatingOrLining = false,
+                                        Disassembly = false,
+                                        InternalPONumber = "4500805771",
+                                        Media = false,
+                                        SparePartsMedia = false
+                                    },
+                                    new Machine
+                                    {
+                                        SerialNumber = "DB 1915 CDN",
+                                        MachineSize = 300,
+                                        MachineClass = "S",
+                                        MachineSizeDesc = "5' x 9' 1D",
+                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
+                                        AirSeal = true,
+                                        Base = false,
+                                        CoatingOrLining = false,
+                                        Disassembly = false,
+                                        InternalPONumber = "4500786536",
+                                        Media = true,
+                                        SparePartsMedia = true
+                                    },
+                                    new Machine
+                                    {
+                                        SerialNumber = "55-1308 CDN",
+                                        MachineSize = 880,
+                                        MachineClass = "XL",
+                                        MachineSizeDesc = "5' x 12' 2D+CP",
+                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 3).FirstOrDefault().SalesOrderID,
+                                        AirSeal = true,
+                                        Base = true,
+                                        CoatingOrLining = false,
+                                        Disassembly = false,
+                                        InternalPONumber = "4500798658/799034",
+                                        Media = false,
+                                        SparePartsMedia = false
                                     }
                                 );
                                 context.SaveChanges();
                             }
-                            else
-                            {
-                                Debug.WriteLine("Could not find a valid OperationsSchedule or Vendor to link the PurchaseOrder.");
-                            }
-                        }
-                        #endregion
+                            #endregion
 
+
+
+                            #region Purchase Orders
+                            if (!context.PurchaseOrders.Any())
+                            {
+                                var operationsSchedule = context.OperationsSchedules.FirstOrDefault();
+                                var vendor = context.Vendors.FirstOrDefault();
+
+                                if (operationsSchedule != null && vendor != null)
+                                {
+                                    context.PurchaseOrders.AddRange(
+                                        new PurchaseOrder
+                                        {
+                                            PurchaseOrderNumber = "PO-1001",
+                                            PODueDate = DateTime.UtcNow.AddDays(30),
+                                            VendorID = vendor.VendorID,
+                                            OperationsID = operationsSchedule.OperationsID
+                                        }
+                                    );
+                                    context.SaveChanges();
+                                }
+                                else
+                                {
+                                    Debug.WriteLine("Could not find a valid OperationsSchedule or Vendor to link the PurchaseOrder.");
+                                }
+                            }
+                            #endregion
+                        }
                     }
                     catch (Exception ex)
                     {
