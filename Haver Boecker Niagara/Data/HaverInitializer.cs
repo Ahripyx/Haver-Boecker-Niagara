@@ -1,5 +1,6 @@
 ﻿using Haver_Boecker_Niagara.Models;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using System.Diagnostics;
 
 namespace Haver_Boecker_Niagara.Data
@@ -131,31 +132,31 @@ namespace Haver_Boecker_Niagara.Data
                         #region Engineering Packages
                         if (!context.EngineeringPackages.Any())
                         {
-                            var engineer = context.Engineers.FirstOrDefault();
-                            if (engineer != null)
-                            {
-                                context.EngineeringPackages.AddRange(
-                                    new EngineeringPackage
-                                    {
-                                        Engineers = new List<Engineer> { engineer },
-                                        PackageReleaseDate = DateTime.UtcNow,
-                                        ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
+                            context.EngineeringPackages.AddRange(
+                                new EngineeringPackage
+                                {
+                                    Engineers = new List<Engineer> { context.Engineers.Where(p => p.EngineerID == 1).FirstOrDefault() },
+                                    PackageReleaseDate = DateTime.UtcNow,
+                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
+                                },
+                                new EngineeringPackage
+                                {
+                                    Engineers = new List<Engineer> { context.Engineers.Where(p => p.EngineerID == 2).FirstOrDefault() },
+                                    PackageReleaseDate = DateTime.UtcNow,
+                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
+                                },
+                                new EngineeringPackage
+                                {
+                                    Engineers = new List<Engineer> { 
+                                        context.Engineers.Where(p => p.EngineerID == 1).FirstOrDefault(),
+                                        context.Engineers.Where(p => p.EngineerID == 2).FirstOrDefault()
                                     },
-                                    new EngineeringPackage
-                                    {
-                                        Engineers = new List<Engineer> { engineer },
-                                        PackageReleaseDate = DateTime.UtcNow,
-                                        ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
-                                    },
-                                    new EngineeringPackage
-                                    {
-                                        Engineers = new List<Engineer> { engineer },
-                                        PackageReleaseDate = DateTime.UtcNow,
-                                        ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
-                                    }
-                                );
-                                context.SaveChanges();
-                            }
+                                    PackageReleaseDate = DateTime.UtcNow,
+                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
+                                }
+                            );
+                            context.SaveChanges();
+                            
                         }
                         #endregion
 
@@ -177,7 +178,7 @@ namespace Haver_Boecker_Niagara.Data
                                     Price = 12000.00M,
                                     Status = "Pending",
                                     CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
-                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 1).FirstOrDefault().EngineeringPackageID
+                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 2).FirstOrDefault().EngineeringPackageID
                                 },
                                 new SalesOrder
                                 {
@@ -185,7 +186,7 @@ namespace Haver_Boecker_Niagara.Data
                                     Price = 8000.00M,
                                     Status = "Pending",
                                     CustomerID = context.Customers.Where(p => p.CustomerID == 2).FirstOrDefault().CustomerID,
-                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 1).FirstOrDefault().EngineeringPackageID
+                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 3).FirstOrDefault().EngineeringPackageID
                                 }
                             );
                             context.SaveChanges();

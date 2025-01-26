@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Engineering Packages</h1>
+<h1 class="mt-2">Engineering Packages</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -48,7 +48,7 @@
         <thead>
             <tr>
                 <th>
-                    ID
+                    Assigned Engineers
                 </th>
                 <th>
                     <button type="submit" name="actionButton" value="EstimatedRel" class="fw-bold btn p-0"
@@ -80,22 +80,28 @@
         <tbody>
             @foreach (var item in Model) {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EngineeringPackageID)
+                    <td class="my-auto">
+                        @foreach (var eng in item.Engineers) {
+                            <span class="d-block">@eng.Name</span>
+                        }
+                        @if (item.Engineers.Count == 0)
+                        {
+                            <span class="d-block">N/A</span>
+                        }
                     </td>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.EstimatedReleaseSummary)
                     </td>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.EstimatedApprovalSummary)
                     </td>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.ActualReleaseSummary)
                     </td>
-                    <td>
+                    <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.ActualApprovalSummary)
                     </td>
-                    <td>
+                    <td class="align-middle">
                         <a asp-action="Edit" asp-route-id="@item.EngineeringPackageID">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.EngineeringPackageID">Details</a> |
                         <a asp-action="Delete" asp-route-id="@item.EngineeringPackageID">Delete</a>

@@ -10,6 +10,7 @@ using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.Utilities;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System.Reflection.PortableExecutable;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -182,8 +183,19 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: EngineeringPackage/Create
-        public IActionResult Create()
+        public IActionResult Create(int? setCountEng)
         {
+            if (setCountEng == null && ViewData["setCountEng"] == null)
+            {
+                ViewData["setCountEng"] = 1;
+                ViewData["engCountDD"] = new SelectList(Enumerable.Range(0, 5));
+            }
+            else
+            {
+                ViewData["setCountEng"] = setCountEng;
+                ViewData["engCountDD"] = new SelectList(Enumerable.Range(0, 5), setCountEng);
+            }
+            ViewData["Engineers"] = new SelectList(_context.Engineers, "EngineerID", "Name", "Not Assigned");
             return View();
         }
 
@@ -200,6 +212,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Engineers"] = new SelectList(_context.Engineers.Where(p => !engineeringPackage.Engineers.Contains(p)), "EngineerID", "Name");
             return View(engineeringPackage);
         }
 
