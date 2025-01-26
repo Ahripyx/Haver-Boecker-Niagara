@@ -35,12 +35,10 @@ namespace Haver_Boecker_Niagara.Controllers
             string sortDirection = "asc",
             string sortField = "ActualAprv"
         ) { 
-            // reset filter button state & tracking
             string[] sortOptions = { "EstimatedRel", "EstimatedAprv", "ActualRel", "ActualAprv" };
             ViewData["Filtering"] = "btn-outline-secondary";
             int filterCount = 0;
 
-            // filter criteria dropdown
             string[] filterCriterias = 
             { 
                 "None", 
@@ -57,7 +55,6 @@ namespace Haver_Boecker_Niagara.Controllers
                ViewData["SelectedCriteria"] = FilterCriteria;
             }
 
-            // datetime error handling
             if (startDate == null)
             {
                 startDate = DateTime.MinValue;
@@ -73,13 +70,11 @@ namespace Haver_Boecker_Niagara.Controllers
                 ViewData["endDate"] = endDate;
             }
 
-            // edge case handling
             if (startDate > endDate)
             {
                 startDate = endDate;
             }
 
-            // grab data and start acting on filters/sorts
             var engPackages = _context
                               .EngineeringPackages
                               .Include(p => p.Engineers)
@@ -112,7 +107,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 _ => engPackages
             };
 
-            // set filter button state if necessary
             if (filterCount > 0)
             {
                 ViewData["Filtering"] = "btn-danger";
@@ -120,7 +114,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 ViewData["ShowFilter"] = "show";
             }
 
-            // sorting
             if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
             {
                 page = 1;
@@ -156,7 +149,6 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["SortDirection"] = sortDirection;
 
 
-            // pagination
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
             var pagedData = await PaginatedList<EngineeringPackage>.CreateAsync(engPackages, page ?? 1, pageSize);

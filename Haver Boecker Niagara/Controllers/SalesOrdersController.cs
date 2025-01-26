@@ -14,7 +14,7 @@ using System.Reflection.PortableExecutable;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    public class SalesOrdersController : Controller
+    public class SalesOrdersController : ElephantController
     {
         private readonly HaverContext _context;
 
@@ -104,7 +104,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["SortField"] = sortField;
             ViewData["SortDirection"] = sortDirection;
 
-            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, "SalesOrders");
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
             var pagedData = await PaginatedList<SalesOrder>.CreateAsync(salesOrders, page ?? 1, pageSize);
 
