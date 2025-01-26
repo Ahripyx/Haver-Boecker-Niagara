@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250126025938_Initial")]
+    [Migration("20250126223206_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -213,9 +213,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("OperationsID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime?>("PODueDate")
                         .HasColumnType("TEXT");
 
@@ -223,12 +220,15 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("SalesOrderID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("VendorID")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("PurchaseOrderID");
 
-                    b.HasIndex("OperationsID");
+                    b.HasIndex("SalesOrderID");
 
                     b.HasIndex("VendorID");
 
@@ -374,11 +374,10 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.PurchaseOrder", b =>
                 {
-                    b.HasOne("Haver_Boecker_Niagara.Models.OperationsSchedule", "OperationsSchedule")
+                    b.HasOne("Haver_Boecker_Niagara.Models.SalesOrder", "SalesOrder")
                         .WithMany("PurchaseOrders")
-                        .HasForeignKey("OperationsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalesOrderID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Haver_Boecker_Niagara.Models.Vendor", "Vendor")
                         .WithMany("PurchaseOrders")
@@ -386,7 +385,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OperationsSchedule");
+                    b.Navigation("SalesOrder");
 
                     b.Navigation("Vendor");
                 });
@@ -420,16 +419,13 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.OperationsSchedule", b =>
-                {
-                    b.Navigation("PurchaseOrders");
-                });
-
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.SalesOrder", b =>
                 {
                     b.Navigation("Machines");
 
                     b.Navigation("OperationsSchedules");
+
+                    b.Navigation("PurchaseOrders");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Vendor", b =>

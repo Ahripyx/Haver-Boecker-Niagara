@@ -60,9 +60,9 @@ namespace Haver_Boecker_Niagara.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PurchaseOrder>()
-                .HasOne(po => po.OperationsSchedule)
+                .HasOne(po => po.SalesOrder)
                 .WithMany(os => os.PurchaseOrders)
-                .HasForeignKey(po => po.OperationsID)
+                .HasForeignKey(po => po.SalesOrderID)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<EngineeringPackage>()

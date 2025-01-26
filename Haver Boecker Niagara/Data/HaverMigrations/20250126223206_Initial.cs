@@ -207,16 +207,16 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     PurchaseOrderNumber = table.Column<string>(type: "TEXT", nullable: false),
                     PODueDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     VendorID = table.Column<int>(type: "INTEGER", nullable: false),
-                    OperationsID = table.Column<int>(type: "INTEGER", nullable: false)
+                    SalesOrderID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PurchaseOrders", x => x.PurchaseOrderID);
                     table.ForeignKey(
-                        name: "FK_PurchaseOrders_OperationsSchedules_OperationsID",
-                        column: x => x.OperationsID,
-                        principalTable: "OperationsSchedules",
-                        principalColumn: "OperationsID",
+                        name: "FK_PurchaseOrders_SalesOrders_SalesOrderID",
+                        column: x => x.SalesOrderID,
+                        principalTable: "SalesOrders",
+                        principalColumn: "SalesOrderID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PurchaseOrders_Vendors_VendorID",
@@ -242,9 +242,9 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 column: "SalesOrderID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchaseOrders_OperationsID",
+                name: "IX_PurchaseOrders_SalesOrderID",
                 table: "PurchaseOrders",
-                column: "OperationsID");
+                column: "SalesOrderID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrders_VendorID",
@@ -273,19 +273,19 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 name: "Machines");
 
             migrationBuilder.DropTable(
+                name: "OperationsSchedules");
+
+            migrationBuilder.DropTable(
                 name: "PurchaseOrders");
 
             migrationBuilder.DropTable(
                 name: "Engineers");
 
             migrationBuilder.DropTable(
-                name: "OperationsSchedules");
+                name: "SalesOrders");
 
             migrationBuilder.DropTable(
                 name: "Vendors");
-
-            migrationBuilder.DropTable(
-                name: "SalesOrders");
 
             migrationBuilder.DropTable(
                 name: "Customers");

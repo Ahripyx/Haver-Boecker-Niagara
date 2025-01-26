@@ -1,73 +1,103 @@
-﻿@model Haver_Boecker_Niagara.Models.OperationsSchedule
+﻿@model Haver_Boecker_Niagara.ViewModels.OperationsScheduleViewModel
 
 @{
-    ViewData["Title"] = "Details";
-    Layout = "AssignPackage.cshtml";
+    ViewData["Title"] = "Operations Schedule Details";
 }
 
-<h1>Details</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div>
-    <h4>OperationsSchedule</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeliveryDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeliveryDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PreOrderNotes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PreOrderNotes)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ScopeNotes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ScopeNotes)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ActualAssemblyHours)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ActualAssemblyHours)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ActualReworkHours)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ActualReworkHours)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BudgetedAssemblyHours)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BudgetedAssemblyHours)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NamePlateStatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NamePlateStatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ExtraNotes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ExtraNotes)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SalesOrder)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SalesOrder.OrderNumber)
-        </dd>
-    </dl>
+    <h4>Sales Order</h4>
+    <p>@Model.SalesOrder</p>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.OperationsID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <h4>Customer Name</h4>
+    <p>@Model.CustomerName</p>
 </div>
+
+<div>
+    <h4>Machines</h4>
+    <ul>
+        @foreach (var machine in Model.Machines)
+        {
+            <li>@machine</li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h4>Serial / Internal PO</h4>
+    <ul>
+        @foreach (var serialAndIPO in Model.SerialAndIPO)
+        {
+            <li>@serialAndIPO</li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h4>Package Release</h4>
+    <ul>
+        @foreach (var engineer in Model.PackageRelease.Engineers)
+        {
+            <li>@engineer</li>
+        }
+    </ul>
+    <p>Release Summary: @Model.PackageRelease.EstimatedReleaseSummary</p>
+    <p>Approval Summary: @Model.PackageRelease.EstimatedApprovalSummary</p>
+</div>
+
+<div>
+    <h4>Vendors</h4>
+    <ul>
+        @foreach (var vendor in Model.Vendors)
+        {
+            <li>@vendor</li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h4>Purchase Orders</h4>
+    <ul>
+        @foreach (var po in Model.PurchaseOrders)
+        {
+            <li>@po</li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h4>Delivery Date</h4>
+    <p>@(Model.DeliveryDate?.ToString("d") ?? "N/A")</p>
+</div>
+
+<div>
+    <h4>Additional Details</h4>
+    <ul>
+        <li>Media: @Model.AdditionalDetails.Media</li>
+        <li>Spare Parts: @Model.AdditionalDetails.SparePartsMedia</li>
+        <li>Base: @Model.AdditionalDetails.Base</li>
+        <li>Air Seal: @Model.AdditionalDetails.AirSeal</li>
+        <li>Coating/Lining: @Model.AdditionalDetails.CoatingOrLining</li>
+        <li>Disassembly: @Model.AdditionalDetails.Disassembly</li>
+    </ul>
+</div>
+
+<div>
+    <h4>Notes</h4>
+    <ul>
+        <li>Pre-Order Notes: @Model.Notes.PreOrderNotes</li>
+        <li>Scope Notes: @Model.Notes.ScopeNotes</li>
+        <li>Actual Assembly Hours: @Model.Notes.ActualAssemblyHours</li>
+        <li>Actual Rework Hours: @Model.Notes.ActualReworkHours</li>
+        <li>Budgeted Assembly Hours: @Model.Notes.BudgetedAssemblyHours</li>
+        <li>Name Plate Status: @Model.Notes.NamePlateStatus</li>
+        <li>Extra Notes: @Model.Notes.ExtraNotes</li>
+    </ul>
+</div>
+
+<p>
+    <a href="@Url.Action("Index")">Back to List</a>
+</p>

@@ -43,6 +43,7 @@ namespace Haver_Boecker_Niagara.Models
         public int? EngineeringPackageID { get; set; }
 
         public EngineeringPackage? EngineeringPackage { get; set; }
+        public ICollection<PurchaseOrder>? PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
 
         public ICollection<OperationsSchedule>? OperationsSchedules { get; set; } = new HashSet<OperationsSchedule>();  // This property is already here
 

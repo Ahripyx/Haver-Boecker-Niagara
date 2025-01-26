@@ -303,10 +303,10 @@ namespace Haver_Boecker_Niagara.Data
                             #region Purchase Orders
                             if (!context.PurchaseOrders.Any())
                             {
-                                var operationsSchedule = context.OperationsSchedules.FirstOrDefault();
+                                var salesOrders = context.SalesOrders.FirstOrDefault();
                                 var vendor = context.Vendors.FirstOrDefault();
 
-                                if (operationsSchedule != null && vendor != null)
+                                if (salesOrders != null && vendor != null)
                                 {
                                     context.PurchaseOrders.AddRange(
                                         new PurchaseOrder
@@ -314,7 +314,7 @@ namespace Haver_Boecker_Niagara.Data
                                             PurchaseOrderNumber = "PO-1001",
                                             PODueDate = DateTime.UtcNow.AddDays(30),
                                             VendorID = vendor.VendorID,
-                                            OperationsID = operationsSchedule.OperationsID
+                                            SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
                                         }
                                     );
                                     context.SaveChanges();

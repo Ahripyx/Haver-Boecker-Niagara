@@ -8,8 +8,6 @@ namespace Haver_Boecker_Niagara.Models
 
         public int SalesOrderID { get; set; }
 
-        public ICollection<PurchaseOrder>? PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
-
         [DisplayName("Delivery Date")]
         public DateTime? DeliveryDate { get; set; }
 
