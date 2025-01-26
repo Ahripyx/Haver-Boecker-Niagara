@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <link rel="stylesheet" href="~/Haver_Boecker_Niagara.styles.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/Haver_Boecker_Niagara.styles.css" asp-append-version="true" /> *@
 </head>
 <body>
     <header>
@@ -73,28 +73,28 @@
                 <i class="fa-solid fa-circle-check"></i>
                 <span>Success Toast</span>
             </div>
-            <i class="fa-solid fa-xmark"></i>
+            <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>
         </li>
         <li class="toast error">
             <div class="column">
                 <i class="fa-solid fa-circle-xmark"></i>
                 <span>Error Toast</span>
             </div>
-            <i class="fa-solid fa-xmark"></i>
+            <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>
         </li>
         <li class="toast info">
             <div class="column">
                 <i class="fa-solid fa-triangle-exclamation"></i>
                 <span>Info Toast</span>
             </div>
-            <i class="fa-solid fa-xmark"></i>
+            <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>
         </li>
         <li class="toast warning">
             <div class="column">
                 <i class="fa-solid fa-circle-info"></i>
                 <span>warning Toast</span>
             </div>
-            <i class="fa-solid fa-xmark"></i>
+            <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>
         </li>
     </ul>
     <div class="container">

@@ -228,7 +228,7 @@ html {
 }
 
 .toast:not(.show) {
-    display: flex;
+    display: none;
 }
 
 
