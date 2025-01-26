@@ -178,6 +178,12 @@ namespace Haver_Boecker_Niagara.Data
                                         Price = 5000.00M,
                                         Status = "Confirmed",
                                         CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
+                                        AirSeal = false,
+                                        Base = true,
+                                        CoatingOrLining = true,
+                                        Disassembly = true,
+                                        Media = true,
+                                        SparePartsMedia = false,
                                         EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 1).FirstOrDefault().EngineeringPackageID
                                     },
                                     new SalesOrder
@@ -186,6 +192,12 @@ namespace Haver_Boecker_Niagara.Data
                                         Price = 12000.00M,
                                         Status = "Pending",
                                         CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
+                                        AirSeal = true,
+                                        Base = false,
+                                        CoatingOrLining = true,
+                                        Disassembly = true,
+                                        Media = false,
+                                        SparePartsMedia = true,
                                         EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 2).FirstOrDefault().EngineeringPackageID
                                     },
                                     new SalesOrder
@@ -194,6 +206,12 @@ namespace Haver_Boecker_Niagara.Data
                                         Price = 8000.00M,
                                         Status = "Pending",
                                         CustomerID = context.Customers.Where(p => p.CustomerID == 2).FirstOrDefault().CustomerID,
+                                        AirSeal = true,
+                                        Base = true,
+                                        CoatingOrLining = true,
+                                        Disassembly = true,
+                                        Media = true,
+                                        SparePartsMedia = true,
                                         EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 3).FirstOrDefault().EngineeringPackageID
                                     }
                                 );
@@ -237,13 +255,7 @@ namespace Haver_Boecker_Niagara.Data
                                         MachineClass = "T",
                                         MachineSizeDesc = "4' x 10' 1D",
                                         SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
-                                        AirSeal = true,
-                                        Base = true,
-                                        CoatingOrLining = true,
-                                        Disassembly = true,
-                                        InternalPONumber = "4500805984",
-                                        Media = true,
-                                        SparePartsMedia = true
+                                        InternalPONumber = "4500805984"
                                     },
                                     new Machine
                                     {
@@ -252,13 +264,7 @@ namespace Haver_Boecker_Niagara.Data
                                         MachineClass = "T",
                                         MachineSizeDesc = "6' x 20' 2D",
                                         SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
-                                        AirSeal = false,
-                                        Base = true,
-                                        CoatingOrLining = false,
-                                        Disassembly = true,
-                                        InternalPONumber = "4500801585",
-                                        Media = false,
-                                        SparePartsMedia = true
+                                        InternalPONumber = "4500801585"
                                     },
                                     new Machine
                                     {
@@ -267,13 +273,7 @@ namespace Haver_Boecker_Niagara.Data
                                         MachineClass = "L",
                                         MachineSizeDesc = "6' x 16' 3D",
                                         SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
-                                        AirSeal = false,
-                                        Base = false,
-                                        CoatingOrLining = false,
-                                        Disassembly = false,
-                                        InternalPONumber = "4500805771",
-                                        Media = false,
-                                        SparePartsMedia = false
+                                        InternalPONumber = "4500805771"
                                     },
                                     new Machine
                                     {
@@ -282,13 +282,7 @@ namespace Haver_Boecker_Niagara.Data
                                         MachineClass = "S",
                                         MachineSizeDesc = "5' x 9' 1D",
                                         SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
-                                        AirSeal = true,
-                                        Base = false,
-                                        CoatingOrLining = false,
-                                        Disassembly = false,
-                                        InternalPONumber = "4500786536",
-                                        Media = true,
-                                        SparePartsMedia = true
+                                        InternalPONumber = "4500786536"
                                     },
                                     new Machine
                                     {
@@ -297,13 +291,7 @@ namespace Haver_Boecker_Niagara.Data
                                         MachineClass = "XL",
                                         MachineSizeDesc = "5' x 12' 2D+CP",
                                         SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 3).FirstOrDefault().SalesOrderID,
-                                        AirSeal = true,
-                                        Base = true,
-                                        CoatingOrLining = false,
-                                        Disassembly = false,
-                                        InternalPONumber = "4500798658/799034",
-                                        Media = false,
-                                        SparePartsMedia = false
+                                        InternalPONumber = "4500798658/799034"
                                     }
                                 );
                                 context.SaveChanges();

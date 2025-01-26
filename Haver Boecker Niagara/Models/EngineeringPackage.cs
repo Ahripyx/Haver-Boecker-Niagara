@@ -39,7 +39,6 @@ namespace Haver_Boecker_Niagara.Models
                 return "N/A";
             }
         }
-        
 
         [DisplayName("Actual Release Date")]
         public DateTime? ActualPackageReleaseDate { get; set; }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250125041347_Initial")]
+    [Migration("20250126025938_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -134,18 +134,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("AirSeal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Base")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("CoatingOrLining")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Disassembly")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("InternalPONumber")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -163,9 +151,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("Media")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("SalesOrderID")
                         .HasColumnType("INTEGER");
 
@@ -173,9 +158,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("SparePartsMedia")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("MachineID");
 
@@ -259,10 +241,25 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("AirSeal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Base")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("CoatingOrLining")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("CustomerID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("Disassembly")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("EngineeringPackageID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Media")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("OrderNumber")
@@ -272,6 +269,9 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("SparePartsMedia")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
                         .IsRequired()

@@ -74,30 +74,12 @@
                         @Html.DisplayNameFor(model => model.MachineSizeDesc) <span style="font-size: 10pt;">▼▲</span>
                     </button>
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Media)
-                </th>
-                <th class="text-nowrap">
-                    Spare Parts
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Base)
-                </th>
-                <th class="text-nowrap">
-                    @Html.DisplayNameFor(model => model.AirSeal)
-                </th>
-                <th class="text-nowrap">
-                    @Html.DisplayNameFor(model => model.CoatingOrLining)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Disassembly)
-                </th>
-            
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model) {
+
                 <tr>
                     <td class="text-nowrap">
                         @Html.DisplayFor(modelItem => item.SalesOrder.OrderNumber)
@@ -117,32 +99,13 @@
                     <td class="text-nowrap">
                         @Html.DisplayFor(modelItem => item.MachineSizeDesc)
                     </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.Media)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.SparePartsMedia)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.Base)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.AirSeal)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.CoatingOrLining)
-                    </td>
-                    <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.Disassembly)
-                    </td>
-
                     <td class="text-nowrap">
                         <a asp-action="Edit" asp-route-id="@item.MachineID">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.MachineID">Details</a> |
                         <a asp-action="Delete" asp-route-id="@item.MachineID">Delete</a>
                     </td>
                 </tr>
-            }   
+            }
         </tbody>
     </table>
     <partial name="_PagingNavBar" />

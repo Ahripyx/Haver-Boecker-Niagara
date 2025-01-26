@@ -45,11 +45,13 @@ namespace Haver_Boecker_Niagara.Models
 
         public bool Disassembly { get; set; } = false;
 
+
         [Required]
         [DisplayName("Order #")]
         public int SalesOrderID { get; set; }
 
         [DisplayName("Order #")]
+
         public SalesOrder? SalesOrder { get; set; } // ? is important
     }
 }
