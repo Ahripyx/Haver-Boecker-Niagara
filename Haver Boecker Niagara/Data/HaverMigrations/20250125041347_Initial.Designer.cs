@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250122210025_Initial")]
+    [Migration("20250125041347_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -262,10 +262,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<int>("CustomerID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EngineeringPackageID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("EngineeringPackageID1")
+                    b.Property<int?>("EngineeringPackageID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("OrderNumber")
@@ -285,9 +282,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
                     b.HasIndex("CustomerID");
 
-                    b.HasIndex("EngineeringPackageID");
-
-                    b.HasIndex("EngineeringPackageID1");
+                    b.HasIndex("EngineeringPackageID")
+                        .IsUnique();
 
                     b.ToTable("SalesOrders");
                 });
@@ -404,14 +400,9 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .IsRequired();
 
                     b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", "EngineeringPackage")
-                        .WithMany()
-                        .HasForeignKey("EngineeringPackageID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", null)
-                        .WithMany("SalesOrders")
-                        .HasForeignKey("EngineeringPackageID1");
+                        .WithOne("SalesOrder")
+                        .HasForeignKey("Haver_Boecker_Niagara.Models.SalesOrder", "EngineeringPackageID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Customer");
 
@@ -425,7 +416,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.EngineeringPackage", b =>
                 {
-                    b.Navigation("SalesOrders");
+                    b.Navigation("SalesOrder")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.OperationsSchedule", b =>

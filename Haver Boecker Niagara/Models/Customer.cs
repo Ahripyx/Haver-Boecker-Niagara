@@ -46,6 +46,6 @@ namespace Haver_Boecker_Niagara.Models
         [DisplayName("Last Updated")]
         public DateTime UpdatedAt { get; set; }
 
-        public ICollection<SalesOrder> SaleOrders { get; set; }
+        public ICollection<SalesOrder>? SaleOrders { get; set; }
     }
 }

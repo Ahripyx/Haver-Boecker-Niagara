@@ -98,7 +98,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     Status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     CustomerID = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false)
+                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -259,12 +259,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
             migrationBuilder.CreateIndex(
                 name: "IX_SalesOrders_EngineeringPackageID",
                 table: "SalesOrders",
-                column: "EngineeringPackageID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SalesOrders_EngineeringPackageID1",
-                table: "SalesOrders",
-                column: "EngineeringPackageID1");
+                column: "EngineeringPackageID",
+                unique: true);
         }
 
         /// <inheritdoc />
