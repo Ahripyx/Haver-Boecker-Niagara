@@ -1,5 +1,6 @@
 ﻿using Haver_Boecker_Niagara.Models;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using System.Diagnostics;
 
 namespace Haver_Boecker_Niagara.Data
@@ -118,6 +119,35 @@ namespace Haver_Boecker_Niagara.Data
                         }
                         #endregion
 
+                        #region Engineering Packages
+                        if (!context.EngineeringPackages.Any())
+                        {
+                            context.EngineeringPackages.AddRange(
+                                new EngineeringPackage
+                                {
+                                    Engineers = new List<Engineer> { context.Engineers.Where(p => p.EngineerID == 1).FirstOrDefault() },
+                                    PackageReleaseDate = DateTime.UtcNow,
+                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
+                                },
+                                new EngineeringPackage
+                                {
+                                    Engineers = new List<Engineer> { context.Engineers.Where(p => p.EngineerID == 2).FirstOrDefault() },
+                                    PackageReleaseDate = DateTime.UtcNow,
+                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
+                                },
+                                new EngineeringPackage
+                                {
+                                    Engineers = new List<Engineer> { 
+                                        context.Engineers.Where(p => p.EngineerID == 1).FirstOrDefault(),
+                                        context.Engineers.Where(p => p.EngineerID == 2).FirstOrDefault()
+                                    },
+                                    PackageReleaseDate = DateTime.UtcNow,
+                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
+                                }
+                            );
+                            context.SaveChanges();
+                        #endregion
+  
                         #region Engineering Speciality (Many-to-Many relationship)
                         if (!context.Set<Dictionary<string, object>>("EngineeringSpeciality").Any())
                         {
@@ -141,21 +171,30 @@ namespace Haver_Boecker_Niagara.Data
                         #region Sales Orders
                         if (!context.SalesOrders.Any())
                         {
-                            var customer = context.Customers.FirstOrDefault();
                             context.SalesOrders.AddRange(
                                 new SalesOrder
                                 {
                                     OrderNumber = "SO-1001",
                                     Price = 5000.00M,
                                     Status = "Confirmed",
-                                    CustomerID = customer.CustomerID
+                                    CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
+                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 1).FirstOrDefault().EngineeringPackageID
                                 },
                                 new SalesOrder
                                 {
                                     OrderNumber = "SO-1002",
                                     Price = 12000.00M,
                                     Status = "Pending",
-                                    CustomerID = customer.CustomerID
+                                    CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
+                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 2).FirstOrDefault().EngineeringPackageID
+                                },
+                                new SalesOrder
+                                {
+                                    OrderNumber = "SO-1003",
+                                    Price = 8000.00M,
+                                    Status = "Pending",
+                                    CustomerID = context.Customers.Where(p => p.CustomerID == 2).FirstOrDefault().CustomerID,
+                                    EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 3).FirstOrDefault().EngineeringPackageID
                                 }
                             );
                             context.SaveChanges();
@@ -190,16 +229,81 @@ namespace Haver_Boecker_Niagara.Data
                         #region Machines
                         if (!context.Machines.Any())
                         {
-                            var salesOrder = context.SalesOrders.FirstOrDefault();
                             context.Machines.AddRange(
                                 new Machine
                                 {
-                                    SerialNumber = "M12345",
-                                    InternalPONumber = "ashufbasfb",
-                                    MachineSize = 2,
-                                    MachineClass = "Heavy Duty",
-                                    MachineSizeDesc = "Large",
-                                    SalesOrderID = salesOrder?.SalesOrderID ?? 0
+                                    SerialNumber = "50-3964 CDN",
+                                    MachineSize = 330,
+                                    MachineClass = "T",
+                                    MachineSizeDesc = "4' x 10' 1D",
+                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
+                                    AirSeal = true,
+                                    Base = true,
+                                    CoatingOrLining = true,
+                                    Disassembly = true,
+                                    InternalPONumber = "4500805984",
+                                    Media = true,
+                                    SparePartsMedia = true
+                                },
+                                new Machine
+                                {
+                                    SerialNumber = "DB-1914 CDN",
+                                    MachineSize = 800,
+                                    MachineClass = "T",
+                                    MachineSizeDesc = "6' x 20' 2D",
+                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
+                                    AirSeal = false,
+                                    Base = true,
+                                    CoatingOrLining = false,
+                                    Disassembly = true,
+                                    InternalPONumber = "4500801585",
+                                    Media = false,
+                                    SparePartsMedia = true
+                                },
+                                new Machine
+                                {
+                                    SerialNumber = "22277 CDN",
+                                    MachineSize = 1100,
+                                    MachineClass = "L",
+                                    MachineSizeDesc = "6' x 16' 3D",
+                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
+                                    AirSeal = false,
+                                    Base = false,
+                                    CoatingOrLining = false,
+                                    Disassembly = false,
+                                    InternalPONumber = "4500805771",
+                                    Media = false,
+                                    SparePartsMedia = false
+                                },
+                                new Machine
+                                {
+                                    SerialNumber = "DB 1915 CDN",
+                                    MachineSize = 300,
+                                    MachineClass = "S",
+                                    MachineSizeDesc = "5' x 9' 1D",
+                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
+                                    AirSeal = true,
+                                    Base = false,
+                                    CoatingOrLining = false,
+                                    Disassembly = false,
+                                    InternalPONumber = "4500786536",
+                                    Media = true,
+                                    SparePartsMedia = true
+                                },
+                                new Machine
+                                {
+                                    SerialNumber = "55-1308 CDN",
+                                    MachineSize = 880,
+                                    MachineClass = "XL",
+                                    MachineSizeDesc = "5' x 12' 2D+CP",
+                                    SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 3).FirstOrDefault().SalesOrderID,
+                                    AirSeal = true,
+                                    Base = true,
+                                    CoatingOrLining = false,
+                                    Disassembly = false,
+                                    InternalPONumber = "4500798658/799034",
+                                    Media = false,
+                                    SparePartsMedia = false
                                 }
                             );
                             context.SaveChanges();
@@ -234,39 +338,6 @@ namespace Haver_Boecker_Niagara.Data
                         }
                         #endregion
 
-                        #region Engineering Packages
-                        if (!context.EngineeringPackages.Any())
-                        {
-                            var engineer = context.Engineers.FirstOrDefault();
-                            if (engineer != null)
-                            {
-                                context.EngineeringPackages.AddRange(
-                                    new EngineeringPackage
-                                    {
-                                        Engineers = new List<Engineer> { engineer },
-                                        PackageReleaseDate = DateTime.UtcNow,
-                                        ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
-                                    }
-                                );
-                                context.SaveChanges();
-
-                                var engineerId = engineer.EngineerID;
-                                var engineeringPackageId = context.EngineeringPackages.LastOrDefault()?.EngineeringPackageID;
-
-                                if (engineeringPackageId.HasValue)
-                                {
-                                    context.Set<Dictionary<string, object>>("EngineeringSpeciality").Add(
-                                        new Dictionary<string, object>
-                                        {
-                                            { "EngineerID", engineerId },
-                                            { "EngineeringPackageID", engineeringPackageId.Value }
-                                        }
-                                    );
-                                    context.SaveChanges();
-                                }
-                            }
-                        }
-                        #endregion
                     }
                     catch (Exception ex)
                     {

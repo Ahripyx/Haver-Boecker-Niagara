@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Haver_Boecker_Niagara.Models.EngineeringPackage>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="mt-2">Engineering Packages</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="mb-2 btn @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
+                data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            Filter/Search @ViewData["numberFilters"]
+        </button><br />
+        <div class="collapse  @ViewData["ShowFilter"]" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Select Criteria:</label>
+                        @Html.DropDownList("FilterCriteria", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label">Date Range:</label>
+                        <div class="col-md-3">
+                            <input name="startDate" id="startDate" value=@ViewData["startDate"] type="date" class="form-control" />
+                        </div>
+                        to
+                        <div class="col-md-3">
+                            <input name="endDate" id="endDate" value=@ViewData["endDate"] type="date" class="form-control" />
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2 form-group col-md-2 align-self-end">
+                        <input type="submit" name="actionButton" value="Filter"
+                               class="btn btn-outline-primary" />
+                        <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Assigned Engineers
+                </th>
+                <th>
+                    <button type="submit" name="actionButton" value="EstimatedRel" class="fw-bold btn p-0"
+                            formaction="@Url.Action("Index", new { sortField = "EstimatedRel", sortDirection = (ViewData["SortField"] as string == "EstimatedRel" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.PackageReleaseDate) <span style="font-size: 10pt;">▼▲</span>
+                    </button>
+                </th>
+                <th>
+                    <button type="submit" name="actionButton" value="EstimatedAprv" class="fw-bold btn p-0"
+                            formaction="@Url.Action("Index", new { sortField = "EstimatedAprv", sortDirection = (ViewData["SortField"] as string == "EstimatedAprv" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.ApprovalDrawingDate) <span style="font-size: 10pt;">▼▲</span>
+                    </button>
+                </th>
+                <th>
+                    <button type="submit" name="actionButton" value="ActualRel" class="fw-bold btn p-0"
+                            formaction="@Url.Action("Index", new { sortField = "ActualRel", sortDirection = (ViewData["SortField"] as string == "ActualRel" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.ActualPackageReleaseDate) <span style="font-size: 10pt;">▼▲</span>
+                    </button>
+                </th>
+                <th>
+                    <button type="submit" name="actionButton" value="ActualAprv" class="fw-bold btn p-0"
+                            formaction="@Url.Action("Index", new { sortField = "ActualAprv", sortDirection = (ViewData["SortField"] as string == "ActualAprv" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        @Html.DisplayNameFor(model => model.ActualApprovalDrawingDate) <span style="font-size: 10pt;">▼▲</span>
+                    </button>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td class="my-auto">
+                        @foreach (var eng in item.Engineers) {
+                            <span class="d-block">@eng.Name</span>
+                        }
+                        @if (item.Engineers.Count == 0)
+                        {
+                            <span class="d-block">N/A</span>
+                        }
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.EstimatedReleaseSummary)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.EstimatedApprovalSummary)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.ActualReleaseSummary)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.ActualApprovalSummary)
+                    </td>
+                    <td class="align-middle">
+                        <a asp-action="Edit" asp-route-id="@item.EngineeringPackageID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.EngineeringPackageID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.EngineeringPackageID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <partial name="_PagingNavBar" />
+</form>
