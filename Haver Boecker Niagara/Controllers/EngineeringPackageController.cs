@@ -185,17 +185,17 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: EngineeringPackage/Create
         public IActionResult Create(int? setCountEng)
         {
-            if (setCountEng == null && ViewData["setCountEng"] == null)
-            {
-                ViewData["setCountEng"] = 1;
-                ViewData["engCountDD"] = new SelectList(Enumerable.Range(0, 5));
-            }
-            else
-            {
-                ViewData["setCountEng"] = setCountEng;
-                ViewData["engCountDD"] = new SelectList(Enumerable.Range(0, 5), setCountEng);
-            }
-            ViewData["Engineers"] = new SelectList(_context.Engineers, "EngineerID", "Name", "Not Assigned");
+            //if (setCountEng == null && ViewData["setCountEng"] == null)
+            //{
+            //    ViewData["setCountEng"] = 1;
+            //    ViewData["engCountDD"] = new SelectList(Enumerable.Range(0, 5));
+            //}
+            //else
+            //{
+            //    ViewData["setCountEng"] = setCountEng;
+            //    ViewData["engCountDD"] = new SelectList(Enumerable.Range(0, 5), setCountEng);
+            //}
+            //ViewData["Engineers"] = new SelectList(_context.Engineers, "EngineerID", "Name", "Not Assigned");
             return View();
         }
 
