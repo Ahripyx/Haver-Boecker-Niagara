@@ -98,7 +98,13 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     Status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     CustomerID = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Media = table.Column<bool>(type: "INTEGER", nullable: false),
+                    SparePartsMedia = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Base = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AirSeal = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CoatingOrLining = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Disassembly = table.Column<bool>(type: "INTEGER", nullable: false),
+                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -152,12 +158,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     MachineSize = table.Column<int>(type: "INTEGER", nullable: false),
                     MachineClass = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     MachineSizeDesc = table.Column<string>(type: "TEXT", nullable: false),
-                    Media = table.Column<bool>(type: "INTEGER", nullable: false),
-                    SparePartsMedia = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Base = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AirSeal = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CoatingOrLining = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Disassembly = table.Column<bool>(type: "INTEGER", nullable: false),
                     SalesOrderID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

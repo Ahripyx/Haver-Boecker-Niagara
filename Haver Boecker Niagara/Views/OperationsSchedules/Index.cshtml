@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Haver_Boecker_Niagara.Models.OperationsSchedule>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "AssignPackage.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreOrderNotes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScopeNotes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActualAssemblyHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActualReworkHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BudgetedAssemblyHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NamePlateStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExtraNotes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalesOrder)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PreOrderNotes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScopeNotes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActualAssemblyHours)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActualReworkHours)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BudgetedAssemblyHours)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NamePlateStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExtraNotes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalesOrder.OrderNumber)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OperationsID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OperationsID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OperationsID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

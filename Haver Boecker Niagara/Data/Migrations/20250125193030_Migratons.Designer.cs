@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Migrations.ApplicationDb
+namespace Haver_Boecker_Niagara.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250118152743_UpdateIdentitySchema")]
-    partial class UpdateIdentitySchema
+    [Migration("20250125193030_Migratons")]
+    partial class Migratons
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
