@@ -1,0 +1,63 @@
+﻿@model Haver_Boecker_Niagara.Models.EngineeringPackage
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Engineering Package</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!--
+            <div class="form-group">
+                <label class="control-label">Select # of Engineers to Assign</label>
+                <select id="setCountEng" name="setCountEng" onchange="location.href=`Create?setCountEng=${this.value}`" class="form-control" asp-items=ViewBag.engCountDD></select>
+            </div>
+                (at) for(int i=0; i<int.Parse(ViewData["setCountEng"].ToString()); i++)
+                {
+                    <div class="form-group">
+                        <label class="control-label">Engineer #(at)i+1</label>
+                        <select class="form-control" asp-items="ViewBag.Engineers"></select>
+                    </div>
+                }
+            -->
+            <div class="form-group">
+                <label asp-for="PackageReleaseDate" class="control-label"></label>
+                <input asp-for="PackageReleaseDate" type="date" class="form-control" />
+                <span asp-validation-for="PackageReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApprovalDrawingDate" class="control-label"></label>
+                <input asp-for="ApprovalDrawingDate" type="date" class="form-control" />
+                <span asp-validation-for="ApprovalDrawingDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActualPackageReleaseDate" class="control-label"></label>
+                <input asp-for="ActualPackageReleaseDate" type="date" class="form-control" />
+                <span asp-validation-for="ActualPackageReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActualApprovalDrawingDate" class="control-label"></label>
+                <input asp-for="ActualApprovalDrawingDate" type="date" class="form-control" />
+                <span asp-validation-for="ActualApprovalDrawingDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="mt-2 btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-1">
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
