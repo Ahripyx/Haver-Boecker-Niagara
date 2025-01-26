@@ -38,6 +38,10 @@ namespace Haver_Boecker_Niagara.Data
                 }
                 #endregion
 
+                #region Seed Required Data
+                // Empty for now
+                #endregion
+
                 #region Seed Sample Data
                 if (SeedSampleData)
                 {
@@ -57,7 +61,9 @@ namespace Haver_Boecker_Niagara.Data
                                     Address = "123 Acme St.",
                                     City = "Metropolis",
                                     Country = "USA",
-                                    PostalCode = "12345"
+                                    PostalCode = "12345",
+                                    CreatedAt = DateTime.UtcNow,
+                                    UpdatedAt = DateTime.UtcNow
                                 },
                                 new Customer
                                 {
@@ -69,7 +75,9 @@ namespace Haver_Boecker_Niagara.Data
                                     Address = "456 Beta Ave.",
                                     City = "Gotham",
                                     Country = "USA",
-                                    PostalCode = "67890"
+                                    PostalCode = "67890",
+                                    CreatedAt = DateTime.UtcNow,
+                                    UpdatedAt = DateTime.UtcNow
                                 }
                             );
                             context.SaveChanges();
@@ -90,7 +98,23 @@ namespace Haver_Boecker_Niagara.Data
                                     Address = "789 Global Rd.",
                                     City = "Sunnyvale",
                                     Country = "USA",
-                                    PostalCode = "24680"
+                                    PostalCode = "24680",
+                                    CreatedAt = DateTime.UtcNow,
+                                    UpdatedAt = DateTime.UtcNow
+                                },
+                                new Vendor
+                                {
+                                    Name = "Prime Components",
+                                    ContactFirstName = "Sally",
+                                    ContactLastName = "Adams",
+                                    PhoneNumber = "555-123-4567",
+                                    Email = "info@primecomponents.com",
+                                    Address = "123 Prime St.",
+                                    City = "Springfield",
+                                    Country = "USA",
+                                    PostalCode = "13579",
+                                    CreatedAt = DateTime.UtcNow,
+                                    UpdatedAt = DateTime.UtcNow
                                 }
                             );
                             context.SaveChanges();
@@ -115,26 +139,6 @@ namespace Haver_Boecker_Niagara.Data
                                 }
                             );
                             context.SaveChanges();
-                        }
-                        #endregion
-
-                        #region Engineering Speciality (Many-to-Many relationship)
-                        if (!context.Set<Dictionary<string, object>>("EngineeringSpeciality").Any())
-                        {
-                            var engineer = context.Engineers.FirstOrDefault();
-                            var engineeringPackage = context.EngineeringPackages.FirstOrDefault();
-
-                            if (engineer != null && engineeringPackage != null)
-                            {
-                                context.Set<Dictionary<string, object>>("EngineeringSpeciality").Add(
-                                    new Dictionary<string, object>
-                                    {
-                                        { "EngineerID", engineer.EngineerID },
-                                        { "EngineeringPackageID", engineeringPackage.EngineeringPackageID }
-                                    }
-                                );
-                                context.SaveChanges();
-                            }
                         }
                         #endregion
 
@@ -166,24 +170,16 @@ namespace Haver_Boecker_Niagara.Data
                         if (!context.OperationsSchedules.Any())
                         {
                             var salesOrder = context.SalesOrders.FirstOrDefault();
-
-                            if (salesOrder != null)
-                            {
-                                context.OperationsSchedules.AddRange(
-                                    new OperationsSchedule
-                                    {
-                                        SalesOrderID = salesOrder.SalesOrderID,
-                                        DeliveryDate = DateTime.UtcNow.AddMonths(1),
-                                        ExtraNotes = "Initial assembly scheduled.",
-                                        NamePlateStatus = false
-                                    }
-                                );
-                                context.SaveChanges();
-                            }
-                            else
-                            {
-                                Debug.WriteLine("No SalesOrder found to associate with OperationsSchedule.");
-                            }
+                            context.OperationsSchedules.AddRange(
+                                new OperationsSchedule
+                                {
+                                    SalesOrderID = salesOrder.SalesOrderID,
+                                    DeliveryDate = DateTime.UtcNow.AddMonths(1),
+                                    ExtraNotes = "Initial assembly scheduled.",
+                                    NamePlateStatus = false
+                                }
+                            );
+                            context.SaveChanges();
                         }
                         #endregion
 
@@ -195,42 +191,31 @@ namespace Haver_Boecker_Niagara.Data
                                 new Machine
                                 {
                                     SerialNumber = "M12345",
-                                    InternalPONumber = "ashufbasfb",
                                     MachineSize = 2,
                                     MachineClass = "Heavy Duty",
                                     MachineSizeDesc = "Large",
-                                    SalesOrderID = salesOrder?.SalesOrderID ?? 0
+                                    SalesOrderID = salesOrder.SalesOrderID
                                 }
                             );
                             context.SaveChanges();
                         }
                         #endregion
 
-
-
                         #region Purchase Orders
                         if (!context.PurchaseOrders.Any())
                         {
                             var operationsSchedule = context.OperationsSchedules.FirstOrDefault();
                             var vendor = context.Vendors.FirstOrDefault();
-
-                            if (operationsSchedule != null && vendor != null)
-                            {
-                                context.PurchaseOrders.AddRange(
-                                    new PurchaseOrder
-                                    {
-                                        PurchaseOrderNumber = "PO-1001",
-                                        PODueDate = DateTime.UtcNow.AddDays(30),
-                                        VendorID = vendor.VendorID,
-                                        OperationsID = operationsSchedule.OperationsID
-                                    }
-                                );
-                                context.SaveChanges();
-                            }
-                            else
-                            {
-                                Debug.WriteLine("Could not find a valid OperationsSchedule or Vendor to link the PurchaseOrder.");
-                            }
+                            context.PurchaseOrders.AddRange(
+                                new PurchaseOrder
+                                {
+                                    OperationsID = operationsSchedule.OperationsID,
+                                    PurchaseOrderNumber = "PO-1001",
+                                    PODueDate = DateTime.UtcNow.AddDays(30),
+                                    VendorID = vendor.VendorID
+                                }
+                            );
+                            context.SaveChanges();
                         }
                         #endregion
 
@@ -249,21 +234,6 @@ namespace Haver_Boecker_Niagara.Data
                                     }
                                 );
                                 context.SaveChanges();
-
-                                var engineerId = engineer.EngineerID;
-                                var engineeringPackageId = context.EngineeringPackages.LastOrDefault()?.EngineeringPackageID;
-
-                                if (engineeringPackageId.HasValue)
-                                {
-                                    context.Set<Dictionary<string, object>>("EngineeringSpeciality").Add(
-                                        new Dictionary<string, object>
-                                        {
-                                            { "EngineerID", engineerId },
-                                            { "EngineeringPackageID", engineeringPackageId.Value }
-                                        }
-                                    );
-                                    context.SaveChanges();
-                                }
                             }
                         }
                         #endregion
