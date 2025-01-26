@@ -6,7 +6,7 @@
 
 <h1 class="mt-2">Machines</h1>
 
-<!--<p>
+ <!--<p>
      <a asp-action="Create">Create New</a>
 </p>-->
 <form asp-action="Index" method="get">
@@ -74,13 +74,12 @@
                         @Html.DisplayNameFor(model => model.MachineSizeDesc) <span style="font-size: 10pt;">▼▲</span>
                     </button>
                 </th>
-
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
+            @foreach (var item in Model) {
+
                 <tr>
                     <td class="text-nowrap">
                         @Html.DisplayFor(modelItem => item.SalesOrder.OrderNumber)
@@ -100,7 +99,6 @@
                     <td class="text-nowrap">
                         @Html.DisplayFor(modelItem => item.MachineSizeDesc)
                     </td>
-
                     <td class="text-nowrap">
                         <a asp-action="Edit" asp-route-id="@item.MachineID">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.MachineID">Details</a> |

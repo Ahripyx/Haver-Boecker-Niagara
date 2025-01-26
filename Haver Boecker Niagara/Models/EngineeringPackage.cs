@@ -40,7 +40,6 @@ namespace Haver_Boecker_Niagara.Models
             }
         }
 
-
         [DisplayName("Actual Release Date")]
         public DateTime? ActualPackageReleaseDate { get; set; }
 
@@ -74,8 +73,7 @@ namespace Haver_Boecker_Niagara.Models
             }
         }
 
-        public ICollection<Engineer> Engineers { get; set; } = new HashSet<Engineer>();
-
+        public ICollection<Engineer>? Engineers { get; set; } = new HashSet<Engineer>();
         public SalesOrder SalesOrder { get; set; }
 
         // this model will later support document upload 
