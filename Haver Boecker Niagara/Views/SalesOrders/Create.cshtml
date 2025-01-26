@@ -1,78 +1,89 @@
 ﻿@model Haver_Boecker_Niagara.Models.SalesOrder
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Sales Order";
 }
 
-<h1>Create</h1>
+<h1>Create Sales Order</h1>
 
-<h4>SalesOrder</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CustomerID" class="control-label"></label>
-                <select asp-for="CustomerID" class ="form-control" asp-items="ViewBag.CustomerID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="OrderNumber" class="control-label"></label>
-                <input asp-for="OrderNumber" class="form-control" />
-                <span asp-validation-for="OrderNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Media" /> @Html.DisplayNameFor(model => model.Media)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SparePartsMedia" /> @Html.DisplayNameFor(model => model.SparePartsMedia)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Base" /> @Html.DisplayNameFor(model => model.Base)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="AirSeal" /> @Html.DisplayNameFor(model => model.AirSeal)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CoatingOrLining" /> @Html.DisplayNameFor(model => model.CoatingOrLining)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Disassembly" /> @Html.DisplayNameFor(model => model.Disassembly)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="EngineeringPackageID" class="control-label"></label>
-                <select asp-for="EngineeringPackageID" class ="form-control" asp-items="ViewBag.EngineeringPackageID"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="OrderNumber" class="control-label"></label>
+        <input asp-for="OrderNumber" class="form-control" />
+        <span asp-validation-for="OrderNumber" class="text-danger"></span>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
 
+    <div class="form-group">
+        <label asp-for="Status" class="control-label"></label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CustomerID" class="control-label"></label>
+        <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
+        <span asp-validation-for="CustomerID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EngineeringPackageID" class="control-label"></label>
+        <select asp-for="EngineeringPackageID" class="form-control" asp-items="ViewBag.EngineeringPackageID"></select>
+        <span asp-validation-for="EngineeringPackageID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Media" class="control-label"></label>
+        <input asp-for="Media" class="form-control" />
+        <span asp-validation-for="Media" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SparePartsMedia" class="control-label"></label>
+        <input asp-for="SparePartsMedia" class="form-control" />
+        <span asp-validation-for="SparePartsMedia" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Base" class="control-label"></label>
+        <input asp-for="Base" class="form-control" />
+        <span asp-validation-for="Base" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AirSeal" class="control-label"></label>
+        <input asp-for="AirSeal" class="form-control" />
+        <span asp-validation-for="AirSeal" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CoatingOrLining" class="control-label"></label>
+        <input asp-for="CoatingOrLining" class="form-control" />
+        <span asp-validation-for="CoatingOrLining" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Disassembly" class="control-label"></label>
+        <input asp-for="Disassembly" class="form-control" />
+        <span asp-validation-for="Disassembly" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PurchaseOrders" class="control-label"></label>
+        <select asp-for="PurchaseOrders" class="form-control" asp-items="ViewBag.PurchaseOrders" multiple="multiple"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

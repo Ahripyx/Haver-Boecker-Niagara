@@ -11,7 +11,6 @@ using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.Utilities;
 using System.Reflection.PortableExecutable;
 
-
 namespace Haver_Boecker_Niagara.Controllers
 {
     public class SalesOrdersController : ElephantController
@@ -111,7 +110,6 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(pagedData);
         }
 
-
         // GET: SalesOrders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -135,7 +133,9 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: SalesOrders/Create
         public IActionResult Create()
         {
+            // Fixing ViewData population
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
+            ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
             ViewData["EngineeringPackageID"] = new SelectList(_context.EngineeringPackages, "EngineeringPackageID", "Name");
             return View();
         }
@@ -143,16 +143,35 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: SalesOrders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder)
+        public async Task<IActionResult> Create(
+            [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder,
+            List<int> SelectedPurchaseOrderIds)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(salesOrder);
                 await _context.SaveChangesAsync();
+
+                if (SelectedPurchaseOrderIds != null)
+                {
+                    foreach (var purchaseOrderId in SelectedPurchaseOrderIds)
+                    {
+                        var purchaseOrder = await _context.PurchaseOrders.FindAsync(purchaseOrderId);
+                        if (purchaseOrder != null)
+                        {
+                            salesOrder.PurchaseOrders.Add(purchaseOrder);
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
+            ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
             ViewData["EngineeringPackageID"] = new SelectList(_context.EngineeringPackages, "EngineeringPackageID", "Name", salesOrder.EngineeringPackageID);
+
             return View(salesOrder);
         }
 
@@ -164,12 +183,16 @@ namespace Haver_Boecker_Niagara.Controllers
                 return NotFound();
             }
 
-            var salesOrder = await _context.SalesOrders.FindAsync(id);
+            var salesOrder = await _context.SalesOrders
+                .Include(s => s.PurchaseOrders)  
+                .FirstOrDefaultAsync(m => m.SalesOrderID == id);
             if (salesOrder == null)
             {
                 return NotFound();
             }
+
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
+            ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber", salesOrder.PurchaseOrders.Select(po => po.PurchaseOrderID));
             ViewData["EngineeringPackageID"] = new SelectList(_context.EngineeringPackages, "EngineeringPackageID", "Name", salesOrder.EngineeringPackageID);
             return View(salesOrder);
         }
@@ -177,7 +200,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: SalesOrders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder)
+        public async Task<IActionResult> Edit(int id, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder, List<int> SelectedPurchaseOrderIds)
         {
             if (id != salesOrder.SalesOrderID)
             {
@@ -190,6 +213,30 @@ namespace Haver_Boecker_Niagara.Controllers
                 {
                     _context.Update(salesOrder);
                     await _context.SaveChangesAsync();
+
+                    var existingPurchaseOrders = _context.SalesOrders
+                        .Where(s => s.SalesOrderID == salesOrder.SalesOrderID)
+                        .Select(s => s.PurchaseOrders)
+                        .FirstOrDefault();
+
+                    if (existingPurchaseOrders != null)
+                    {
+                        existingPurchaseOrders.Clear();
+                        await _context.SaveChangesAsync();
+                    }
+
+                    if (SelectedPurchaseOrderIds != null)
+                    {
+                        foreach (var purchaseOrderId in SelectedPurchaseOrderIds)
+                        {
+                            var purchaseOrder = await _context.PurchaseOrders.FindAsync(purchaseOrderId);
+                            if (purchaseOrder != null)
+                            {
+                                salesOrder.PurchaseOrders.Add(purchaseOrder);
+                            }
+                        }
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -204,7 +251,9 @@ namespace Haver_Boecker_Niagara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
+            ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
             ViewData["EngineeringPackageID"] = new SelectList(_context.EngineeringPackages, "EngineeringPackageID", "Name", salesOrder.EngineeringPackageID);
             return View(salesOrder);
         }
