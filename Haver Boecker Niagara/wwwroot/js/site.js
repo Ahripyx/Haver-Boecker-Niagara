@@ -18,19 +18,21 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const toastError = document.querySelector('.toast.error');
     const toastWarning = document.querySelector('.toast.warning');
     const toastInfo = document.querySelector('.toast.info');
-
+    
     //Remove the toast by clicking X
-    const removeToast = (toast) => {
-        toas.style.display = 'none';
-        toastError.style.display = 'none';
-        toastWarning.style.display = 'none';
-        toastInfo.style.display = 'none';
-        setTimeout(() => toastSucess.remove(), 500);
-        setTimeout(() => toastError.remove(), 500);
-        setTimeout(() => toastWarning.remove(), 500);
-        setTimeout(() => toastInfo.remove(), 500);
+    const removeToast = (t) => {
+        if (t) {
+            t.style.display = 'none';
+            setTimeout(() => toast.remove(), 500);
+        }
     }
-
+    document.querySelectorAll('.close-toast').forEach(i => {
+        i.addEventListener('click', (e) => {
+            const toast = e.target.closest('.toast'); 
+            removeToast(toast);
+        });
+    });
+    //Create the toasts
     if (btnCreate) {
         console.log('Btn exist')
         btnCreate.addEventListener("click", () => {
