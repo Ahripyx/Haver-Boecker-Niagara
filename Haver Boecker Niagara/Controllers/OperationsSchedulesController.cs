@@ -86,15 +86,16 @@ namespace Haver_Boecker_Niagara.Controllers
                     }
                 });
 
+            ViewBag.SalesOrders = new SelectList(await _context.SalesOrders.Select(s => new { s.OrderNumber, s.SalesOrderID }).ToListAsync(), "OrderNumber", "OrderNumber");
+            ViewBag.Customers = new SelectList(await _context.Customers.Select(c => new { c.CustomerID, c.Name }).ToListAsync(), "Name", "Name");
+
             if (!string.IsNullOrEmpty(searchSales))
             {
-                operationsSchedules = operationsSchedules.Where(o => EF.Functions.Like(o.SalesOrder, $"%{searchSales}%"));
-                filterCount++;
+                operationsSchedules = operationsSchedules.Where(o => o.SalesOrder == searchSales);
             }
             if (!string.IsNullOrEmpty(searchCustomer))
             {
-                operationsSchedules = operationsSchedules.Where(o => EF.Functions.Like(o.CustomerName, $"%{searchCustomer}%"));
-                filterCount++;
+                operationsSchedules = operationsSchedules.Where(o => o.CustomerName == searchCustomer);
             }
             if (!string.IsNullOrEmpty(searchDelivery) && DateTime.TryParse(searchDelivery, out DateTime searchAfterDate))
             {
@@ -109,7 +110,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 ViewData["ShowFilter"] = "show";
             }
 
-            //Keep the end date value saved
             ViewData["searchDelivery"] = searchDelivery;
 
             if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
