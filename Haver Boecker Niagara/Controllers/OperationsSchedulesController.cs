@@ -276,7 +276,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: OperationsSchedules/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -284,8 +284,8 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var operationsSchedule = await _context.OperationsSchedules
+                .Include(o => o.SalesOrder)
                 .FirstOrDefaultAsync(m => m.OperationsID == id);
-
             if (operationsSchedule == null)
             {
                 return NotFound();
@@ -299,15 +299,13 @@ namespace Haver_Boecker_Niagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var operationsSchedule = await _context.OperationsSchedules
-                .FirstOrDefaultAsync(m => m.OperationsID == id);
-
+            var operationsSchedule = await _context.OperationsSchedules.FindAsync(id);
             if (operationsSchedule != null)
             {
                 _context.OperationsSchedules.Remove(operationsSchedule);
-                await _context.SaveChangesAsync();
             }
 
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
