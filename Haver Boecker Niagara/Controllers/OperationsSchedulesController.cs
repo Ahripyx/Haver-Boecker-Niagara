@@ -27,7 +27,7 @@ namespace Haver_Boecker_Niagara.Controllers
         public async Task<IActionResult> Index(string? searchSales, string? searchCustomer, string? searchDelivery,
                                                int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "searchSales")
         {
-            string[] sortOptions = { "SalesOrder", "CustomerName", "PurchaseOrders", "DeliveryDate" };
+            string[] sortOptions = { "SalesOrder", "CustomerName", "DeliveryDate" };
             ViewData["Filtering"] = "btn-outline-secondary";
             int filterCount = 0;
 
@@ -96,15 +96,10 @@ namespace Haver_Boecker_Niagara.Controllers
                 operationsSchedules = operationsSchedules.Where(o => EF.Functions.Like(o.CustomerName, $"%{searchCustomer}%"));
                 filterCount++;
             }
-            if (!string.IsNullOrEmpty(searchDelivery))
+            if (!string.IsNullOrEmpty(searchDelivery) && DateTime.TryParse(searchDelivery, out DateTime searchAfterDate))
             {
-                //Change this code later once delivery filter is a date selector
-                DateTime parsedDate;
-                if (DateTime.TryParse(searchDelivery, out parsedDate))
-                {
-                    operationsSchedules = operationsSchedules.Where(o => o.DeliveryDate == parsedDate);
-                    filterCount++;
-                }
+                operationsSchedules = operationsSchedules.Where(o => o.DeliveryDate >= searchAfterDate);
+                filterCount++;
             }
 
             if (filterCount > 0)
@@ -113,6 +108,9 @@ namespace Haver_Boecker_Niagara.Controllers
                 ViewData["NumberFilters"] = $"({filterCount} Filter{(filterCount > 1 ? "s" : "")} Applied)";
                 ViewData["ShowFilter"] = "show";
             }
+
+            //Keep the end date value saved
+            ViewData["searchDelivery"] = searchDelivery;
 
             if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
             {
@@ -129,7 +127,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 "SalesOrder" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.SalesOrder) : operationsSchedules.OrderByDescending(o => o.SalesOrder),
                 "CustomerName" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.CustomerName) : operationsSchedules.OrderByDescending(o => o.CustomerName),
                 "Vendors" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.Vendors) : operationsSchedules.OrderByDescending(o => o.Vendors),
-                "PurchaseOrders" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.PurchaseOrders) : operationsSchedules.OrderByDescending(o => o.PurchaseOrders),
                 "DeliveryDate" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.DeliveryDate) : operationsSchedules.OrderByDescending(o => o.DeliveryDate),
                 _ => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.SalesOrder) : operationsSchedules.OrderByDescending(o => o.SalesOrder),
             };

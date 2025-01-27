@@ -28,8 +28,8 @@
                         @Html.TextBox("SearchCustomer", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Search Delivery Date</label>
-                        @Html.TextBox("SearchDelivery", null, new { @class = "form-control" })
+                        <label class="control-label">After Delivery Date</label>
+                        <input type="date" name="searchDelivery" class="form-control" value="@ViewData["searchDelivery"]" />
                     </div>
                     <div class="form-group col-md-2 align-self-end">
                         <input type="submit" name="actionButton" value="Filter"
@@ -56,32 +56,27 @@
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="Machines" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "Machines", sortDirection = (ViewData["sortField"] as string == "Machines" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                    <button type="submit" value="Machines" class="btn btn-toolbar" disabled>
                         @Html.DisplayNameFor(model => model.Machines)
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="SerialAndIPO" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "SerialAndIPO", sortDirection = (ViewData["sortField"] as string == "SerialAndIPO" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                    <button type="submit" value="SerialAndIPO" class="btn btn-toolbar" disabled>
                         @Html.DisplayNameFor(model => model.SerialAndIPO)
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="Engineers" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "Engineers", sortDirection = (ViewData["sortField"] as string == "Engineers" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                    <button type="submit" value="Engineers" class="btn btn-toolbar" disabled>
                         @Html.DisplayNameFor(model => model.PackageRelease.Engineers)
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="Vendors" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "Vendors", sortDirection = (ViewData["sortField"] as string == "Vendors" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                    <button type="submit" value="Vendors" class="btn btn-toolbar" disabled>
                         @Html.DisplayNameFor(model => model.Vendors)
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="PurchaseOrders" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "PurchaseOrders", sortDirection = (ViewData["sortField"] as string == "PurchaseOrders" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                    <button type="submit" value="PurchaseOrders" class="btn btn-toolbar" disabled>
                         @Html.DisplayNameFor(model => model.PurchaseOrders)
                     </button>
                 </th>
@@ -92,14 +87,12 @@
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="Additional Details" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "Additional Details", sortDirection = (ViewData["sortField"] as string == "Additional Details" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                    <button type="submit" value="Additional Details" class="btn btn-toolbar" disabled>
                         Additional Details
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="Actions" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "Actions", sortDirection = (ViewData["sortField"] as string == "Actions" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                    <button type="submit" value="Actions" class="btn btn-toolbar" disabled>
                         Actions
                     </button>
                 </th>
