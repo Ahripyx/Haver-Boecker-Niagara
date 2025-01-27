@@ -11,7 +11,9 @@ using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Haver_Boecker_Niagara.Utilities;
-using Elfie.Serialization;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -233,7 +235,7 @@ namespace Haver_Boecker_Niagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OperationsID,SalesOrderID,DeliveryDate,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours,NamePlateStatus,ExtraNotes")] OperationsSchedule operationsSchedule, List<int> selectedPurchaseOrders)
         {
-            
+
             ViewData["SalesOrderID"] = new SelectList(await _context.SalesOrders.ToListAsync(), "SalesOrderID", "OrderNumber", operationsSchedule.SalesOrderID);
             return View(operationsSchedule);
         }
@@ -272,7 +274,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             if (ModelState.IsValid)
             {
-               
+
 
                 return RedirectToAction(nameof(Index));
             }
@@ -314,6 +316,77 @@ namespace Haver_Boecker_Niagara.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+        public IActionResult DownloadMachineSchedule()
+        {
+            //Getting data for OS
+            var operationsSchedules = _context.OperationsSchedules
+                .Include(o => o.SalesOrder)
+                    .ThenInclude(s => s.Customer)
+                .Include(o => o.SalesOrder.Machines)
+                .Include(o => o.SalesOrder.EngineeringPackage)
+                    .ThenInclude(ep => ep.Engineers)
+                 .Include(o => o.SalesOrder.PurchaseOrders)
+                    .ThenInclude(po => po.Vendor)
+                .Select(o => new OperationsScheduleViewModel
+                {
+                    Id = o.OperationsID,
+                    SalesOrder = o.SalesOrder.OrderNumber,
+                    CustomerName = o.SalesOrder.Customer.Name,
+                    Machines = o.SalesOrder.Machines
+                        .Select(m => m.MachineDescription)
+                        .ToList(),
+                    SerialAndIPO = o.SalesOrder.Machines
+                        .Select(m => $"{m.SerialNumber} / {m.InternalPONumber}")
+                        .ToList(),
+                    PackageRelease = new PackageReleaseViewModel
+                    {
+                        Engineers = o.SalesOrder.EngineeringPackage.Engineers
+                            .Select(e => e.Name)
+                            .ToList(),
+                        EstimatedReleaseSummary = o.SalesOrder.EngineeringPackage.EstimatedReleaseSummary,
+                        EstimatedApprovalSummary = o.SalesOrder.EngineeringPackage.EstimatedApprovalSummary
+                    },
+                    Vendors = o.SalesOrder.PurchaseOrders
+                        .Select(po => po.Vendor.Name)
+                        .ToList(),
+                    PurchaseOrders = o.SalesOrder.PurchaseOrders
+                        .Select(po => $"{po.PurchaseOrderNumber} ({po.PODueDateSummary})")
+                        .ToList(),
+                    DeliveryDate = o.DeliveryDate,
+                    AdditionalDetails = new AdditionalDetailsViewModel
+                    {
+                        Media = o.SalesOrder.Media ? "✓" : "✗",
+                        SparePartsMedia = o.SalesOrder.SparePartsMedia ? "✓" : "✗",
+                        Base = o.SalesOrder.Base ? "✓" : "✗",
+                        AirSeal = o.SalesOrder.AirSeal ? "✓" : "✗",
+                        CoatingOrLining = o.SalesOrder.CoatingOrLining ? "✓" : "✗",
+                        Disassembly = o.SalesOrder.Disassembly ? "✓" : "✗"
+                    },
+                    Notes = new NotesViewModel
+                    {
+                        PreOrderNotes = o.PreOrderNotes,
+                        ScopeNotes = o.ScopeNotes,
+                        ActualAssemblyHours = o.ActualAssemblyHours,
+                        ActualReworkHours = o.ActualReworkHours,
+                        BudgetedAssemblyHours = o.BudgetedAssemblyHours,
+                        NamePlateStatus = o.NamePlateStatus ? "Received" : "Required",
+                        ExtraNotes = o.ExtraNotes
+                    }
+                });
+
+
+            //Getting row count
+            int numRows = operationsSchedules.Count();
+
+            //Checking if there is data
+            if (numRows > 0)
+            {
+                //Creating Excel Sheet
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+                    var workSheet = excel.Workbook.Worksheets.Add("MachineSchedules");
 
         private bool OperationsScheduleExists(int id)
         {
