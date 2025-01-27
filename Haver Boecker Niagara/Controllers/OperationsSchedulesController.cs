@@ -11,6 +11,9 @@ using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Haver_Boecker_Niagara.Utilities;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -227,7 +230,7 @@ namespace Haver_Boecker_Niagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OperationsID,SalesOrderID,DeliveryDate,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours,NamePlateStatus,ExtraNotes")] OperationsSchedule operationsSchedule, List<int> selectedPurchaseOrders)
         {
-            
+
             ViewData["SalesOrderID"] = new SelectList(await _context.SalesOrders.ToListAsync(), "SalesOrderID", "OrderNumber", operationsSchedule.SalesOrderID);
             return View(operationsSchedule);
         }
@@ -266,7 +269,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             if (ModelState.IsValid)
             {
-               
+
 
                 return RedirectToAction(nameof(Index));
             }
@@ -309,6 +312,154 @@ namespace Haver_Boecker_Niagara.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        public IActionResult DownloadMachineSchedule()
+        {
+            //Getting data for OS
+            var operationsSchedules = _context.OperationsSchedules
+                .Include(o => o.SalesOrder)
+                    .ThenInclude(s => s.Customer)
+                .Include(o => o.SalesOrder.Machines)
+                .Include(o => o.SalesOrder.EngineeringPackage)
+                    .ThenInclude(ep => ep.Engineers)
+                 .Include(o => o.SalesOrder.PurchaseOrders)
+                    .ThenInclude(po => po.Vendor)
+                .Select(o => new OperationsScheduleViewModel
+                {
+                    Id = o.OperationsID,
+                    SalesOrder = o.SalesOrder.OrderNumber,
+                    CustomerName = o.SalesOrder.Customer.Name,
+                    Machines = o.SalesOrder.Machines
+                        .Select(m => m.MachineDescription)
+                        .ToList(),
+                    SerialAndIPO = o.SalesOrder.Machines
+                        .Select(m => $"{m.SerialNumber} / {m.InternalPONumber}")
+                        .ToList(),
+                    PackageRelease = new PackageReleaseViewModel
+                    {
+                        Engineers = o.SalesOrder.EngineeringPackage.Engineers
+                            .Select(e => e.Name)
+                            .ToList(),
+                        EstimatedReleaseSummary = o.SalesOrder.EngineeringPackage.EstimatedReleaseSummary,
+                        EstimatedApprovalSummary = o.SalesOrder.EngineeringPackage.EstimatedApprovalSummary
+                    },
+                    Vendors = o.SalesOrder.PurchaseOrders
+                        .Select(po => po.Vendor.Name)
+                        .ToList(),
+                    PurchaseOrders = o.SalesOrder.PurchaseOrders
+                        .Select(po => $"{po.PurchaseOrderNumber} ({po.PODueDateSummary})")
+                        .ToList(),
+                    DeliveryDate = o.DeliveryDate,
+                    AdditionalDetails = new AdditionalDetailsViewModel
+                    {
+                        Media = o.SalesOrder.Media ? "✓" : "✗",
+                        SparePartsMedia = o.SalesOrder.SparePartsMedia ? "✓" : "✗",
+                        Base = o.SalesOrder.Base ? "✓" : "✗",
+                        AirSeal = o.SalesOrder.AirSeal ? "✓" : "✗",
+                        CoatingOrLining = o.SalesOrder.CoatingOrLining ? "✓" : "✗",
+                        Disassembly = o.SalesOrder.Disassembly ? "✓" : "✗"
+                    },
+                    Notes = new NotesViewModel
+                    {
+                        PreOrderNotes = o.PreOrderNotes,
+                        ScopeNotes = o.ScopeNotes,
+                        ActualAssemblyHours = o.ActualAssemblyHours,
+                        ActualReworkHours = o.ActualReworkHours,
+                        BudgetedAssemblyHours = o.BudgetedAssemblyHours,
+                        NamePlateStatus = o.NamePlateStatus ? "Received" : "Required",
+                        ExtraNotes = o.ExtraNotes
+                    }
+                });
+
+
+            //Getting row count
+            int numRows = operationsSchedules.Count();
+
+            //Checking if there is data
+            if (numRows > 0)
+            {
+                //Creating Excel Sheet
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+                    var workSheet = excel.Workbook.Worksheets.Add("MachineSchedules");
+
+                    //Loading the data
+                    workSheet.Cells[3, 1].LoadFromCollection(operationsSchedules, true);
+
+                    //Formating Delivery Date
+                    workSheet.Column(9).Style.Numberformat.Format = "yyyy-mm-dd";
+
+                    //Setting style for headings
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 11])
+                    {
+                        headings.Style.Font.Bold = true;
+                        headings.Style.Font.Size = 14;
+                        var fill = headings.Style.Fill;
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.LightGray);
+                        headings.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        headings.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    }
+
+                    //Centering all the columns text
+                    workSheet.Cells[4, 1, numRows + 3, 11].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center; 
+
+                    //Setting header rows height
+                    workSheet.Row(3).Height = 25;
+
+                    //Setting columns widths 
+                    for (int i = 2; i <= 11; i++)
+                    {
+                        workSheet.Column(i).Width = 50;
+                    }
+
+                    //Setting style for all data rows
+                    for (int i = 4; i <= numRows + 3; i++) 
+                    {
+                        workSheet.Row(i).Height = 100;
+                        workSheet.Cells[i, 1, i, 11].Style.Font.Size = 12;
+                        workSheet.Cells[i, 1, i, 11].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    }
+
+                    //Adding title at the top of the spreadsheet
+                    workSheet.Cells[1, 1].Value = "Machine Schedules";
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 11])
+                    {
+                        Rng.Merge = true;
+                        Rng.Style.Font.Bold = true;
+                        Rng.Style.Font.Size = 20;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+
+                    //Setting timestamp for excel download
+                    DateTime utcDate = DateTime.UtcNow;
+                    TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                    DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
+                    using (ExcelRange Rng = workSheet.Cells[2, 1])
+                    {
+                        Rng.Value = localDate.ToShortDateString();
+                        Rng.Style.Font.Bold = true;
+                        Rng.Style.Font.Size = 12;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    }
+
+                    //Downloading excel
+                    try
+                    {
+                        Byte[] theData = excel.GetAsByteArray();
+                        string filename = "MachineSchedules.xlsx";
+                        string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        return File(theData, mimeType, filename);
+                    }
+                    catch (Exception)
+                    {
+                        return BadRequest("Could not build and download the file.");
+                    }
+                    //TODO: Replace errors with toast error popups in case it doesn't work
+                }
+            }
+            return NotFound("No data.");
+        }
         private bool OperationsScheduleExists(int id)
         {
             return _context.OperationsSchedules.Any(e => e.OperationsID == id);
