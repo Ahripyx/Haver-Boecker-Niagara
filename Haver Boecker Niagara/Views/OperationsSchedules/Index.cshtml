@@ -24,20 +24,12 @@
                         @Html.TextBox("SearchSales", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Search Sales Order</label>
-                        @Html.TextBox("SearchSales", null, new { @class = "form-control" })
+                        <label class="control-label">Search Customer Name</label>
+                        @Html.TextBox("SearchCustomer", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Search Sales Order</label>
-                        @Html.TextBox("SearchSales", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="control-label">Search Sales Order</label>
-                        @Html.TextBox("SearchSales", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="control-label">Search Sales Order</label>
-                        @Html.TextBox("SearchSales", null, new { @class = "form-control" })
+                        <label class="control-label">Search Delivery Date</label>
+                        @Html.TextBox("SearchDelivery", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-2 align-self-end">
                         <input type="submit" name="actionButton" value="Filter"
@@ -173,4 +165,5 @@
             }
         </tbody>
     </table>
+    <partial name="_PagingNavBar" />
 </form>

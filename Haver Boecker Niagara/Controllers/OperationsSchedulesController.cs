@@ -10,6 +10,7 @@ using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Haver_Boecker_Niagara.Utilities;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -23,16 +24,20 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: OperationsSchedules
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchSales, string? searchCustomer, string? searchDelivery,
+                                               int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "searchSales")
         {
-            var operationsSchedules = await _context.OperationsSchedules
+            string[] sortOptions = { "SalesOrder", "CustomerName", "PurchaseOrders", "DeliveryDate" };
+            ViewData["Filtering"] = "btn-outline-secondary";
+            int filterCount = 0;
+
+            var operationsSchedules = _context.OperationsSchedules
                 .Include(o => o.SalesOrder)
                     .ThenInclude(s => s.Customer)
                 .Include(o => o.SalesOrder.Machines)
                 .Include(o => o.SalesOrder.EngineeringPackage)
                     .ThenInclude(ep => ep.Engineers)
                  .Include(o => o.SalesOrder.PurchaseOrders)
-
                     .ThenInclude(po => po.Vendor)
                 .Select(o => new OperationsScheduleViewModel
                 {
@@ -79,10 +84,64 @@ namespace Haver_Boecker_Niagara.Controllers
                         NamePlateStatus = o.NamePlateStatus ? "Received" : "Required",
                         ExtraNotes = o.ExtraNotes
                     }
-                })
-                .ToListAsync();
+                });
 
-            return View(operationsSchedules);
+            if (!string.IsNullOrEmpty(searchSales))
+            {
+                operationsSchedules = operationsSchedules.Where(o => EF.Functions.Like(o.SalesOrder, $"%{searchSales}%"));
+                filterCount++;
+            }
+            if (!string.IsNullOrEmpty(searchCustomer))
+            {
+                operationsSchedules = operationsSchedules.Where(o => EF.Functions.Like(o.CustomerName, $"%{searchCustomer}%"));
+                filterCount++;
+            }
+            if (!string.IsNullOrEmpty(searchDelivery))
+            {
+                //Change this code later once delivery filter is a date selector
+                DateTime parsedDate;
+                if (DateTime.TryParse(searchDelivery, out parsedDate))
+                {
+                    operationsSchedules = operationsSchedules.Where(o => o.DeliveryDate == parsedDate);
+                    filterCount++;
+                }
+            }
+
+            if (filterCount > 0)
+            {
+                ViewData["Filtering"] = "btn-danger";
+                ViewData["NumberFilters"] = $"({filterCount} Filter{(filterCount > 1 ? "s" : "")} Applied)";
+                ViewData["ShowFilter"] = "show";
+            }
+
+            if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
+            {
+                page = 1;
+                if (actionButton == sortField)
+                {
+                    sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                }
+                sortField = actionButton;
+            }
+
+            operationsSchedules = sortField switch
+            {
+                "SalesOrder" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.SalesOrder) : operationsSchedules.OrderByDescending(o => o.SalesOrder),
+                "CustomerName" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.CustomerName) : operationsSchedules.OrderByDescending(o => o.CustomerName),
+                "Vendors" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.Vendors) : operationsSchedules.OrderByDescending(o => o.Vendors),
+                "PurchaseOrders" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.PurchaseOrders) : operationsSchedules.OrderByDescending(o => o.PurchaseOrders),
+                "DeliveryDate" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.DeliveryDate) : operationsSchedules.OrderByDescending(o => o.DeliveryDate),
+                _ => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.SalesOrder) : operationsSchedules.OrderByDescending(o => o.SalesOrder),
+            };
+
+            ViewData["SortField"] = sortField;
+            ViewData["SortDirection"] = sortDirection;
+
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+            var pagedData = await PaginatedList<OperationsScheduleViewModel>.CreateAsync(operationsSchedules, page ?? 1, pageSize);
+
+            return View(pagedData);
         }
 
         // GET: OperationsSchedules/Details/5
