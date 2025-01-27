@@ -6,7 +6,7 @@ namespace Haver_Boecker_Niagara.Models
     {
         public int OperationsID { get; set; }
 
-        public int SalesOrderID { get; set; }
+        public int? SalesOrderID { get; set; }
 
         [DisplayName("Delivery Date")]
         public DateTime? DeliveryDate { get; set; }
@@ -33,7 +33,7 @@ namespace Haver_Boecker_Niagara.Models
         [DisplayName("Comments/Notes")]
         public string ExtraNotes { get; set; }
 
-        public SalesOrder SalesOrder { get; set; }
+        public SalesOrder? SalesOrder { get; set; }
 
     }
 }

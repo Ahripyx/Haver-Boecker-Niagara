@@ -74,7 +74,7 @@ namespace Haver_Boecker_Niagara.Models
         }
 
         public ICollection<Engineer>? Engineers { get; set; } = new HashSet<Engineer>();
-        public SalesOrder SalesOrder { get; set; }
+        public SalesOrder? SalesOrder { get; set; }
 
         // this model will later support document upload 
 

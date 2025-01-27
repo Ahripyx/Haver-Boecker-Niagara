@@ -27,9 +27,9 @@ namespace Haver_Boecker_Niagara.Models
                 return "N/A";
             }
         }
-        public int VendorID { get; set; }
+        public int? VendorID { get; set; }
 
-        public Vendor Vendor { get; set; }
+        public Vendor?  Vendor { get; set; }
 
         public int? SalesOrderID { get; set; }
         public SalesOrder? SalesOrder { get; set; }

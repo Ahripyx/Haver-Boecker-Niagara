@@ -16,9 +16,9 @@ namespace Haver_Boecker_Niagara.Models
         public string Status { get; set; }
 
         [Required]
-        public int CustomerID { get; set; }
+        public int? CustomerID { get; set; }
 
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage = "Order number cannot exceed 50 characters.")]
