@@ -177,7 +177,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 {
                     OperationsID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SalesOrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    SalesOrderID = table.Column<int>(type: "INTEGER", nullable: true),
                     DeliveryDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     PreOrderNotes = table.Column<string>(type: "TEXT", nullable: true),
                     ScopeNotes = table.Column<string>(type: "TEXT", nullable: true),
@@ -206,7 +206,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .Annotation("Sqlite:Autoincrement", true),
                     PurchaseOrderNumber = table.Column<string>(type: "TEXT", nullable: false),
                     PODueDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    VendorID = table.Column<int>(type: "INTEGER", nullable: false),
+                    VendorID = table.Column<int>(type: "INTEGER", nullable: true),
                     SalesOrderID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>

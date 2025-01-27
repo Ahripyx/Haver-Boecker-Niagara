@@ -11,6 +11,7 @@ using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Haver_Boecker_Niagara.Utilities;
+using Elfie.Serialization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -23,7 +24,6 @@ namespace Haver_Boecker_Niagara.Controllers
             _context = context;
         }
 
-        // GET: OperationsSchedules
         public async Task<IActionResult> Index(string? searchSales, string? searchCustomer, string? searchDelivery,
                                                int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "searchSales")
         {
@@ -52,11 +52,15 @@ namespace Haver_Boecker_Niagara.Controllers
                         .ToList(),
                     PackageRelease = new PackageReleaseViewModel
                     {
-                        Engineers = o.SalesOrder.EngineeringPackage.Engineers
-                            .Select(e => e.Name)
-                            .ToList(),
-                        EstimatedReleaseSummary = o.SalesOrder.EngineeringPackage.EstimatedReleaseSummary,
-                        EstimatedApprovalSummary = o.SalesOrder.EngineeringPackage.EstimatedApprovalSummary
+                        Engineers = o.SalesOrder.EngineeringPackage != null && o.SalesOrder.EngineeringPackage.Engineers != null
+                    ? o.SalesOrder.EngineeringPackage.Engineers.Select(e => e.Name).ToList()
+                    : new List<string>(),
+                        EstimatedReleaseSummary = o.SalesOrder.EngineeringPackage != null && o.SalesOrder.EngineeringPackage.EstimatedReleaseSummary != null
+                    ? o.SalesOrder.EngineeringPackage.EstimatedReleaseSummary
+                    : "N/A",
+                        EstimatedApprovalSummary = o.SalesOrder.EngineeringPackage != null && o.SalesOrder.EngineeringPackage.EstimatedApprovalSummary != null
+                    ? o.SalesOrder.EngineeringPackage.EstimatedApprovalSummary
+                    : "N/A"
                     },
                     Vendors = o.SalesOrder.PurchaseOrders
                         .Select(po => po.Vendor.Name)
@@ -86,16 +90,19 @@ namespace Haver_Boecker_Niagara.Controllers
                     }
                 });
 
+
             ViewBag.SalesOrders = new SelectList(await _context.SalesOrders.Select(s => new { s.OrderNumber, s.SalesOrderID }).ToListAsync(), "OrderNumber", "OrderNumber");
             ViewBag.Customers = new SelectList(await _context.Customers.Select(c => new { c.CustomerID, c.Name }).ToListAsync(), "Name", "Name");
 
             if (!string.IsNullOrEmpty(searchSales))
             {
-                operationsSchedules = operationsSchedules.Where(o => o.SalesOrder == searchSales);
+                operationsSchedules = operationsSchedules.Where(o => o.SalesOrder.Contains(searchSales));
+                filterCount++;
             }
             if (!string.IsNullOrEmpty(searchCustomer))
             {
-                operationsSchedules = operationsSchedules.Where(o => o.CustomerName == searchCustomer);
+                operationsSchedules = operationsSchedules.Where(o => o.CustomerName.Contains(searchCustomer));
+                filterCount++;
             }
             if (!string.IsNullOrEmpty(searchDelivery) && DateTime.TryParse(searchDelivery, out DateTime searchAfterDate))
             {
@@ -109,8 +116,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 ViewData["NumberFilters"] = $"({filterCount} Filter{(filterCount > 1 ? "s" : "")} Applied)";
                 ViewData["ShowFilter"] = "show";
             }
-
-            ViewData["searchDelivery"] = searchDelivery;
 
             if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
             {
@@ -126,9 +131,8 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 "SalesOrder" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.SalesOrder) : operationsSchedules.OrderByDescending(o => o.SalesOrder),
                 "CustomerName" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.CustomerName) : operationsSchedules.OrderByDescending(o => o.CustomerName),
-                "Vendors" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.Vendors) : operationsSchedules.OrderByDescending(o => o.Vendors),
                 "DeliveryDate" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.DeliveryDate) : operationsSchedules.OrderByDescending(o => o.DeliveryDate),
-                _ => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.SalesOrder) : operationsSchedules.OrderByDescending(o => o.SalesOrder),
+                _ => operationsSchedules.OrderBy(o => o.SalesOrder),
             };
 
             ViewData["SortField"] = sortField;
@@ -136,10 +140,12 @@ namespace Haver_Boecker_Niagara.Controllers
 
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+
             var pagedData = await PaginatedList<OperationsScheduleViewModel>.CreateAsync(operationsSchedules, page ?? 1, pageSize);
 
             return View(pagedData);
         }
+
 
         // GET: OperationsSchedules/Details/5
         public async Task<IActionResult> Details(string orderNumber)
