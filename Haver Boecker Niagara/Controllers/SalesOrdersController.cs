@@ -9,7 +9,6 @@ using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.Utilities;
-using System.Reflection.PortableExecutable;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -22,7 +21,6 @@ namespace Haver_Boecker_Niagara.Controllers
             _context = context;
         }
 
-        // GET: SalesOrders
         public async Task<IActionResult> Index(
             int? pageSizeID,
             int? page,
@@ -35,7 +33,6 @@ namespace Haver_Boecker_Niagara.Controllers
         )
         {
             string[] sortOptions = { "OrderNumber", "Customer", "Status", "Price" };
-
             var filterCount = 0;
             ViewData["Filtering"] = "btn-outline-secondary";
 
@@ -110,7 +107,6 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(pagedData);
         }
 
-        // GET: SalesOrders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -130,29 +126,40 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(salesOrder);
         }
 
-        // GET: SalesOrders/Create
         public IActionResult Create()
         {
-            // Fixing ViewData population
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
-            ViewData["EngineeringPackageID"] = new SelectList(_context.EngineeringPackages, "EngineeringPackageID", "Name");
             return View();
         }
 
-        // POST: SalesOrders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder,
+            [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] SalesOrder salesOrder,
             List<int> SelectedPurchaseOrderIds)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(salesOrder);
+                DateTime today = DateTime.Today;
+                int daysUntilNextFriday = ((int)DayOfWeek.Friday - (int)today.DayOfWeek + 7) % 7;
+                DateTime nextFriday = today.AddDays(daysUntilNextFriday);
+
+                var newEngineeringPackage = new EngineeringPackage
+                {
+                    PackageReleaseDate = nextFriday,
+                    ApprovalDrawingDate = nextFriday,
+                    Engineers = new HashSet<Engineer>() 
+                };
+
+                _context.EngineeringPackages.Add(newEngineeringPackage);
                 await _context.SaveChangesAsync();
 
-                if (SelectedPurchaseOrderIds != null)
+                salesOrder.EngineeringPackageID = newEngineeringPackage.EngineeringPackageID;
+
+                _context.SalesOrders.Add(salesOrder);
+                await _context.SaveChangesAsync();
+                if (SelectedPurchaseOrderIds != null && SelectedPurchaseOrderIds.Any())
                 {
                     foreach (var purchaseOrderId in SelectedPurchaseOrderIds)
                     {
@@ -170,34 +177,10 @@ namespace Haver_Boecker_Niagara.Controllers
 
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
-            ViewData["EngineeringPackageID"] = new SelectList(_context.EngineeringPackages, "EngineeringPackageID", "Name", salesOrder.EngineeringPackageID);
-
             return View(salesOrder);
         }
 
-        // GET: SalesOrders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var salesOrder = await _context.SalesOrders
-                .Include(s => s.PurchaseOrders)  
-                .FirstOrDefaultAsync(m => m.SalesOrderID == id);
-            if (salesOrder == null)
-            {
-                return NotFound();
-            }
-
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
-            ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber", salesOrder.PurchaseOrders.Select(po => po.PurchaseOrderID));
-            ViewData["EngineeringPackageID"] = new SelectList(_context.EngineeringPackages, "EngineeringPackageID", "Name", salesOrder.EngineeringPackageID);
-            return View(salesOrder);
-        }
-
-        // POST: SalesOrders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder, List<int> SelectedPurchaseOrderIds)
@@ -252,9 +235,8 @@ namespace Haver_Boecker_Niagara.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
+            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.Customer.Name);
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
-            ViewData["EngineeringPackageID"] = new SelectList(_context.EngineeringPackages, "EngineeringPackageID", "Name", salesOrder.EngineeringPackageID);
             return View(salesOrder);
         }
 
