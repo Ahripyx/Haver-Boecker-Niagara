@@ -318,76 +318,131 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
 
+
         public IActionResult DownloadMachineSchedule()
         {
-            //Getting data for OS
             var operationsSchedules = _context.OperationsSchedules
                 .Include(o => o.SalesOrder)
                     .ThenInclude(s => s.Customer)
                 .Include(o => o.SalesOrder.Machines)
                 .Include(o => o.SalesOrder.EngineeringPackage)
                     .ThenInclude(ep => ep.Engineers)
-                 .Include(o => o.SalesOrder.PurchaseOrders)
+                .Include(o => o.SalesOrder.PurchaseOrders)
                     .ThenInclude(po => po.Vendor)
-                .Select(o => new OperationsScheduleViewModel
+                .Select(o => new
                 {
-                    Id = o.OperationsID,
+                    o.OperationsID,
                     SalesOrder = o.SalesOrder.OrderNumber,
                     CustomerName = o.SalesOrder.Customer.Name,
-                    Machines = o.SalesOrder.Machines
-                        .Select(m => m.MachineDescription)
-                        .ToList(),
-                    SerialAndIPO = o.SalesOrder.Machines
-                        .Select(m => $"{m.SerialNumber} / {m.InternalPONumber}")
-                        .ToList(),
-                    PackageRelease = new PackageReleaseViewModel
+                    Machines = string.Join(", ", o.SalesOrder.Machines.Select(m => m.MachineDescription)),
+                    SerialAndIPO = string.Join(", ", o.SalesOrder.Machines.Select(m => $"{m.SerialNumber} / {m.InternalPONumber}")),
+                    EngineeringInfo = string.Join(" \n ", new string[]
                     {
-                        Engineers = o.SalesOrder.EngineeringPackage.Engineers
-                            .Select(e => e.Name)
-                            .ToList(),
-                        EstimatedReleaseSummary = o.SalesOrder.EngineeringPackage.EstimatedReleaseSummary,
-                        EstimatedApprovalSummary = o.SalesOrder.EngineeringPackage.EstimatedApprovalSummary
-                    },
-                    Vendors = o.SalesOrder.PurchaseOrders
-                        .Select(po => po.Vendor.Name)
-                        .ToList(),
-                    PurchaseOrders = o.SalesOrder.PurchaseOrders
-                        .Select(po => $"{po.PurchaseOrderNumber} ({po.PODueDateSummary})")
-                        .ToList(),
+            string.Join(", ", o.SalesOrder.EngineeringPackage.Engineers.Select(e => e.Name)),
+            o.SalesOrder.EngineeringPackage.EstimatedReleaseSummary,
+            o.SalesOrder.EngineeringPackage.EstimatedApprovalSummary
+                    }),
+                    Vendors = string.Join("\n ", o.SalesOrder.PurchaseOrders.Select(po => po.Vendor.Name)),
+                    PurchaseOrders = string.Join("\n ", o.SalesOrder.PurchaseOrders.Select(po => $"{po.PurchaseOrderNumber} ({po.PODueDateSummary})")),
                     DeliveryDate = o.DeliveryDate,
-                    AdditionalDetails = new AdditionalDetailsViewModel
+                    MediaInfo = string.Join(" \n ", new string[]
                     {
-                        Media = o.SalesOrder.Media ? "✓" : "✗",
-                        SparePartsMedia = o.SalesOrder.SparePartsMedia ? "✓" : "✗",
-                        Base = o.SalesOrder.Base ? "✓" : "✗",
-                        AirSeal = o.SalesOrder.AirSeal ? "✓" : "✗",
-                        CoatingOrLining = o.SalesOrder.CoatingOrLining ? "✓" : "✗",
-                        Disassembly = o.SalesOrder.Disassembly ? "✓" : "✗"
-                    },
-                    Notes = new NotesViewModel
+            o.SalesOrder.Media ? "✓ Media" : "✗ Media",
+            o.SalesOrder.SparePartsMedia ? "✓ SparePartsMedia" : "✗ SparePartsMedia",
+            o.SalesOrder.Base ? "✓ Base" : "✗ Base",
+            o.SalesOrder.AirSeal ? "✓ AirSeal" : "✗ AirSeal",
+            o.SalesOrder.CoatingOrLining ? "✓ CoatingOrLining" : "✗ CoatingOrLining",
+            o.SalesOrder.Disassembly ? "✓ Disassembly" : "✗ Disassembly"
+                    }),
+
+                    NotesInfo = string.Join(" \n ", new string[]
                     {
-                        PreOrderNotes = o.PreOrderNotes,
-                        ScopeNotes = o.ScopeNotes,
-                        ActualAssemblyHours = o.ActualAssemblyHours,
-                        ActualReworkHours = o.ActualReworkHours,
-                        BudgetedAssemblyHours = o.BudgetedAssemblyHours,
-                        NamePlateStatus = o.NamePlateStatus ? "Received" : "Required",
-                        ExtraNotes = o.ExtraNotes
-                    }
+            o.PreOrderNotes ?? "No PreOrderNotes",
+            o.ScopeNotes ?? "No ScopeNotes",
+            $"Actual Assembly Hours: {o.ActualAssemblyHours}",
+            $"Actual Rework Hours: {o.ActualReworkHours}",
+            $"Budgeted Assembly Hours: {o.BudgetedAssemblyHours}",
+            o.NamePlateStatus ? "NamePlate: Received" : "NamePlate: Required",
+            o.ExtraNotes ?? "No ExtraNotes"
+                    })
                 });
 
 
-            //Getting row count
+
             int numRows = operationsSchedules.Count();
 
-            //Checking if there is data
             if (numRows > 0)
             {
-                //Creating Excel Sheet
                 using (ExcelPackage excel = new ExcelPackage())
                 {
                     var workSheet = excel.Workbook.Worksheets.Add("MachineSchedules");
 
+                    workSheet.Cells[3, 1].LoadFromCollection(operationsSchedules, true);
+
+                    workSheet.Column(9).Style.Numberformat.Format = "yyyy-mm-dd";
+
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 11])
+                    {
+                        headings.Style.Font.Bold = true;
+                        headings.Style.Font.Size = 14;
+                        var fill = headings.Style.Fill;
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.LightGray);
+                        headings.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        headings.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    }
+
+                    workSheet.Cells[4, 1, numRows + 3, 11].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    workSheet.Row(3).Height = 25;
+
+                    for (int i = 2; i <= 11; i++)
+                    {
+                        workSheet.Column(i).Width = 50;
+                    }
+
+                    for (int i = 4; i <= numRows + 3; i++)
+                    {
+                        workSheet.Row(i).Height = 100;
+                        workSheet.Cells[i, 1, i, 11].Style.Font.Size = 12;
+                        workSheet.Cells[i, 1, i, 11].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    }
+
+                    workSheet.Cells[1, 1].Value = "Machine Schedules";
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 11])
+                    {
+                        Rng.Merge = true;
+                        Rng.Style.Font.Bold = true;
+                        Rng.Style.Font.Size = 20;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+
+                    DateTime utcDate = DateTime.UtcNow;
+                    TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                    DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
+                    using (ExcelRange Rng = workSheet.Cells[2, 1])
+                    {
+                        Rng.Value = localDate.ToShortDateString();
+                        Rng.Style.Font.Bold = true;
+                        Rng.Style.Font.Size = 12;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    }
+
+                    try
+                    {
+                        Byte[] theData = excel.GetAsByteArray();
+                        string filename = "MachineSchedules.xlsx";
+                        string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        return File(theData, mimeType, filename);
+                    }
+                    catch (Exception)
+                    {
+                        return BadRequest("Could not build and download the file.");
+                    }
+                }
+            }
+            return NotFound("No data.");
+        }
         private bool OperationsScheduleExists(int id)
         {
             return _context.OperationsSchedules.Any(e => e.OperationsID == id);
