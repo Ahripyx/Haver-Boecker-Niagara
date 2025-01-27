@@ -179,65 +179,116 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
             return View(salesOrder);
         }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var salesOrder = await _context.SalesOrders
+                .Include(s => s.PurchaseOrders)
+                .Include(s => s.Customer)
+                .FirstOrDefaultAsync(m => m.SalesOrderID == id);
+            if (salesOrder == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
+            ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber", salesOrder.PurchaseOrders.Select(po => po.PurchaseOrderID));
+
+            // Pass the sales order data to the view
+            return View(salesOrder);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder, List<int> SelectedPurchaseOrderIds)
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder,
+            List<int> SelectedPurchaseOrderIds)
         {
             if (id != salesOrder.SalesOrderID)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
+                // Log validation errors if ModelState is invalid
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    _context.Update(salesOrder);
-                    await _context.SaveChangesAsync();
-
-                    var existingPurchaseOrders = _context.SalesOrders
-                        .Where(s => s.SalesOrderID == salesOrder.SalesOrderID)
-                        .Select(s => s.PurchaseOrders)
-                        .FirstOrDefault();
-
-                    if (existingPurchaseOrders != null)
-                    {
-                        existingPurchaseOrders.Clear();
-                        await _context.SaveChangesAsync();
-                    }
-
-                    if (SelectedPurchaseOrderIds != null)
-                    {
-                        foreach (var purchaseOrderId in SelectedPurchaseOrderIds)
-                        {
-                            var purchaseOrder = await _context.PurchaseOrders.FindAsync(purchaseOrderId);
-                            if (purchaseOrder != null)
-                            {
-                                salesOrder.PurchaseOrders.Add(purchaseOrder);
-                            }
-                        }
-                        await _context.SaveChangesAsync();
-                    }
+                    Console.WriteLine(error.ErrorMessage);
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SalesOrderExists(salesOrder.SalesOrderID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
+                // Repopulate the ViewData for dropdowns
+                ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
+                ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber", salesOrder.PurchaseOrders.Select(po => po.PurchaseOrderID));
+
+                // Return the view with the current salesOrder to fix any errors
+                return View(salesOrder);
             }
 
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.Customer.Name);
-            ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
-            return View(salesOrder);
+            try
+            {
+                var existingSalesOrder = await _context.SalesOrders
+                    .Include(s => s.PurchaseOrders)
+                    .FirstOrDefaultAsync(s => s.SalesOrderID == id);
+
+                if (existingSalesOrder == null)
+                {
+                    return NotFound();
+                }
+
+                // Update the sales order fields
+                existingSalesOrder.Price = salesOrder.Price;
+                existingSalesOrder.Status = salesOrder.Status;
+                existingSalesOrder.CustomerID = salesOrder.CustomerID;
+                existingSalesOrder.OrderNumber = salesOrder.OrderNumber;
+                existingSalesOrder.Media = salesOrder.Media;
+                existingSalesOrder.SparePartsMedia = salesOrder.SparePartsMedia;
+                existingSalesOrder.Base = salesOrder.Base;
+                existingSalesOrder.AirSeal = salesOrder.AirSeal;
+                existingSalesOrder.CoatingOrLining = salesOrder.CoatingOrLining;
+                existingSalesOrder.Disassembly = salesOrder.Disassembly;
+
+                // Clear existing PurchaseOrders and re-add selected ones
+                existingSalesOrder.PurchaseOrders.Clear();
+
+                if (SelectedPurchaseOrderIds != null && SelectedPurchaseOrderIds.Any())
+                {
+                    foreach (var purchaseOrderId in SelectedPurchaseOrderIds)
+                    {
+                        var purchaseOrder = await _context.PurchaseOrders.FindAsync(purchaseOrderId);
+                        if (purchaseOrder != null)
+                        {
+                            existingSalesOrder.PurchaseOrders.Add(purchaseOrder);
+                        }
+                    }
+                }
+
+                _context.Update(existingSalesOrder);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!SalesOrderExists(salesOrder.SalesOrderID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during Edit: {ex.Message}");
+                throw;
+            }
         }
 
         // GET: SalesOrders/Delete/5
