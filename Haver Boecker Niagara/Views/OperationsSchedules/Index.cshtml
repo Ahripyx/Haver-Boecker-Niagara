@@ -8,6 +8,8 @@
 
 <a href="@Url.Action("Create", "OperationsSchedules")" class="btn btn-primary">Create New Schedule</a>
 
+<a href="@Url.Action("DownloadMachineSchedule", "OperationsSchedules")" class="btn btn-primary">Download Spreadsheet</a>
+
 <form asp-action="Index" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
