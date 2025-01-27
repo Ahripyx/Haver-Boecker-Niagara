@@ -46,7 +46,7 @@
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Customer.CustomerID)
+                    Customer Name
                 </th>
                 <th>
                     <button type="submit" name="actionButton" value="OrderNumber" class="text-nowrap fw-bold btn p-0"
@@ -86,7 +86,7 @@
                         @Html.DisplayFor(modelItem => item.Status)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Customer.CustomerID)
+                        @Html.DisplayFor(modelItem => item.Customer.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.OrderNumber)
