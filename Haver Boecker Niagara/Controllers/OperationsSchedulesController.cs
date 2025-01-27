@@ -10,6 +10,7 @@ using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Haver_Boecker_Niagara.Utilities;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -23,16 +24,20 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: OperationsSchedules
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchSales, string? searchCustomer, string? searchDelivery,
+                                               int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "searchSales")
         {
-            var operationsSchedules = await _context.OperationsSchedules
+            string[] sortOptions = { "SalesOrder", "CustomerName", "DeliveryDate" };
+            ViewData["Filtering"] = "btn-outline-secondary";
+            int filterCount = 0;
+
+            var operationsSchedules = _context.OperationsSchedules
                 .Include(o => o.SalesOrder)
                     .ThenInclude(s => s.Customer)
                 .Include(o => o.SalesOrder.Machines)
                 .Include(o => o.SalesOrder.EngineeringPackage)
                     .ThenInclude(ep => ep.Engineers)
                  .Include(o => o.SalesOrder.PurchaseOrders)
-
                     .ThenInclude(po => po.Vendor)
                 .Select(o => new OperationsScheduleViewModel
                 {
@@ -79,10 +84,61 @@ namespace Haver_Boecker_Niagara.Controllers
                         NamePlateStatus = o.NamePlateStatus ? "Received" : "Required",
                         ExtraNotes = o.ExtraNotes
                     }
-                })
-                .ToListAsync();
+                });
 
-            return View(operationsSchedules);
+            ViewBag.SalesOrders = new SelectList(await _context.SalesOrders.Select(s => new { s.OrderNumber, s.SalesOrderID }).ToListAsync(), "OrderNumber", "OrderNumber");
+            ViewBag.Customers = new SelectList(await _context.Customers.Select(c => new { c.CustomerID, c.Name }).ToListAsync(), "Name", "Name");
+
+            if (!string.IsNullOrEmpty(searchSales))
+            {
+                operationsSchedules = operationsSchedules.Where(o => o.SalesOrder == searchSales);
+            }
+            if (!string.IsNullOrEmpty(searchCustomer))
+            {
+                operationsSchedules = operationsSchedules.Where(o => o.CustomerName == searchCustomer);
+            }
+            if (!string.IsNullOrEmpty(searchDelivery) && DateTime.TryParse(searchDelivery, out DateTime searchAfterDate))
+            {
+                operationsSchedules = operationsSchedules.Where(o => o.DeliveryDate >= searchAfterDate);
+                filterCount++;
+            }
+
+            if (filterCount > 0)
+            {
+                ViewData["Filtering"] = "btn-danger";
+                ViewData["NumberFilters"] = $"({filterCount} Filter{(filterCount > 1 ? "s" : "")} Applied)";
+                ViewData["ShowFilter"] = "show";
+            }
+
+            ViewData["searchDelivery"] = searchDelivery;
+
+            if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
+            {
+                page = 1;
+                if (actionButton == sortField)
+                {
+                    sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                }
+                sortField = actionButton;
+            }
+
+            operationsSchedules = sortField switch
+            {
+                "SalesOrder" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.SalesOrder) : operationsSchedules.OrderByDescending(o => o.SalesOrder),
+                "CustomerName" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.CustomerName) : operationsSchedules.OrderByDescending(o => o.CustomerName),
+                "Vendors" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.Vendors) : operationsSchedules.OrderByDescending(o => o.Vendors),
+                "DeliveryDate" => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.DeliveryDate) : operationsSchedules.OrderByDescending(o => o.DeliveryDate),
+                _ => sortDirection == "asc" ? operationsSchedules.OrderBy(o => o.SalesOrder) : operationsSchedules.OrderByDescending(o => o.SalesOrder),
+            };
+
+            ViewData["SortField"] = sortField;
+            ViewData["SortDirection"] = sortDirection;
+
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+            var pagedData = await PaginatedList<OperationsScheduleViewModel>.CreateAsync(operationsSchedules, page ?? 1, pageSize);
+
+            return View(pagedData);
         }
 
         // GET: OperationsSchedules/Details/5
@@ -220,7 +276,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: OperationsSchedules/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -228,8 +284,8 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var operationsSchedule = await _context.OperationsSchedules
+                .Include(o => o.SalesOrder)
                 .FirstOrDefaultAsync(m => m.OperationsID == id);
-
             if (operationsSchedule == null)
             {
                 return NotFound();
@@ -243,15 +299,13 @@ namespace Haver_Boecker_Niagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var operationsSchedule = await _context.OperationsSchedules
-                .FirstOrDefaultAsync(m => m.OperationsID == id);
-
+            var operationsSchedule = await _context.OperationsSchedules.FindAsync(id);
             if (operationsSchedule != null)
             {
                 _context.OperationsSchedules.Remove(operationsSchedule);
-                await _context.SaveChangesAsync();
             }
 
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
