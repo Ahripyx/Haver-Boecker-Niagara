@@ -395,6 +395,8 @@ h1 {
     border-spacing: 0 20px;
 }
 
+
+
 /*engineers-table*/
 .engineers-table {
     table-layout: fixed;
@@ -563,6 +565,140 @@ h1 {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
         margin: 5px;
     }
+
+/*/////////////////////////
+    Toast Notifications yey
+    /////////////////////
+*/
+:root {
+    --blue: #002F5F;
+    --grey: #D6D6D6;
+    --red: #FF0000;
+    --green: #4CAF50;
+    --yellow: #B6900C;
+    --lightBlue: #39AFE2;
+    --white: white;
+    --dark: #080808;
+}
+
+.notifications {
+    position: fixed;
+    margin-top: 30px;
+    right: 20px;
+}
+
+    .notifications :where(.toast, .column) {
+        display: flex;
+        align-items: center;
+    }
+
+    .notifications .toast {
+        width: 400px;
+        position: relative;
+        overflow: hidden;
+        list-style: none;
+        border-radius: 4px;
+        padding: 16px 17px;
+        margin-bottom: 10px;
+        background: var(--white);
+        justify-content: space-between;
+        animation: show_toast 0.3s ease forwards;
+    }
+
+@keyframes show_toast {
+    0% {
+        transform: translateX(100%);
+    }
+
+    40% {
+        transform: translateX(-5%);
+    }
+
+    80% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-10px);
+    }
+}
+
+.toast::before {
+    position: absolute;
+    content: "";
+    height: 3px;
+    width: 100%;
+    bottom: 0px;
+    left: 0px;
+    animation: progress 5s linear forwards;
+}
+
+@keyframes progress {
+    100% {
+        width: 0%;
+    }
+}
+
+.toast.success::before {
+    background: var(--green);
+}
+
+.toast.error::before {
+    background: var(--red);
+}
+
+.toast.warning::before {
+    background: var(--yellow);
+}
+
+.toast.info::before {
+    background: var(--lightBlue);
+}
+
+.toast .column i {
+    font-size: 1.75rem;
+}
+
+
+.toast.success .column i {
+    color: var(--green);
+}
+
+.toast.error .column i {
+    color: var(--red);
+}
+
+.toast.warning .column i {
+    color: var(--yellow);
+}
+
+.toast.info .column i {
+    color: var(--lightBlue);
+}
+
+.toast .column i {
+    font-size: 1.75rem;
+}
+
+
+
+.toast .column span {
+    font-size: 1.07rem;
+    margin-left: 12px;
+}
+
+.toast i:last-child {
+    color: var(--grey);
+    cursor: pointer;
+}
+
+    .toast i:last-child:hover {
+        color: var(--dark);
+    }
+
+.toast:not(.show) {
+    display: none;
+}
 
 
 @media (min-width: 768px) {

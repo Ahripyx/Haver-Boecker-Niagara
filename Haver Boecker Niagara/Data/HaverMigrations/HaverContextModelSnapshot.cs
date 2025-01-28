@@ -17,21 +17,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
 
-            modelBuilder.Entity("EngineeringSpeciality", b =>
-                {
-                    b.Property<int>("EngineeringPackagesEngineeringPackageID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("EngineersEngineerID")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("EngineeringPackagesEngineeringPackageID", "EngineersEngineerID");
-
-                    b.HasIndex("EngineersEngineerID");
-
-                    b.ToTable("EngineeringSpeciality");
-                });
-
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Customer", b =>
                 {
                     b.Property<int>("CustomerID")
@@ -123,6 +108,27 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.HasKey("EngineeringPackageID");
 
                     b.ToTable("EngineeringPackages");
+                });
+
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.EngineeringPackageEngineer", b =>
+                {
+                    b.Property<int>("EngineeringPackageEngineerID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EngineerID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EngineeringPackageID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EngineeringPackageEngineerID");
+
+                    b.HasIndex("EngineerID");
+
+                    b.HasIndex("EngineeringPackageID");
+
+                    b.ToTable("EngineeringPackageEngineers");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Machine", b =>
@@ -332,19 +338,23 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.ToTable("Vendors");
                 });
 
-            modelBuilder.Entity("EngineeringSpeciality", b =>
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.EngineeringPackageEngineer", b =>
                 {
-                    b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", null)
+                    b.HasOne("Haver_Boecker_Niagara.Models.Engineer", "Engineer")
                         .WithMany()
-                        .HasForeignKey("EngineeringPackagesEngineeringPackageID")
+                        .HasForeignKey("EngineerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Haver_Boecker_Niagara.Models.Engineer", null)
+                    b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", "EngineeringPackage")
                         .WithMany()
-                        .HasForeignKey("EngineersEngineerID")
+                        .HasForeignKey("EngineeringPackageID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Engineer");
+
+                    b.Navigation("EngineeringPackage");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Machine", b =>
