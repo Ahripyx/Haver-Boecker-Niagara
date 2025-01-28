@@ -9,6 +9,7 @@
 *///////////////////////////////////////
 
 document.addEventListener("DOMContentLoaded", (e) => {
+    //The ones that are not in using are for later on the project please dont remove
     const page = document.body.dataset.page;
     const btnCreate = document.getElementById('btnCreate');
     const btnDelete = document.getElementById('btnDelete');
@@ -18,7 +19,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const toastError = document.querySelector('.toast.error');
     const toastWarning = document.querySelector('.toast.warning');
     const toastInfo = document.querySelector('.toast.info');
-    
+    const logoutIcon = document.querySelector('.logout-icon');
     //Remove the toast by clicking X
     const removeToast = (t) => {
         if (t) {
@@ -97,5 +98,5 @@ document.addEventListener("DOMContentLoaded", (e) => {
             }, 5000);
         }
     }
-   
+    
 })
