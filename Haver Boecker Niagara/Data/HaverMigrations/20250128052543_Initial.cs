@@ -124,24 +124,26 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EngineeringSpeciality",
+                name: "EngineeringPackageEngineers",
                 columns: table => new
                 {
-                    EngineeringPackagesEngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false),
-                    EngineersEngineerID = table.Column<int>(type: "INTEGER", nullable: false)
+                    EngineeringPackageEngineerID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    EngineerID = table.Column<int>(type: "INTEGER", nullable: false),
+                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EngineeringSpeciality", x => new { x.EngineeringPackagesEngineeringPackageID, x.EngineersEngineerID });
+                    table.PrimaryKey("PK_EngineeringPackageEngineers", x => x.EngineeringPackageEngineerID);
                     table.ForeignKey(
-                        name: "FK_EngineeringSpeciality_EngineeringPackages_EngineeringPackagesEngineeringPackageID",
-                        column: x => x.EngineeringPackagesEngineeringPackageID,
+                        name: "FK_EngineeringPackageEngineers_EngineeringPackages_EngineeringPackageID",
+                        column: x => x.EngineeringPackageID,
                         principalTable: "EngineeringPackages",
                         principalColumn: "EngineeringPackageID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EngineeringSpeciality_Engineers_EngineersEngineerID",
-                        column: x => x.EngineersEngineerID,
+                        name: "FK_EngineeringPackageEngineers_Engineers_EngineerID",
+                        column: x => x.EngineerID,
                         principalTable: "Engineers",
                         principalColumn: "EngineerID",
                         onDelete: ReferentialAction.Cascade);
@@ -227,9 +229,14 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EngineeringSpeciality_EngineersEngineerID",
-                table: "EngineeringSpeciality",
-                column: "EngineersEngineerID");
+                name: "IX_EngineeringPackageEngineers_EngineerID",
+                table: "EngineeringPackageEngineers",
+                column: "EngineerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EngineeringPackageEngineers_EngineeringPackageID",
+                table: "EngineeringPackageEngineers",
+                column: "EngineeringPackageID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Machines_SalesOrderID",
@@ -267,7 +274,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EngineeringSpeciality");
+                name: "EngineeringPackageEngineers");
 
             migrationBuilder.DropTable(
                 name: "Machines");
