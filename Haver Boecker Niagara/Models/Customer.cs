@@ -7,7 +7,7 @@ namespace Haver_Boecker_Niagara.Models
     {
         public int CustomerID { get; set; }
 
-        [DisplayName("Customer Name")]
+        [DisplayName("Customer")]
         public string Name { get; set; }
 
         [DisplayName("Contact First Name")]
@@ -31,13 +31,13 @@ namespace Haver_Boecker_Niagara.Models
             ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
 
-        [DisplayName("Street Address")]
+        [DisplayName("Address")]
         public string? Address { get; set; }
 
         public string? City { get; set; }
         public string? Country { get; set; }
 
-        [DisplayName("Postal Code")]
+        [DisplayName("Postcode")]
         public string? PostalCode { get; set; }
 
         [DisplayName("Date Created")]

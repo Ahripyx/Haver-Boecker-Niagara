@@ -12,6 +12,18 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label class="control-label">Select # of Engineers to Assign</label>
+                <select id="setCountEng" name="setCountEng" onchange="location.href=`../Edit/@Model.EngineeringPackageID?setCountEng=${this.value}`" class="form-control" asp-items=ViewBag.engCountDD></select>
+            </div>
+            @for(int i=0; i<int.Parse(ViewData["setCountEng"].ToString()); i++)
+            {
+                <div class="form-group">
+                    <label class="control-label">Engineer #@(i+1)</label>
+                    <select id="engineer@(i)" name="engineer@(i)" class="form-control" asp-items=@((SelectList)ViewData["engineer"+i])></select>
+                </div>
+            }
             <input type="hidden" asp-for="EngineeringPackageID" />
             <div class="form-group">
                 <label asp-for="PackageReleaseDate" class="control-label"></label>

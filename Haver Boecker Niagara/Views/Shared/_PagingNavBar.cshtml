@@ -31,18 +31,18 @@
             <ul class="pagination justify-content-center pagination-sm" style="margin:20px 0">
                 <li class="page-item">
                     <button type="submit" name="page" value="1" @prevDisabled class="btn page-link">
-                        <span aria-hidden="true">&lArr;</span>&nbsp;First
+                        <i class="bi bi-chevron-double-left"></i>&nbsp;First
                     </button>
                 </li>
                 <li class="page-item d-none d-md-inline">
                     <button type="submit" name="page" data-bs-toggle="tooltip" value="@(stepBack)" @prevDisabled
                             title="Jump Back @(Model.PageIndex - stepBack) Pages" class="btn page-link">
-                        <span aria-hidden="true">&lArr;</span>
+                        <i class="bi bi-chevron-left"></i>
                     </button>
                 </li>
                 <li class="page-item">
                     <button type="submit" name="page" @prevDisabled value="@(Model.PageIndex - 1)" class="btn page-link">
-                        &nbsp;<span aria-hidden="true">&larr;</span>&nbsp;<span class="d-none d-md-inline">Previous</span>
+                        <i class="bi bi-arrow-left"></i>&nbsp;<span class="d-none d-md-inline">Previous</span>
                     </button>
                 </li>
                 <li class="page-item active">
@@ -52,22 +52,21 @@
                 </li>
                 <li class="page-item">
                     <button type="submit" name="page" @nextDisabled value="@(Model.PageIndex + 1)" class="btn page-link">
-                        <span class="d-none d-md-inline">Next</span>&nbsp;<span aria-hidden="true">&rarr;</span>&nbsp;
+                        <span class="d-none d-md-inline">Next</span>&nbsp;<i class="bi bi-arrow-right"></i>
                     </button>
                 </li>
                 <li class="page-item d-none d-md-inline">
                     <button type="submit" data-bs-toggle="tooltip" name="page" @nextDisabled value="@(stepForward)"
                             title="Jump Forward @(stepForward - Model.PageIndex) Pages" class="btn page-link">
-                        <span aria-hidden="true">&rArr;</span>
+                        <i class="bi bi-chevron-right"></i>
                     </button>
                 </li>
                 <li class="page-item">
                     <button type="submit" name="page" @nextDisabled value="@(Model.TotalPages)" class="btn page-link">
-                        Last&nbsp;<span aria-hidden="true">&rArr;</span>
+                        Last&nbsp;<i class="bi bi-chevron-double-right"></i>
                     </button>
                 </li>
             </ul>
         }
     }
-</nav>
 </nav>
