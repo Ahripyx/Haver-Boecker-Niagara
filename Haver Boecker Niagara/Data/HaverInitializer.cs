@@ -148,26 +148,6 @@ namespace Haver_Boecker_Niagara.Data
                             context.SaveChanges();
                             #endregion
 
-                            #region Engineering Speciality (Many-to-Many relationship)
-                            if (!context.Set<Dictionary<string, object>>("EngineeringSpeciality").Any())
-                            {
-                                var engineer = context.Engineers.FirstOrDefault();
-                                var engineeringPackage = context.EngineeringPackages.FirstOrDefault();
-
-                                if (engineer != null && engineeringPackage != null)
-                                {
-                                    context.Set<Dictionary<string, object>>("EngineeringSpeciality").Add(
-                                        new Dictionary<string, object>
-                                        {
-                                        { "EngineerID", engineer.EngineerID },
-                                        { "EngineeringPackageID", engineeringPackage.EngineeringPackageID }
-                                        }
-                                    );
-                                    context.SaveChanges();
-                                }
-                            }
-                            #endregion
-
                             #region Sales Orders
                             if (!context.SalesOrders.Any())
                             {

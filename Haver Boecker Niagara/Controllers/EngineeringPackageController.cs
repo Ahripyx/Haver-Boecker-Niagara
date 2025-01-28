@@ -78,7 +78,7 @@ namespace Haver_Boecker_Niagara.Controllers
             var engPackages = _context
                               .EngineeringPackages
                               .Include(p => p.Engineers)
-                              .AsNoTracking();
+                              .AsTracking();
 
             if (!String.IsNullOrEmpty(FilterCriteria) && FilterCriteria != "None")
             {
@@ -165,6 +165,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var engineeringPackage = await _context.EngineeringPackages
+                .Include(p => p.Engineers)
                 .FirstOrDefaultAsync(m => m.EngineeringPackageID == id);
             if (engineeringPackage == null)
             {
@@ -175,19 +176,9 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: EngineeringPackage/Create
-        public IActionResult Create(int? setCountEng)
+        public IActionResult Create()
         {
-            //if (setCountEng == null && ViewData["setCountEng"] == null)
-            //{
-            //    ViewData["setCountEng"] = 1;
-            //    ViewData["engCountDD"] = new SelectList(Enumerable.Range(0, 5));
-            //}
-            //else
-            //{
-            //    ViewData["setCountEng"] = setCountEng;
-            //    ViewData["engCountDD"] = new SelectList(Enumerable.Range(0, 5), setCountEng);
-            //}
-            //ViewData["Engineers"] = new SelectList(_context.Engineers, "EngineerID", "Name", "Not Assigned");
+            
             return View();
         }
 
@@ -209,14 +200,35 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: EngineeringPackage/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int? setCountEng)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var engineeringPackage = await _context.EngineeringPackages.FindAsync(id);
+            var engineeringPackage = await _context.EngineeringPackages.Include(p => p.Engineers).Where(p => p.EngineeringPackageID == id).FirstOrDefaultAsync();
+
+            if (setCountEng == null)
+            {
+                setCountEng = engineeringPackage.Engineers.Count;
+                
+            }
+            ViewData["setCountEng"] = setCountEng;
+            ViewData["engCountDD"] = new SelectList(Enumerable.Range(0, 5), setCountEng);
+            while (setCountEng > 0)
+            {
+                if (engineeringPackage.Engineers.Count >= setCountEng)
+                {
+                    ViewData["engineer" + (setCountEng - 1).ToString()] = new SelectList(_context.Engineers, "EngineerID", "Name", engineeringPackage.Engineers.ElementAt(setCountEng.Value-1).EngineerID);
+
+                } else
+                {
+                    ViewData["engineer" + (setCountEng - 1).ToString()] = new SelectList(_context.Engineers, "EngineerID", "Name");
+
+                }
+                setCountEng--;
+            }
             if (engineeringPackage == null)
             {
                 return NotFound();
@@ -229,15 +241,44 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EngineeringPackageID,PackageReleaseDate,ApprovalDrawingDate,ActualPackageReleaseDate,ActualApprovalDrawingDate")] EngineeringPackage engineeringPackage)
+        public async Task<IActionResult> Edit(int id, [Bind("EngineeringPackageID,PackageReleaseDate,ApprovalDrawingDate,ActualPackageReleaseDate,ActualApprovalDrawingDate")] EngineeringPackage engineeringPackage, int? setCountEng, int? engineer0, int? engineer1, int? engineer2, int? engineer3)
         {
             if (id != engineeringPackage.EngineeringPackageID)
             {
                 return NotFound();
             }
+            
 
             if (ModelState.IsValid)
             {
+                foreach (var engPack in _context.EngineeringPackageEngineers
+                .Where(p => p.EngineeringPackageID == engineeringPackage.EngineeringPackageID))
+                {
+                    _context.Remove(engPack);
+                }
+                _context.SaveChanges();
+                engineeringPackage.Engineers = new List<Engineer>();
+                // create new engis
+                if (engineer0 != null && setCountEng >= 1)
+                {
+                    var eng1 = _context.Engineers.Find(engineer0);
+                    engineeringPackage.Engineers.Add(eng1);
+                }
+                if (engineer1 != null && setCountEng >= 2)
+                {
+                    var eng2 = _context.Engineers.Find(engineer1);
+                    engineeringPackage.Engineers.Add(eng2);
+                }
+                if (engineer2 != null && setCountEng >= 3)
+                {
+                    var eng3 = _context.Engineers.Find(engineer2);
+                    engineeringPackage.Engineers.Add(eng3);
+                }
+                if (engineer3 != null && setCountEng == 4)
+                {
+                    var eng4 = _context.Engineers.Find(engineer3);
+                    engineeringPackage.Engineers.Add(eng4);
+                }
                 try
                 {
                     _context.Update(engineeringPackage);
