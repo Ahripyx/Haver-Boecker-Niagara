@@ -12,9 +12,16 @@
     <header>
         <nav class="navbar navbar-expand-sm ">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/Logo.png" alt="Haver_Boecker_Niagara" />
-                </a>
+                <div class="logo-container">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="~/Logo.png" alt="Haver_Boecker_Niagara" />
+                    </a>
+                    <!-- login btn -->
+                    <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-light btn-sm rounded-pill login-button">
+                        Log in
+                    </a>
+                </div>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -38,6 +45,9 @@
                         </li>
                     </ul>
                 </div>
+
+
+
             </div>
         </nav>
     </header>
