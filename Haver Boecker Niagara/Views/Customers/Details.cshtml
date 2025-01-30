@@ -8,9 +8,6 @@
 
 <div class="detailed-container">
     <h1>Customer Details</h1>
-
-    
-        
         <div class="container-detailed-3">
             <div>
                 <dl class="column">
@@ -23,16 +20,16 @@
                 </dl>
             </div>
             <div>
-            <dl class="column">
-                        <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.ContactPerson)
-                        </dt>
-                        <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.ContactPerson)
-                        </dd>
-                    </dl>
-                </div>
+                <dl class="column">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.ContactPerson)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.ContactPerson)
+                    </dd>
+                </dl>
             </div>
+        </div>
         <div class="container-detailed-3">
             <div>
                 <dl class="column">
@@ -121,18 +118,9 @@
             </dl>
         </div>
     </div>
-            
-            
-            
-            
-            
-            
-        
-
-        <div>
-            <br/>
-            <a asp-action="Edit" asp-route-id="@Model?.CustomerID" class="btn-edit">Edit</a>
-            <a asp-action="Index" class="btn-primary-close">CLOSE</a>
-        </div>
-    
+    <div>
+        <br/>
+        <a asp-action="Edit" asp-route-id="@Model?.CustomerID" class="btn-edit">Edit</a>
+        <a asp-action="Index" class="btn-primary-close">CLOSE</a>
+    </div> 
 </div>
