@@ -4,48 +4,73 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+@* <h1>Details</h1>
+ *@
 
-<div>
-    <h4>Engineering Package</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Engineers)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var item in Model.Engineers)
-            {
-                <span>@item.Name</span> <br />
-            }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PackageReleaseDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EstimatedReleaseSummary)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ApprovalDrawingDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EstimatedApprovalSummary)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ActualPackageReleaseDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ActualReleaseSummary)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ActualApprovalDrawingDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ActualApprovalSummary)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.EngineeringPackageID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="detailed-container">
+    <h1>Engineering Package Details</h1>
+    <div class="container-detailed-3">
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Engineers)
+                </dt>
+                <dd class="col-sm-10">
+                    @foreach (var item in Model.Engineers)
+                    {
+                        <span>@item.Name</span> <br />
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="container-detailed-3">
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.PackageReleaseDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.EstimatedReleaseSummary)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ApprovalDrawingDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.EstimatedApprovalSummary)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="container-detailed-3">
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ActualPackageReleaseDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ActualReleaseSummary)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ActualApprovalDrawingDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ActualApprovalSummary)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div>
+        <br />
+        <a asp-action="Edit" asp-route-id="@Model?.EngineeringPackageID" class="btn-edit">Edit</a> 
+        <a asp-action="Index" class="btn-primary-close">CLOSE</a>
+    </div>
 </div>

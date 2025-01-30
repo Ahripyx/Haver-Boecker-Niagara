@@ -8,12 +8,14 @@
     <h1>@ViewData["Title"]</h1>
     <div class="container-detailed-3">
         <div>
-            <h3>Sales Order</h3>
+            <h6>Sales Order</h6>
+            <hr />
             <p>@Model.SalesOrder</p>
         </div>
 
         <div>
-            <h3>Customer Name</h3>
+            <h6>Customer Name</h6>
+            <hr />
             <p>@Model.CustomerName</p>
         </div>
 
@@ -24,7 +26,8 @@
 
     <div class="container-detailed-3">
         <div>
-            <h3>Serial / Internal PO</h3>
+            <h6>Serial / Internal PO</h6>
+            <hr />
             <ul>
                 @foreach (var serialAndIPO in Model.SerialAndIPO)
                 {
@@ -33,7 +36,8 @@
             </ul>
         </div>
         <div>
-            <h3>Machines</h3>
+            <h6>Machines</h6>
+            <hr />
             <ul>
                 @foreach (var machine in Model.Machines)
                 {
@@ -47,7 +51,8 @@
 
     <div class="container-detailed-3">
         <div>
-            <h3>Purchase Orders</h3>
+            <h6>Purchase Orders</h6>
+            <hr />
             <ul>
                 @foreach (var po in Model.PurchaseOrders)
                 {
@@ -56,7 +61,8 @@
             </ul>
         </div>
         <div>
-            <h3>Vendors</h3>
+            <h6>Vendors</h6>
+            <hr />
             <ul>
                 @foreach (var vendor in Model.Vendors)
                 {
@@ -72,11 +78,13 @@
         
 
         <div>
-            <h3>Delivery Date</h3>
+            <h6>Delivery Date</h6>
+            <hr />
             <p>@(Model.DeliveryDate?.ToString("d") ?? "N/A")</p>
         </div>
         <div>
-            <h3>Package Release</h3>
+            <h6>Package Release</h6>
+            <hr />
             <ul>
                 @foreach (var engineer in Model.PackageRelease.Engineers)
                 {
@@ -91,7 +99,8 @@
     </div>
     <div class="container-detailed-3">
         <div>
-            <h3>Notes</h3>
+            <h6>Notes</h6>
+            <hr />
             <ul>
                 <li>Pre-Order Notes: @Model.Notes.PreOrderNotes</li>
                 <li>Scope Notes: @Model.Notes.ScopeNotes</li>
@@ -104,7 +113,8 @@
         </div>
 
         <div>
-            <h3>Additional Details</h3>
+            <h6>Additional Details</h6>
+            <hr />
             <ul>
                 <li>Media: @Model.AdditionalDetails.Media</li>
                 <li>Spare Parts: @Model.AdditionalDetails.SparePartsMedia</li>
@@ -120,7 +130,8 @@
 
    
 
-    <p>
+    <p class="btn">
         <a href="@Url.Action("Index")" class="btn-primary-close">close</a>
     </p>
 </div>
+

@@ -1,15 +1,31 @@
-﻿namespace Haver_Boecker_Niagara.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Haver_Boecker_Niagara.ViewModels
 {
     public class OperationsScheduleViewModel
     {
         public int Id { get; set; }
+
+        [Display(Name = "Sales Order")]
         public string? SalesOrder { get; set; }
+
+        [Display(Name ="Customer Name")]
         public string? CustomerName { get; set; }
         public List<string>? Machines { get; set; }
+
+        [Display(Name = "Serial And Ipo")]
         public List<string> SerialAndIPO { get; set; }
+
+
+        [Display(Name = "Package Release")]
         public PackageReleaseViewModel? PackageRelease { get; set; }
         public List<string>? Vendors { get; set; }
+
+        [Display(Name = "Purcharse Orders")]
         public List<string>? PurchaseOrders { get; set; }
+
+
+        [Display(Name = "Delviery Date")]
         public DateTime? DeliveryDate { get; set; }
         public AdditionalDetailsViewModel? AdditionalDetails { get; set; }
         public NotesViewModel? Notes { get; set; }

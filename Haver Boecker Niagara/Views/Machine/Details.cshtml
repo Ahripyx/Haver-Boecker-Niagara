@@ -4,52 +4,79 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Machine</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SalesOrder)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SalesOrder.OrderNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SerialNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SerialNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.InternalPONumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.InternalPONumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MachineSize)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MachineSize)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MachineClass)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MachineClass)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MachineSizeDesc)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MachineSizeDesc)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MachineID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="detailed-container">
+    <h1>Machine Details</h1>
+    <div class="container-detailed-3">
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.SalesOrder)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.SalesOrder.OrderNumber)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.SerialNumber)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.SerialNumber)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="container-detailed-3">
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.InternalPONumber)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.InternalPONumber)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.MachineSize)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.MachineSize)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="container-detailed-3">
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.MachineClass)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.MachineClass)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.MachineSizeDesc)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.MachineSizeDesc)
+                </dd>
+            </dl>
+        </div>
+    </div>
+              
+    <div>
+        <br />
+        <a asp-action="Edit" asp-route-id="@Model?.MachineID" class="btn-edit">Edit</a> 
+        <a asp-action="Index" class="btn-primary-close">close</a>
+    </div>
 </div>
 

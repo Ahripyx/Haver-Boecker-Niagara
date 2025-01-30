@@ -4,103 +4,110 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Purchase Orders</h1>
+<div class="main-container">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+    <h1>Purchase Orders</h1>
 
-<form asp-action="Index" method="get">
-    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
-    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
-    <div class="form-horizontal">
-        <button class="btn @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
-                data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-            Filter/Search @ViewData["numberFilters"]
-        </button><br />
-        <div class="collapse @ViewData["ShowFilter"]" id="collapseFilter">
-            <div class="card card-body bg-light">
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label class="control-label">Search Purchase Order Number:</label>
-                        @Html.TextBox("SearchPONumber", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="control-label">Search Due Date</label>
-                        @Html.TextBox("SearchDueDate", null, new { @class = "form-control", type = "date" })
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="control-label">Search Vendor</label>
-                        @Html.TextBox("SearchVendor", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="control-label">Search Operations Schedule</label>
-                        @Html.TextBox("SearchOperations", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-2 align-self-end">
-                        <input type="submit" name="actionButton" value="Filter"
-                               class="btn btn-outline-primary" />
-                        <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+    <form asp-action="Index" method="get">
+        <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+        <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+        <div class="form-horizontal">
+
+            <div class="collapse @ViewData["ShowFilter"]" id="collapseFilter">
+                <div class="card card-body ">
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Search Purchase Order Number:</label>
+                            @Html.TextBox("SearchPONumber", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Search Due Date</label>
+                            @Html.TextBox("SearchDueDate", null, new { @class = "form-control", type = "date" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Search Vendor</label>
+                            @Html.TextBox("SearchVendor", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Search Operations Schedule</label>
+                            @Html.TextBox("SearchOperations", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-2 align-self-end">
+                            <input type="submit" name="actionButton" value="Filter"
+                                   class="btn btn-outline-primary" />
+                            <a asp-action="Index" class="btn-clear">Clear</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    <button type="submit" name="actionButton" value="PurchaseOrderNumber" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "PurchaseOrderNumber", sortDirection = (ViewData["SortField"] as string == "PurchaseOrderNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                        @Html.DisplayNameFor(model => model.First().PurchaseOrderNumber)
-                    </button>
-                </th>
-                <th>
-                    <button type="submit" name="actionButton" value="PODueDate" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "PODueDate", sortDirection = (ViewData["SortField"] as string == "PODueDate" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                        @Html.DisplayNameFor(model => model.First().PODueDate)
-                    </button>
-                </th>
-                <th>
-                    <button type="submit" name="actionButton" value="VendorName" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "VendorName", sortDirection = (ViewData["SortField"] as string == "VendorName" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                        @Html.DisplayNameFor(model => model.First().Vendor.Name)
-                    </button>
-                </th>
-                <th>
-                    <button type="submit" name="actionButton" value="OrderNumber" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "OrderNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                        Order Number
-                    </button>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
+        @* search, create btn *@
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <button class="search-btn btn @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
+                    data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                Search @ViewData["numberFilters"]
+            </button>
+            <a asp-action="Create" class="btn create-btn">Create New</a>
+        </div>
+        <div class="table-container">
 
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PurchaseOrderNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PODueDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Vendor.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SalesOrder.OrderNumber)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.PurchaseOrderID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.PurchaseOrderID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.PurchaseOrderID">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <partial name="_PagingNavBar" />
-</form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <button type="submit" name="actionButton" value="PurchaseOrderNumber" class="btn btn-toolbar"
+                                    formaction="@Url.Action("Index", new { sortField = "PurchaseOrderNumber", sortDirection = (ViewData["SortField"] as string == "PurchaseOrderNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                                @Html.DisplayNameFor(model => model.First().PurchaseOrderNumber)
+                            </button>
+                        </th>
+                        <th>
+                            <button type="submit" name="actionButton" value="PODueDate" class="btn btn-toolbar"
+                                    formaction="@Url.Action("Index", new { sortField = "PODueDate", sortDirection = (ViewData["SortField"] as string == "PODueDate" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                                @Html.DisplayNameFor(model => model.First().PODueDate)
+                            </button>
+                        </th>
+                        <th>
+                            <button type="submit" name="actionButton" value="VendorName" class="btn btn-toolbar"
+                                    formaction="@Url.Action("Index", new { sortField = "VendorName", sortDirection = (ViewData["SortField"] as string == "VendorName" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                                @Html.DisplayNameFor(model => model.First().Vendor.Name)
+                            </button>
+                        </th>
+                        <th>
+                            <button type="submit" name="actionButton" value="OrderNumber" class="btn btn-toolbar"
+                                    formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "OrderNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                                Order Number
+                            </button>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PurchaseOrderNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PODueDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Vendor.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SalesOrder.OrderNumber)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.PurchaseOrderID" class="ed-det-del-btn">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.PurchaseOrderID" class="ed-det-del-btn">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.PurchaseOrderID" class="ed-det-del-btn">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+<partial name="_PagingNavBar" />

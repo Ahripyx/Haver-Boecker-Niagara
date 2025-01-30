@@ -4,39 +4,55 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>PurchaseOrder</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PurchaseOrderNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PurchaseOrderNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PODueDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PODueDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Vendor)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Vendor.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SalesOrder)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SalesOrder.OrderNumber)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.PurchaseOrderID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="detailed-container">
+    <h1>PurchaseOrder Details</h1>
+    <div class="container-detailed-3">
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.PurchaseOrderNumber)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.PurchaseOrderNumber)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.PODueDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.PODueDate)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="container-detailed-3">
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Vendor)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Vendor.Name)
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <dl class="column">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.SalesOrder)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.SalesOrder.OrderNumber)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div>
+        <br />
+        <a asp-action="Edit" asp-route-id="@Model?.PurchaseOrderID" class="btn-edit">Edit</a>
+        <a asp-action="Index" class="btn-primary-close">close</a>
+    </div>
 </div>
