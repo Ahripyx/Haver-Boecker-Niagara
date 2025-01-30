@@ -98,7 +98,13 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     Status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     CustomerID = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Media = table.Column<bool>(type: "INTEGER", nullable: false),
+                    SparePartsMedia = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Base = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AirSeal = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CoatingOrLining = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Disassembly = table.Column<bool>(type: "INTEGER", nullable: false),
+                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -118,24 +124,26 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EngineeringSpeciality",
+                name: "EngineeringPackageEngineers",
                 columns: table => new
                 {
-                    EngineeringPackagesEngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false),
-                    EngineersEngineerID = table.Column<int>(type: "INTEGER", nullable: false)
+                    EngineeringPackageEngineerID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    EngineerID = table.Column<int>(type: "INTEGER", nullable: false),
+                    EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EngineeringSpeciality", x => new { x.EngineeringPackagesEngineeringPackageID, x.EngineersEngineerID });
+                    table.PrimaryKey("PK_EngineeringPackageEngineers", x => x.EngineeringPackageEngineerID);
                     table.ForeignKey(
-                        name: "FK_EngineeringSpeciality_EngineeringPackages_EngineeringPackagesEngineeringPackageID",
-                        column: x => x.EngineeringPackagesEngineeringPackageID,
+                        name: "FK_EngineeringPackageEngineers_EngineeringPackages_EngineeringPackageID",
+                        column: x => x.EngineeringPackageID,
                         principalTable: "EngineeringPackages",
                         principalColumn: "EngineeringPackageID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EngineeringSpeciality_Engineers_EngineersEngineerID",
-                        column: x => x.EngineersEngineerID,
+                        name: "FK_EngineeringPackageEngineers_Engineers_EngineerID",
+                        column: x => x.EngineerID,
                         principalTable: "Engineers",
                         principalColumn: "EngineerID",
                         onDelete: ReferentialAction.Cascade);
@@ -152,12 +160,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     MachineSize = table.Column<int>(type: "INTEGER", nullable: false),
                     MachineClass = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     MachineSizeDesc = table.Column<string>(type: "TEXT", nullable: false),
-                    Media = table.Column<bool>(type: "INTEGER", nullable: false),
-                    SparePartsMedia = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Base = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AirSeal = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CoatingOrLining = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Disassembly = table.Column<bool>(type: "INTEGER", nullable: false),
                     SalesOrderID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -177,7 +179,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 {
                     OperationsID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SalesOrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    SalesOrderID = table.Column<int>(type: "INTEGER", nullable: true),
                     DeliveryDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     PreOrderNotes = table.Column<string>(type: "TEXT", nullable: true),
                     ScopeNotes = table.Column<string>(type: "TEXT", nullable: true),
@@ -206,17 +208,17 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .Annotation("Sqlite:Autoincrement", true),
                     PurchaseOrderNumber = table.Column<string>(type: "TEXT", nullable: false),
                     PODueDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    VendorID = table.Column<int>(type: "INTEGER", nullable: false),
-                    OperationsID = table.Column<int>(type: "INTEGER", nullable: false)
+                    VendorID = table.Column<int>(type: "INTEGER", nullable: true),
+                    SalesOrderID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PurchaseOrders", x => x.PurchaseOrderID);
                     table.ForeignKey(
-                        name: "FK_PurchaseOrders_OperationsSchedules_OperationsID",
-                        column: x => x.OperationsID,
-                        principalTable: "OperationsSchedules",
-                        principalColumn: "OperationsID",
+                        name: "FK_PurchaseOrders_SalesOrders_SalesOrderID",
+                        column: x => x.SalesOrderID,
+                        principalTable: "SalesOrders",
+                        principalColumn: "SalesOrderID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PurchaseOrders_Vendors_VendorID",
@@ -227,9 +229,14 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EngineeringSpeciality_EngineersEngineerID",
-                table: "EngineeringSpeciality",
-                column: "EngineersEngineerID");
+                name: "IX_EngineeringPackageEngineers_EngineerID",
+                table: "EngineeringPackageEngineers",
+                column: "EngineerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EngineeringPackageEngineers_EngineeringPackageID",
+                table: "EngineeringPackageEngineers",
+                column: "EngineeringPackageID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Machines_SalesOrderID",
@@ -242,9 +249,9 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 column: "SalesOrderID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchaseOrders_OperationsID",
+                name: "IX_PurchaseOrders_SalesOrderID",
                 table: "PurchaseOrders",
-                column: "OperationsID");
+                column: "SalesOrderID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrders_VendorID",
@@ -267,10 +274,13 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EngineeringSpeciality");
+                name: "EngineeringPackageEngineers");
 
             migrationBuilder.DropTable(
                 name: "Machines");
+
+            migrationBuilder.DropTable(
+                name: "OperationsSchedules");
 
             migrationBuilder.DropTable(
                 name: "PurchaseOrders");
@@ -279,13 +289,10 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 name: "Engineers");
 
             migrationBuilder.DropTable(
-                name: "OperationsSchedules");
+                name: "SalesOrders");
 
             migrationBuilder.DropTable(
                 name: "Vendors");
-
-            migrationBuilder.DropTable(
-                name: "SalesOrders");
 
             migrationBuilder.DropTable(
                 name: "Customers");

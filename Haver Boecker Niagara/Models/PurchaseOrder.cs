@@ -1,6 +1,7 @@
 ﻿// lookup table for PO#
 
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Haver_Boecker_Niagara.Models
 {
@@ -12,14 +13,26 @@ namespace Haver_Boecker_Niagara.Models
 
 
         [DisplayName("Purchase Order Due Date")]
-        public DateTime? PODueDate { get; set; } 
+        public DateTime? PODueDate { get; set; }
 
-        public int VendorID { get; set; }
+        [NotMapped]
+        public string PODueDateSummary
+        {
+            get
+            {
+                if (PODueDate != null)
+                {
+                    return PODueDate!.Value.ToShortDateString();
+                }
+                return "N/A";
+            }
+        }
+        public int? VendorID { get; set; }
 
-        public Vendor Vendor { get; set; }
+        public Vendor?  Vendor { get; set; }
 
-        public int OperationsID { get; set; }
-        public OperationsSchedule OperationsSchedule { get; set; }
+        public int? SalesOrderID { get; set; }
+        public SalesOrder? SalesOrder { get; set; }
 
     }
 }

@@ -32,6 +32,5 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             return View();
         }
-
     }
 }

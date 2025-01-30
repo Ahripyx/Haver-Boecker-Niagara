@@ -62,14 +62,14 @@
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="Vendor" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "Vendor", sortDirection = (ViewData["SortField"] as string == "Vendor" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                    <button type="submit" name="actionButton" value="VendorName" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "VendorName", sortDirection = (ViewData["SortField"] as string == "VendorName" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
                         @Html.DisplayNameFor(model => model.First().Vendor.Name)
                     </button>
                 </th>
                 <th>
-                    <button type="submit" name="actionButton" value="OperationsSchedule" class="btn btn-toolbar"
-                            formaction="@Url.Action("Index", new { sortField = "OperationsSchedule", sortDirection = (ViewData["SortField"] as string == "OperationsSchedule" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                    <button type="submit" name="actionButton" value="OrderNumber" class="btn btn-toolbar"
+                            formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "OrderNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
                         Order Number
                     </button>
                 </th>
@@ -91,7 +91,7 @@
                         @Html.DisplayFor(modelItem => item.Vendor.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.OperationsSchedule.SalesOrder.OrderNumber)
+                        @Html.DisplayFor(modelItem => item.SalesOrder.OrderNumber)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.PurchaseOrderID">Edit</a> |

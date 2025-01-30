@@ -16,6 +16,8 @@ namespace Haver_Boecker_Niagara.Data
         public DbSet<Machine> Machines { get; set; }
         public DbSet<SalesOrder> SalesOrders { get; set; }
 
+        public DbSet<EngineeringPackageEngineer> EngineeringPackageEngineers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -50,7 +52,7 @@ namespace Haver_Boecker_Niagara.Data
             modelBuilder.Entity<SalesOrder>()
                 .HasOne(so => so.EngineeringPackage)
                 .WithOne(ep => ep.SalesOrder)
-                .HasForeignKey<SalesOrder>(so => so.EngineeringPackageID) 
+                .HasForeignKey<SalesOrder>(so => so.EngineeringPackageID)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PurchaseOrder>()
@@ -60,19 +62,16 @@ namespace Haver_Boecker_Niagara.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PurchaseOrder>()
-                .HasOne(po => po.OperationsSchedule)
+                .HasOne(po => po.SalesOrder)
                 .WithMany(os => os.PurchaseOrders)
-                .HasForeignKey(po => po.OperationsID)
+                .HasForeignKey(po => po.SalesOrderID)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<EngineeringPackage>()
                 .HasMany(ep => ep.Engineers)
                 .WithMany(e => e.EngineeringPackages)
-                .UsingEntity<Dictionary<string, object>>(
-                    "EngineeringSpeciality",
-                    j => j.HasOne<Engineer>().WithMany(),
-                    j => j.HasOne<EngineeringPackage>().WithMany());
-        }
+                .UsingEntity<EngineeringPackageEngineer>();
 
+        }
     }
 }

@@ -1,0 +1,81 @@
+﻿@model Haver_Boecker_Niagara.Models.OperationsSchedule
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>OperationsSchedule</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="OperationsID" />
+
+            <div class="form-group">
+                <label asp-for="SalesOrderID" class="control-label"></label>
+                <select asp-for="SalesOrderID" class="form-control" asp-items="ViewBag.SalesOrderID"></select>
+                <span asp-validation-for="SalesOrderID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DeliveryDate" class="control-label"></label>
+                <input asp-for="DeliveryDate" class="form-control" />
+                <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PreOrderNotes" class="control-label"></label>
+                <input asp-for="PreOrderNotes" class="form-control" />
+                <span asp-validation-for="PreOrderNotes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ScopeNotes" class="control-label"></label>
+                <input asp-for="ScopeNotes" class="form-control" />
+                <span asp-validation-for="ScopeNotes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ActualAssemblyHours" class="control-label"></label>
+                <input asp-for="ActualAssemblyHours" class="form-control" />
+                <span asp-validation-for="ActualAssemblyHours" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ActualReworkHours" class="control-label"></label>
+                <input asp-for="ActualReworkHours" class="form-control" />
+                <span asp-validation-for="ActualReworkHours" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BudgetedAssemblyHours" class="control-label"></label>
+                <input asp-for="BudgetedAssemblyHours" class="form-control" />
+                <span asp-validation-for="BudgetedAssemblyHours" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="NamePlateStatus" /> @Html.DisplayNameFor(model => model.NamePlateStatus)
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExtraNotes" class="control-label"></label>
+                <input asp-for="ExtraNotes" class="form-control" />
+                <span asp-validation-for="ExtraNotes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" id="btnEdit" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

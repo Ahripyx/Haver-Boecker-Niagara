@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
     document.querySelectorAll('.close-toast').forEach(i => {
         i.addEventListener('click', (e) => {
-            const toast = e.target.closest('.toast'); 
+            const toast = e.target.closest('.toast');
             removeToast(toast);
         });
     });
@@ -52,13 +52,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
                         toastError.style.display = "none";
                     }, 5000);
                 }
-            } 
+            }
         });
     }
     if (btnEdit) {
         console.log('Btn exist')
         btnEdit.addEventListener("click", () => {
-            sessionStorage.setItem("showToast", "true"); 
+            sessionStorage.setItem("showToast", "true");
             const inputs = document.querySelectorAll('input');
             let error = false;
             inputs.forEach(i => {
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
                         toastError.style.display = "none";
                     }, 5000);
                 }
-            } 
+            }
         });
     }
     if (btnDelete) {
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
 
     const showToast = sessionStorage.getItem("showToast");
-    
+
     if (showToast === "true") {
         const toast = document.querySelector('.toast.success');
         if (toast) {
@@ -92,11 +92,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
             sessionStorage.removeItem("showToast");
 
-           
+
             setTimeout(() => {
                 toast.style.display = "none";
             }, 5000);
         }
     }
-    
+
 })

@@ -16,23 +16,39 @@ namespace Haver_Boecker_Niagara.Models
         public string Status { get; set; }
 
         [Required]
-        public int CustomerID { get; set; }
+        public int? CustomerID { get; set; }
 
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
 
         [Required]
         [Display(Name = "Order Number")]
         [StringLength(50, ErrorMessage = "Order number cannot exceed 50 characters.")]
         public string OrderNumber { get; set; }
+        public bool Media { get; set; } = false;
+
+        [DisplayName("Spare Parts / Media")]
+        public bool SparePartsMedia { get; set; } = false;
+
+        public bool Base { get; set; } = false;
+
+        [DisplayName("Air Seal")]
+        public bool AirSeal { get; set; } = false;
+
+        [DisplayName("Coating / Lining")]
+        public bool CoatingOrLining { get; set; } = false;
+
+        public bool Disassembly { get; set; } = false;
+
 
         [DisplayName("Engineering Package")]
-        public int EngineeringPackageID { get; set; }
+        public int? EngineeringPackageID { get; set; }
 
-        [Display(Name = "Engineering Package")]
-        public EngineeringPackage EngineeringPackage { get; set; } 
+        public EngineeringPackage? EngineeringPackage { get; set; }
+        public ICollection<PurchaseOrder>? PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
 
-        public ICollection<OperationsSchedule> OperationsSchedules { get; set; } = new HashSet<OperationsSchedule>();
+        public ICollection<OperationsSchedule>? OperationsSchedules { get; set; } = new HashSet<OperationsSchedule>();  // This property is already here
 
-        public ICollection<Machine> Machines { get; set; } = new HashSet<Machine>();
+        public ICollection<Machine>? Machines { get; set; } = new HashSet<Machine>();
     }
+
 }

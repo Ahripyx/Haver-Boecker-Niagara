@@ -27,7 +27,7 @@
                             <span class="small fw-bolder">BitBusters</span><br />
                             <div class="text-start me-3">
                                 <small class="text-start">Admin</small>
-                        </div>
+                            </div>
                         </div>
                         <a class="btn" href="@Url.Action("_Login", "Home")" id="logout-icon">
                             <i class="bi bi-box-arrow-right" style="color: white; padding-left:0;"></i>
@@ -53,12 +53,18 @@
                             <a class="nav-link" asp-area="" asp-controller="Vendors" asp-action="Index">Vendors</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="SalesOrders" asp-action="Index">Sales Order</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="SalesOrder" asp-action="Index">Sales Order</a>
+                            <a class="nav-link" asp-area="" asp-controller="EngineeringPackage" asp-action="Index">Engineering Package</a>
                         </li>
-                       
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Machine" asp-action="Index">Machine</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="PurchaseOrders" asp-action="Index">Purcharse Orders</a>
+                        </li>
+
                     </ul>
                 </div>
 
@@ -71,14 +77,14 @@
         <li class="toast success">
             <div class="column">
                 <i class="fa-solid fa-circle-check"></i>
-                <span>Changes Applied</span>
+                <span>Success</span>
             </div>
             <i class="fa-solid fa-xmark close-toast"></i>
         </li>
         <li class="toast error">
             <div class="column">
                 <i class="fa-solid fa-circle-xmark"></i>
-                <span>Please review the fields</span>
+                <span>Error</span>
             </div>
             <i class="fa-solid fa-xmark close-toast"></i>
         </li>

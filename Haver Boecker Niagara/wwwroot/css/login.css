@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 body {
     font-family: Arial, sans-serif;
     background-color: #FFFF;
@@ -6,9 +6,11 @@ body {
     align-items: center;
     margin: 0;
 }
-h2{
+
+h2 {
     font-size: large;
 }
+
 input {
     border-radius: 0.313rem;
     background-color: #D6D6D680;
