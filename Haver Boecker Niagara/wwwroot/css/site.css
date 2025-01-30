@@ -255,7 +255,7 @@ h4 {
     text-transform: uppercase;
 }
 
-.btn-primary-close {
+.btn-primary-close, .btn-edit {
     background-color: #FF0000;
     color: white;
     font-size: 15px;
@@ -270,13 +270,22 @@ h4 {
     transition: all 0.3s ease-in-out;
     width: 10%;
 }
+.btn-edit {
+    background-color: #002F5F;
+}
 
-    .btn-primary-close:hover {
-        background-color: #CC0000; 
-        color: white;
-        transform: scale(1.1);
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); 
-    }
+.btn-primary-close:hover {
+    background-color: #CC0000;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+.btn-edit:hover {
+    background-color: #004080; 
+    transform: scale(1.1);
+    color:white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
 /* table styling */
 body {
     background-color: #F0F0F0;
@@ -520,7 +529,13 @@ h1 {
         color: white;
         background-color: rgba(0, 47, 95, 0.9);
     }
-
+.column dt {
+    font-weight: bold;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc; 
+    display: inline-block; 
+    width: 100%;
+}
 /* Page btn */
 .pagination {
     display: flex;
