@@ -258,14 +258,25 @@ h4 {
 .btn-primary-close {
     background-color: #FF0000;
     color: white;
-    font-size: 10px;
-    padding: 5px 13px;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 8px 13px;
+    margin-top: 10px;
     border: none;
-    border-radius: 3px;
+    border-radius: 5px;
     text-decoration: none;
     cursor: pointer;
     text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+    width: 10%;
 }
+
+    .btn-primary-close:hover {
+        background-color: #CC0000; 
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); 
+    }
 /* table styling */
 body {
     background-color: #F0F0F0;
@@ -553,21 +564,24 @@ h1 {
 }
 
 .container-detailed-3 {
-    display: flex; 
+    display: flex;
     gap: 20px;
-    justify-content: space-between; 
-    align-items: flex-start; 
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5px;
+    align-items: stretch;
 }
 
     .container-detailed-3 div {
         flex: 1; 
-        padding: 10px; 
+        padding: 20px; 
         background-color: #f9f9f9; 
         border: 1px solid #ccc;
-        border-radius: 20px;
+        border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
         margin: 5px;
     }
+
 
 /*/////////////////////////
     Toast Notifications yey
