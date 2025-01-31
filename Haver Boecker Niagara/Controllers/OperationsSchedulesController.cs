@@ -235,6 +235,23 @@ namespace Haver_Boecker_Niagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OperationsID,SalesOrderID,DeliveryDate,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours,NamePlateStatus,ExtraNotes")] OperationsSchedule operationsSchedule, List<int> selectedPurchaseOrders)
         {
+            if (ModelState.IsValid)
+            {
+                _context.OperationsSchedules.Add(operationsSchedule);
+                await _context.SaveChangesAsync();
+
+                if (selectedPurchaseOrders != null && selectedPurchaseOrders.Any())
+                {
+                    var purchaseOrders = await _context.PurchaseOrders
+                        .Where(po => selectedPurchaseOrders.Contains(po.PurchaseOrderID))
+                        .ToListAsync();
+
+                    operationsSchedule.SalesOrder.PurchaseOrders = purchaseOrders;
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
 
             ViewData["SalesOrderID"] = new SelectList(await _context.SalesOrders.ToListAsync(), "SalesOrderID", "OrderNumber", operationsSchedule.SalesOrderID);
             return View(operationsSchedule);
@@ -262,7 +279,6 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(operationsSchedule);
         }
 
-        // POST: OperationsSchedules/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OperationsID,SalesOrderID,DeliveryDate,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours,NamePlateStatus,ExtraNotes")] OperationsSchedule operationsSchedule, List<int> selectedPurchaseOrders)
@@ -274,7 +290,49 @@ namespace Haver_Boecker_Niagara.Controllers
 
             if (ModelState.IsValid)
             {
+                try
+                {
+                    var existingSchedule = await _context.OperationsSchedules
+                        .Include(os => os.SalesOrder.PurchaseOrders)
+                        .FirstOrDefaultAsync(os => os.OperationsID == id);
 
+                    if (existingSchedule == null)
+                    {
+                        return NotFound();
+                    }
+
+                    existingSchedule.SalesOrderID = operationsSchedule.SalesOrderID;
+                    existingSchedule.DeliveryDate = operationsSchedule.DeliveryDate;
+                    existingSchedule.PreOrderNotes = operationsSchedule.PreOrderNotes;
+                    existingSchedule.ScopeNotes = operationsSchedule.ScopeNotes;
+                    existingSchedule.ActualAssemblyHours = operationsSchedule.ActualAssemblyHours;
+                    existingSchedule.ActualReworkHours = operationsSchedule.ActualReworkHours;
+                    existingSchedule.BudgetedAssemblyHours = operationsSchedule.BudgetedAssemblyHours;
+                    existingSchedule.NamePlateStatus = operationsSchedule.NamePlateStatus;
+                    existingSchedule.ExtraNotes = operationsSchedule.ExtraNotes;
+                    if (selectedPurchaseOrders != null)
+                    {
+                        var purchaseOrders = await _context.PurchaseOrders
+                            .Where(po => selectedPurchaseOrders.Contains(po.PurchaseOrderID))
+                            .ToListAsync();
+
+                        existingSchedule.SalesOrder.PurchaseOrders = purchaseOrders;
+                    }
+
+                    _context.Update(existingSchedule);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.OperationsSchedules.Any(e => e.OperationsID == id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
 
                 return RedirectToAction(nameof(Index));
             }
@@ -282,6 +340,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["SalesOrderID"] = new SelectList(await _context.SalesOrders.ToListAsync(), "SalesOrderID", "OrderNumber", operationsSchedule.SalesOrderID);
             return View(operationsSchedule);
         }
+
 
         // GET: OperationsSchedules/Delete/5
         public async Task<IActionResult> Delete(int? id)
