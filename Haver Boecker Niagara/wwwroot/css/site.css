@@ -212,9 +212,8 @@ h4 {
     border-radius: 5px;
     border: 1px solid #C0C0C0;
     line-height: 1.2;
-    background-color: #FFFFFF;
-    width: 100%; 
-    padding: 10px; 
+    background-color: #FFFFFF; 
+    padding: 0.5em; 
     font-size: 1rem;
     box-sizing: border-box; 
 }

@@ -4,11 +4,12 @@
     ViewData["Title"] = "Operations Schedules";
 }
 
-<div class="main-container">
+<form asp-action="Index" method="get">
+
+    <div class="main-container">
 
     <h1>@ViewData["Title"]</h1>
 
-    <form asp-action="Index" method="get">
         <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
         <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
 
@@ -167,7 +168,8 @@
                     </tr>
                 }
             </tbody>
-        </table>  
-    </form>
-</div>
-<partial name="_PagingNavBar" />
+        </table>
+    </div>
+    <partial name="_PagingNavBar" />
+
+</form>

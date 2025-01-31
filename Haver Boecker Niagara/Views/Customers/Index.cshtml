@@ -3,13 +3,13 @@
 @{
     ViewData["Title"] = "Index";
 }
+<form asp-action="Index" method="get">
+    <div class="main-container">
 
-<div class="main-container">
-
-    <h1>Customers</h1>
+        <h1>Customers</h1>
 
 
-    <form asp-action="Index" method="get">
+    
         <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
         <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
 
@@ -154,7 +154,8 @@
                 </tbody>
             </table>
         </div>
-    </form>
-</div>
-<partial name="_PagingNavBar" />
+    </div>
+    <partial name="_PagingNavBar" />
+
+</form>
 
