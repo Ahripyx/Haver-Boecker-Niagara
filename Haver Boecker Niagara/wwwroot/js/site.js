@@ -4,9 +4,7 @@
 // Write your JavaScript code.
 
 
-/*//////////////////////////////////////
-    Toast Notifications 
-*///////////////////////////////////////
+
 
 document.addEventListener("DOMContentLoaded", (e) => {
     //The ones that are not in using are for later on the project please dont remove
@@ -19,7 +17,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const toastError = document.querySelector('.toast.error');
     const toastWarning = document.querySelector('.toast.warning');
     const toastInfo = document.querySelector('.toast.info');
-    const logoutIcon = document.querySelector('.logout-icon');
+    const logoutIcon = document.querySelector('#logout-icon');
+    const btnClose = document.querySelector('#btnClose');
+    const btnContinue = document.querySelector('#btnContinue');
+
+    /*//////////////////////////////////////
+    Toast Notifications 
+    *///////////////////////////////////////
     //Remove the toast by clicking X
     const removeToast = (t) => {
         if (t) {
@@ -83,6 +87,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
         });
     }
 
+
+    
     const showToast = sessionStorage.getItem("showToast");
 
     if (showToast === "true") {
@@ -99,4 +105,53 @@ document.addEventListener("DOMContentLoaded", (e) => {
         }
     }
 
+    //Popup functionality 
+
+    if (logoutIcon) {
+        console.log('button there')
+        const PopupMainConteiner = document.querySelector('.popup-conteiner');
+        const btnLogOut = document.querySelector('#btnLogOut');
+        const btnCancel = document.querySelector('#btnCancel');
+        logoutIcon.addEventListener('click', e => {
+            e.preventDefault();
+            PopupMainConteiner.style.display = 'flex';
+        });
+        if (btnCancel) {
+            btnCancel.addEventListener('click', () => {
+                PopupMainConteiner.style.display = 'none';
+            });
+        }
+        if (btnLogOut) { 
+            btnLogOut.addEventListener('click', () => {
+                const logoutUrl = btnLogOut.getAttribute("data-logut-url");
+                window.location.href = logoutUrl;
+            });
+        }
+    }
+    
+    if (btnClose) {
+        console.log('Btn close there')
+        const PopupMainConteiner = document.querySelector('.popup-close-conteiner');
+        const btnCloseCancel = document.querySelector('#btnCloseCancel');
+       
+        btnClose.addEventListener('click', e => {
+            e.preventDefault();
+            PopupMainConteiner.style.display = 'flex';
+        });
+        if (btnCloseCancel) {
+            console.log('btnCancel there')
+            btnCloseCancel.addEventListener('click', () => {
+                console.log('btn close clicked')
+                PopupMainConteiner.style.display = 'none';
+            });
+        }
+        if (btnContinue) {
+            btnContinue.addEventListener('click', () => {
+                window.location.href = btnClose.href;
+                if (toastWarning) {
+                    sessionStorage.setItem("showToast", "true");
+                }
+            })
+        }
+    }
 })

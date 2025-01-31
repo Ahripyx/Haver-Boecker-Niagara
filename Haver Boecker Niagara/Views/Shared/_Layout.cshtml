@@ -29,8 +29,8 @@
                                 <small class="text-start">Admin</small>
                             </div>
                         </div>
-                        <a class="btn" href="@Url.Action("_Login", "Home")" id="logout-icon">
-                            <i class="bi bi-box-arrow-right" style="color: white; padding-left:0;"></i>
+                        <a class="btn">
+                            <i class="bi bi-box-arrow-right" style="color: white; padding-left:0;" id="logout-icon"></i>
                         </a>
                     </div>
                 </div>
@@ -67,8 +67,30 @@
 
                     </ul>
                 </div>
-
-
+                <!--Logout popup hide-->
+                <div class="popup-conteiner">
+                    <div class="popup-content">
+                        <i class="fa-solid fa-circle-info close-toast" id="infoIcon"></i>
+                        <p>You are about to log out <br />
+                            Are you sure you want to do it?</p>
+                        <div class="popup-btns">
+                            <button id="btnCancel" class="btn-cancel">Cancel</button>
+                            <button id="btnLogOut" data-logut-url="@Url.Action("_Login", "Home")" >Log Out</button>
+                        </div>
+                    </div>
+                </div>
+                <!--Close form popup hide-->
+                <div class="popup-close-conteiner">
+                    <div class="popup-content">
+                        <i class="fa-solid fa-triangle-exclamation close-toast" id="warningIcon"></i>
+                        <p>Once you close the form this action cannot be changed <br />
+                            Are you sure you want to continue?</p>
+                        <div class="popup-btns">
+                            <button id="btnCloseCancel" class="btn-cancel">Cancel</button>
+                            <button id="btnContinue">Continue</button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </nav>

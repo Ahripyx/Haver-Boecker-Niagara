@@ -430,20 +430,20 @@ h1 {
 
 /*engineers-table*/
 .engineers-table {
-    table-layout: fixed;
+table-layout: fixed;
 }
-    .engineers-table th:first-child,
-    .engineers-table td:first-child, .engineers-table th:nth-child(2),
-    .engineers-table td:nth-child(2) {
-        text-align: left; 
-    }
+.engineers-table th:first-child,
+.engineers-table td:first-child, .engineers-table th:nth-child(2),
+.engineers-table td:nth-child(2) {
+    text-align: left; 
+}
 
 
 
-    .engineers-table th:last-child,
-    .engineers-table td:last-child {
-        text-align: right; 
-    }
+.engineers-table th:last-child,
+.engineers-table td:last-child {
+    text-align: right; 
+}
 /* table header styling */
 .table thead th {
     background-color: #F0F0F0;
@@ -453,72 +453,72 @@ h1 {
     padding-left: 8px;
 }
 
-        .table thead th button {
-            font-weight: bold;
-            font-size: 16px;
-            color: #5F696D;
-            text-align: left;
-        }
+.table thead th button {
+    font-weight: bold;
+    font-size: 16px;
+    color: #5F696D;
+    text-align: left;
+}
 
 
-    .table thead tr th:first-child {
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
-        border-left: 2px solid #C0C0C0;
-    }
+.table thead tr th:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-left: 2px solid #C0C0C0;
+}
 
-    .table thead tr th:last-child {
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-        border-right: 2px solid #C0C0C0;
-    }
+.table thead tr th:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-right: 2px solid #C0C0C0;
+}
 
     /* table body styling */
-    .table tbody tr {
-        background-color: #F0F0F0;
-        border: 2px solid #C0C0C0;
-        border-radius: 10px;
-    }
+.table tbody tr {
+    background-color: #F0F0F0;
+    border: 2px solid #C0C0C0;
+    border-radius: 10px;
+}
 
-        .table tbody tr td {
-            border-top: 2px solid #C0C0C0;
-            border-bottom: 2px solid #C0C0C0;
-            font-size: 12px;
-            color: #5F696D;
-            text-align: left;
-            padding-left: 10px;
-        }
+.table tbody tr td {
+    border-top: 2px solid #C0C0C0;
+    border-bottom: 2px solid #C0C0C0;
+    font-size: 12px;
+    color: #5F696D;
+    text-align: left;
+    padding-left: 10px;
+}
 
-            .table tbody tr td:first-child {
-                border-top-left-radius: 10px;
-                border-bottom-left-radius: 10px;
-                border-left: 2px solid #C0C0C0;
-                padding-right: 0px;
-            }
+.table tbody tr td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-left: 2px solid #C0C0C0;
+    padding-right: 0px;
+}
 
-            .table tbody tr td:last-child {
-                border-top-right-radius: 10px;
-                border-bottom-right-radius: 10px;
-                border-right: 2px solid #C0C0C0;
-                padding-left: 5px;
-                width: 12%;
-                white-space: nowrap;
-            }
+.table tbody tr td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-right: 2px solid #C0C0C0;
+    padding-left: 5px;
+    width: 12%;
+    white-space: nowrap;
+}
 
-    .table tbody td:nth-last-child(2) {
-        padding-right: 0;
-        width: 8%;
-    }
+.table tbody td:nth-last-child(2) {
+    padding-right: 0;
+    width: 8%;
+}
 
 
-    .table td {
-        background-color: #F0F0F0;
-        padding: 10px 15px;
-    }
+.table td {
+    background-color: #F0F0F0;
+    padding: 10px 15px;
+}
 
-    .table tbody tr td {
-        font-size: 16px;
-    }
+.table tbody tr td {
+    font-size: 16px;
+}
 /* edit details delete btn */
 .ed-det-del-btn {
     display: inline-block;
@@ -533,10 +533,10 @@ h1 {
     transition: background-color 0.3s ease;
 }
 
-    .ed-det-del-btn:hover {
-        color: white;
-        background-color: rgba(0, 47, 95, 0.9);
-    }
+.ed-det-del-btn:hover {
+    color: white;
+    background-color: rgba(0, 47, 95, 0.9);
+}
 .column dt {
     font-weight: bold;
     padding-bottom: 5px;
@@ -623,8 +623,8 @@ h1 {
 
 .notifications {
     position: fixed;
-    margin-top: 30px;
-    right: 20px;
+    margin-top: 1.875rem;
+    right: 1.25rem;
 }
 
     .notifications :where(.toast, .column) {
@@ -633,16 +633,17 @@ h1 {
     }
 
     .notifications .toast {
-        width: 400px;
+        width: 25rem;
         position: relative;
         overflow: hidden;
         list-style: none;
         border-radius: 4px;
-        padding: 16px 17px;
-        margin-bottom: 10px;
+        padding: 1rem 1.063rem;
+        margin-bottom: 0.625rem;
         background: var(--white);
         justify-content: space-between;
         animation: show_toast 0.3s ease forwards;
+        top: 9.375rem;
     }
 
 @keyframes show_toast {
@@ -724,7 +725,7 @@ h1 {
 
 .toast .column span {
     font-size: 1.07rem;
-    margin-left: 12px;
+    margin-left: 0.75rem;
 }
 
 .toast i:last-child {
@@ -732,14 +733,86 @@ h1 {
     cursor: pointer;
 }
 
-    .toast i:last-child:hover {
-        color: var(--dark);
-    }
+.toast i:last-child:hover {
+    color: var(--dark);
+}
 
 .toast:not(.show) {
     display: none;
 }
 
+/*Log out pop up*/
+.popup-conteiner {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: 100%;
+    background-color: rgba(0, 47, 95, 0.35);
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+.popup-content {
+    background-color: #fff;
+    padding: 1.25rem;
+    border-radius: 0.625rem;
+    text-align: center;
+    padding: 1.875rem;
+}
+
+.popup-btns button {
+    
+    border-radius: 5px;
+    padding: 5px 20px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+#btnLogOut {
+    background-color: #002F5F;
+    color: var(--white);
+    border: 2px solid;
+}
+
+#infoIcon {
+    color: var(--blue);
+    font-size: x-large
+}
+
+.popup-btns .btn-cancel{
+    background-color: #39AFE2;
+    color: white;
+    border: 2px solid;
+    padding-left: 1.688rem;
+    padding-right: 1.688rem;
+}
+
+/*Pop up close form*/
+
+.popup-close-conteiner {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: 100%;
+    background-color: rgba(0, 47, 95, 0.35);
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+#btnContinue{
+    color: var(--white);
+    background-color: var(--blue);
+    border: 2px solid;
+}
+#warningIcon {
+    color: var(--blue);
+    font-size: x-large;
+}
 
 @media (min-width: 768px) {
     html {
