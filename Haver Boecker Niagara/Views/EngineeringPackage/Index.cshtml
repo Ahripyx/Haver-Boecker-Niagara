@@ -5,22 +5,13 @@
 }
 <form asp-action="Index" method="get">
     <div class="main-container">
-    <h1>Engineering Packages</h1>
+        <h1>Engineering Packages</h1>
 
-        <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
-        <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
-
-        @* search, create btn *@
-        <div class="d-flex justify-content-between align-items-center mb-1">
-            <button class="search-btn btn @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
-                    data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                Search @ViewData["numberFilters"]
-            </button>
-            <a asp-action="Create" class="btn create-btn">Create New</a>
-        </div>
+        <input type="hidden" name="sortDirection" value="@ViewData["SortDirection"]" />
+        <input type="hidden" name="sortField" value="@ViewData["SortField"]" />
 
         <div class="form-horizontal">
-            <div class="collapse  @ViewData["ShowFilter"]" id="collapseFilter">
+            <div class="collapse @ViewData["ShowFilter"]" id="collapseFilter">
                 <div class="col">
                     <div class="row">
                         <div class="form-group col-md-3">
@@ -28,33 +19,40 @@
                             @Html.DropDownList("FilterCriteria", null, new { @class = "form-control" })
                         </div>
                     </div>
-                    
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Search by Order Number:</label>
+                        <input type="text" name="orderNumber" value="@ViewData["OrderNumber"]" class="form-control" placeholder="Enter Order Number" />
+                    </div>
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label class="control-label">Start of Date Range:</label>
-                            <input name="startDate" id="startDate" value=@ViewData["startDate"] type="date" class="form-control" />
+                            <input name="startDate" id="startDate" value="@ViewData["startDate"]" type="date" class="form-control" />
                         </div>
-                        
+
                         <div class="form-group col-md-3">
                             <label class="control-label">End of Date Range:</label>
-                            <input name="endDate" id="endDate" value=@ViewData["endDate"] type="date" class="form-control" />
+                            <input name="endDate" id="endDate" value="@ViewData["endDate"]" type="date" class="form-control" />
                         </div>
                     </div>
+
                     <div class="mt-2 form-group col-md-2 align-self-end">
-                        <input type="submit" name="actionButton" value="Filter"
-                                class="btn btn-outline-primary" />
+                        <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
                         <a asp-action="Index" class="btn-clear">Clear</a>
                     </div>
                 </div>
-            
             </div>
         </div>
+
         <table class="table">
             <thead>
                 <tr>
                     <th>
-                        Assigned Engineers
+                        <button type="submit" name="actionButton" value="OrderNumber" class="fw-bold btn p-0"
+                                formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "OrderNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                            Order Number
+                        </button>
                     </th>
+                    <th>Assigned Engineers</th>
                     <th>
                         <button type="submit" name="actionButton" value="EstimatedRel" class="fw-bold btn p-0"
                                 formaction="@Url.Action("Index", new { sortField = "EstimatedRel", sortDirection = (ViewData["SortField"] as string == "EstimatedRel" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
@@ -86,6 +84,9 @@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.SalesOrder.OrderNumber)
+                        </td>
                         <td class="my-auto">
                             @foreach (var eng in item.Engineers)
                             {
@@ -109,8 +110,8 @@
                             @Html.DisplayFor(modelItem => item.ActualApprovalSummary)
                         </td>
                         <td class="align-middle">
-                            <a asp-action="Edit" asp-route-id="@item.EngineeringPackageID" class="ed-det-del-btn">Edit</a> 
-                            <a asp-action="Details" asp-route-id="@item.EngineeringPackageID" class="ed-det-del-btn">Details</a> 
+                            <a asp-action="Edit" asp-route-id="@item.EngineeringPackageID" class="ed-det-del-btn">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.EngineeringPackageID" class="ed-det-del-btn">Details</a>
                             <a asp-action="Delete" asp-route-id="@item.EngineeringPackageID" class="ed-det-del-btn">Delete</a>
                         </td>
                     </tr>
@@ -121,3 +122,4 @@
 
     <partial name="_PagingNavBar" />
 </form>
+

@@ -1,6 +1,5 @@
 ﻿using Haver_Boecker_Niagara.Models;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 using System.Diagnostics;
 
 namespace Haver_Boecker_Niagara.Data
@@ -13,7 +12,6 @@ namespace Haver_Boecker_Niagara.Data
             using (var context = new HaverContext(
                 serviceProvider.GetRequiredService<DbContextOptions<HaverContext>>()))
             {
-                #region Prepare the Database
                 try
                 {
                     if (UseMigrations)
@@ -37,274 +35,161 @@ namespace Haver_Boecker_Niagara.Data
                 {
                     Debug.WriteLine(ex.GetBaseException().Message);
                 }
-                #endregion
 
-                #region Seed Sample Data
                 if (SeedSampleData)
                 {
                     try
+
                     {
-                        #region Customers
-                        if (!context.Customers.Any())
-                        {
-                            context.Customers.AddRange(
-                                new Customer
+                        string[] firstNames = { "John", "Michael", "Emily", "Sarah", "David", "James", "Sophia", "Daniel", "Olivia", "Robert" };
+                        string[] lastNames = { "Smith", "Johnson", "Brown", "Davis", "Miller", "Wilson", "Moore", "Anderson", "Taylor", "Thomas" };
+                        string[] cities = { "New York", "Los Angeles", "Chicago", "Houston", "San Francisco", "London", "Berlin", "Toronto", "Sydney", "Paris" };
+                        string[] countries = { "USA", "UK", "Germany", "Canada", "Australia", "France", "Italy", "Spain", "Netherlands", "Sweden" };
+
+                        if (!context.Customers.Any()) { 
+                            string[] companyNames = { "Acme Corp", "BrightTech Ltd", "Summit Solutions", "Global Enterprises", "Pioneer Logistics",
+                              "Vertex Systems", "Nexus Industries", "PrimeTech Solutions", "Western Dynamics", "Liberty Innovations" };
+                            for (int i = 0; i < 10; i++)
+                            {
+                                context.Customers.Add(new Customer
                                 {
-                                    Name = "Acme Corporation",
-                                    ContactFirstName = "John",
-                                    ContactLastName = "Doe",
-                                    PhoneNumber = "123-456-7890",
-                                    Email = "contact@acmecorp.com",
-                                    Address = "123 Acme St.",
-                                    City = "Metropolis",
-                                    Country = "USA",
-                                    PostalCode = "12345"
-                                },
-                                new Customer
-                                {
-                                    Name = "Beta Industries",
-                                    ContactFirstName = "Jane",
-                                    ContactLastName = "Smith",
-                                    PhoneNumber = "987-654-3210",
-                                    Email = "support@betaind.com",
-                                    Address = "456 Beta Ave.",
-                                    City = "Gotham",
-                                    Country = "USA",
-                                    PostalCode = "67890"
-                                }
-                            );
+                                    Name = companyNames[i],
+                                    ContactFirstName = firstNames[i],
+                                    ContactLastName = lastNames[i],
+                                    PhoneNumber = $"555-100{i}",
+                                    Email = $"customer{i + 1}@example.com",
+                                    Address = $"{i + 1} Elm St",
+                                    City = cities[i],
+                                    Country = countries[i],
+                                    PostalCode = $"1000{i}"
+                                });
+                            }
                             context.SaveChanges();
                         }
-                        #endregion
-
-                        #region Vendors
                         if (!context.Vendors.Any())
                         {
-                            context.Vendors.AddRange(
-                                new Vendor
+                            string[] vendorNames = { "Tech Supplies Inc.", "Global Trade Ltd.", "Prime Distributors", "Nexus Components", "Pioneer Solutions",
+                             "Western Tools", "Omega Equipments", "Vertex Systems", "Summit Industries", "Liberty Parts" };
+
+                            for (int i = 0; i < 10; i++)
+                            {
+                                context.Vendors.Add(new Vendor
                                 {
-                                    Name = "Global Parts Inc.",
-                                    ContactFirstName = "Tom",
-                                    ContactLastName = "Green",
-                                    PhoneNumber = "111-222-3333",
-                                    Email = "sales@globalparts.com",
-                                    Address = "789 Global Rd.",
-                                    City = "Sunnyvale",
-                                    Country = "USA",
-                                    PostalCode = "24680"
-                                }
-                            );
+                                    Name = vendorNames[i],
+                                    ContactFirstName = firstNames[i],
+                                    ContactLastName = lastNames[i],
+                                    PhoneNumber = $"666-200{i}",
+                                    Email = $"vendor{i + 1}@example.com",
+                                    Address = $"{i + 1} Business Rd",
+                                    City = cities[i],
+                                    Country = countries[i],
+                                    PostalCode = $"2000{i}"
+                                });
+                            }
                             context.SaveChanges();
                         }
-                        #endregion
 
-                        #region Engineers
                         if (!context.Engineers.Any())
                         {
-                            context.Engineers.AddRange(
-                                new Engineer
+                            for (int i = 0; i < 10; i++)
+                            {
+                                context.Engineers.Add(new Engineer
                                 {
-                                    FirstName = "Alice",
-                                    LastName = "Johnson",
-                                    Email = "alice.johnson@hbn.com"
-                                },
-                                new Engineer
-                                {
-                                    FirstName = "Bob",
-                                    LastName = "Martin",
-                                    Email = "bob.martin@hbn.com"
-                                }
-                            );
+                                    FirstName = firstNames[i],
+                                    LastName = lastNames[i],
+                                    Email = $"engineer{i + 1}@hbn.com"
+                                });
+                            }
                             context.SaveChanges();
                         }
-                        #endregion
-
-                        #region Engineering Packages
                         if (!context.EngineeringPackages.Any())
                         {
-                            context.EngineeringPackages.AddRange(
-                                new EngineeringPackage
+                            var engineers = context.Engineers.ToList();
+                            for (int i = 1; i <= 5; i++)
+                            {
+                                context.EngineeringPackages.Add(new EngineeringPackage
                                 {
-                                    Engineers = new List<Engineer> { context.Engineers.Where(p => p.EngineerID == 1).FirstOrDefault() },
+                                    Engineers = engineers.Take(2).ToList(),
                                     PackageReleaseDate = DateTime.UtcNow,
                                     ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
-                                },
-                                new EngineeringPackage
-                                {
-                                    Engineers = new List<Engineer> { context.Engineers.Where(p => p.EngineerID == 2).FirstOrDefault() },
-                                    PackageReleaseDate = DateTime.UtcNow,
-                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
-                                },
-                                new EngineeringPackage
-                                {
-                                    Engineers = new List<Engineer> {
-                                        context.Engineers.Where(p => p.EngineerID == 1).FirstOrDefault(),
-                                        context.Engineers.Where(p => p.EngineerID == 2).FirstOrDefault()
-                                    },
-                                    PackageReleaseDate = DateTime.UtcNow,
-                                    ApprovalDrawingDate = DateTime.UtcNow.AddDays(5)
-                                }
-                            );
+                                });
+                            }
                             context.SaveChanges();
-                            #endregion
+                        }
 
-                            #region Sales Orders
-                            if (!context.SalesOrders.Any())
+                        if (!context.SalesOrders.Any())
+                        {
+                            var customers = context.Customers.ToList();
+                            var engPackages = context.EngineeringPackages.ToList();
+                            for (int i = 1; i <= 5; i++)
                             {
-                                context.SalesOrders.AddRange(
-                                    new SalesOrder
-                                    {
-                                        OrderNumber = "SO-1001",
-                                        Price = 5000.00M,
-                                        Status = "Confirmed",
-                                        CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
-                                        AirSeal = false,
-                                        Base = true,
-                                        CoatingOrLining = true,
-                                        Disassembly = true,
-                                        Media = true,
-                                        SparePartsMedia = false,
-                                        EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 1).FirstOrDefault().EngineeringPackageID
-                                    },
-                                    new SalesOrder
-                                    {
-                                        OrderNumber = "SO-1002",
-                                        Price = 12000.00M,
-                                        Status = "Pending",
-                                        CustomerID = context.Customers.Where(p => p.CustomerID == 1).FirstOrDefault().CustomerID,
-                                        AirSeal = true,
-                                        Base = false,
-                                        CoatingOrLining = true,
-                                        Disassembly = true,
-                                        Media = false,
-                                        SparePartsMedia = true,
-                                        EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 2).FirstOrDefault().EngineeringPackageID
-                                    },
-                                    new SalesOrder
-                                    {
-                                        OrderNumber = "SO-1003",
-                                        Price = 8000.00M,
-                                        Status = "Pending",
-                                        CustomerID = context.Customers.Where(p => p.CustomerID == 2).FirstOrDefault().CustomerID,
-                                        AirSeal = true,
-                                        Base = true,
-                                        CoatingOrLining = true,
-                                        Disassembly = true,
-                                        Media = true,
-                                        SparePartsMedia = true,
-                                        EngineeringPackageID = context.EngineeringPackages.Where(p => p.EngineeringPackageID == 3).FirstOrDefault().EngineeringPackageID
-                                    }
-                                );
-                                context.SaveChanges();
+                                context.SalesOrders.Add(new SalesOrder
+                                {
+                                    OrderNumber = $"SO-100{i}",
+                                    Price = i * 10000,
+                                    Status = "Confirmed",
+                                    CustomerID = customers[i - 1].CustomerID,
+                                    EngineeringPackageID = engPackages[i - 1].EngineeringPackageID,
+                                    AirSeal = true,
+                                    Base = false,
+                                    CoatingOrLining = true,
+                                    Disassembly = true,
+                                    Media = false,
+                                    SparePartsMedia = true
+                                });
                             }
-                            #endregion
+                            context.SaveChanges();
+                        }
 
-                            #region Operations Schedules
-                            if (!context.OperationsSchedules.Any())
+                        if (!context.OperationsSchedules.Any())
+                        {
+                            var salesOrders = context.SalesOrders.ToList();
+                            for (int i = 1; i <= 3; i++)
                             {
-                                var salesOrder = context.SalesOrders.FirstOrDefault();
-
-                                if (salesOrder != null)
+                                context.OperationsSchedules.Add(new OperationsSchedule
                                 {
-                                    context.OperationsSchedules.AddRange(
-                                        new OperationsSchedule
-                                        {
-                                            SalesOrderID = salesOrder.SalesOrderID,
-                                            DeliveryDate = DateTime.UtcNow.AddMonths(1),
-                                            ExtraNotes = "Initial assembly scheduled.",
-                                            NamePlateStatus = false
-                                        }
-                                    );
-                                    context.SaveChanges();
-                                }
-                                else
-                                {
-                                    Debug.WriteLine("No SalesOrder found to associate with OperationsSchedule.");
-                                }
+                                    SalesOrderID = salesOrders[i - 1].SalesOrderID,
+                                    DeliveryDate = DateTime.UtcNow.AddMonths(1),
+                                    ExtraNotes = "Initial assembly scheduled.",
+                                    NamePlateStatus = false
+                                });
                             }
-                            #endregion
+                            context.SaveChanges();
+                        }
 
-                            #region Machines
-                            if (!context.Machines.Any())
+                        if (!context.Machines.Any())
+                        {
+                            var salesOrders = context.SalesOrders.ToList();
+                            for (int i = 1; i <= 30; i++)
                             {
-                                context.Machines.AddRange(
-                                    new Machine
-                                    {
-                                        SerialNumber = "50-3964 CDN",
-                                        MachineSize = 330,
-                                        MachineClass = "T",
-                                        MachineSizeDesc = "4' x 10' 1D",
-                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
-                                        InternalPONumber = "4500805984"
-                                    },
-                                    new Machine
-                                    {
-                                        SerialNumber = "DB-1914 CDN",
-                                        MachineSize = 800,
-                                        MachineClass = "T",
-                                        MachineSizeDesc = "6' x 20' 2D",
-                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
-                                        InternalPONumber = "4500801585"
-                                    },
-                                    new Machine
-                                    {
-                                        SerialNumber = "22277 CDN",
-                                        MachineSize = 1100,
-                                        MachineClass = "L",
-                                        MachineSizeDesc = "6' x 16' 3D",
-                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
-                                        InternalPONumber = "4500805771"
-                                    },
-                                    new Machine
-                                    {
-                                        SerialNumber = "DB 1915 CDN",
-                                        MachineSize = 300,
-                                        MachineClass = "S",
-                                        MachineSizeDesc = "5' x 9' 1D",
-                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 2).FirstOrDefault().SalesOrderID,
-                                        InternalPONumber = "4500786536"
-                                    },
-                                    new Machine
-                                    {
-                                        SerialNumber = "55-1308 CDN",
-                                        MachineSize = 880,
-                                        MachineClass = "XL",
-                                        MachineSizeDesc = "5' x 12' 2D+CP",
-                                        SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 3).FirstOrDefault().SalesOrderID,
-                                        InternalPONumber = "4500798658/799034"
-                                    }
-                                );
-                                context.SaveChanges();
+                                context.Machines.Add(new Machine
+                                {
+                                    SerialNumber = $"SN-{1000 + i}",
+                                    MachineSize = 300 + (i * 10),
+                                    MachineClass = "T",
+                                    MachineSizeDesc = $"Size {i}",
+                                    SalesOrderID = salesOrders[i % salesOrders.Count].SalesOrderID,
+                                    InternalPONumber = $"PO-{2000 + i}"
+                                });
                             }
-                            #endregion
+                            context.SaveChanges();
+                        }
 
-
-
-                            #region Purchase Orders
-                            if (!context.PurchaseOrders.Any())
+                        if (!context.PurchaseOrders.Any())
+                        {
+                            var vendors = context.Vendors.ToList();
+                            var salesOrders = context.SalesOrders.ToList();
+                            for (int i = 1; i <= 30; i++)
                             {
-                                var salesOrders = context.SalesOrders.FirstOrDefault();
-                                var vendor = context.Vendors.FirstOrDefault();
-
-                                if (salesOrders != null && vendor != null)
+                                context.PurchaseOrders.Add(new PurchaseOrder
                                 {
-                                    context.PurchaseOrders.AddRange(
-                                        new PurchaseOrder
-                                        {
-                                            PurchaseOrderNumber = "PO-1001",
-                                            PODueDate = DateTime.UtcNow.AddDays(30),
-                                            VendorID = vendor.VendorID,
-                                            SalesOrderID = context.SalesOrders.Where(p => p.SalesOrderID == 1).FirstOrDefault().SalesOrderID,
-                                        }
-                                    );
-                                    context.SaveChanges();
-                                }
-                                else
-                                {
-                                    Debug.WriteLine("Could not find a valid OperationsSchedule or Vendor to link the PurchaseOrder.");
-                                }
+                                    PurchaseOrderNumber = $"PO-300{i}",
+                                    PODueDate = DateTime.UtcNow.AddDays(30),
+                                    VendorID = vendors[i % vendors.Count].VendorID,
+                                    SalesOrderID = salesOrders[i % salesOrders.Count].SalesOrderID,
+                                });
                             }
-                            #endregion
+                            context.SaveChanges();
                         }
                     }
                     catch (Exception ex)
@@ -312,7 +197,6 @@ namespace Haver_Boecker_Niagara.Data
                         Debug.WriteLine(ex.GetBaseException().Message);
                     }
                 }
-                #endregion
             }
         }
     }

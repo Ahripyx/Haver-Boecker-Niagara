@@ -259,13 +259,26 @@ namespace Haver_Boecker_Niagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var salesOrder = await _context.SalesOrders.FindAsync(id);
+            var salesOrder = await _context.SalesOrders
+                .Include(s => s.EngineeringPackage)
+                .FirstOrDefaultAsync(s => s.SalesOrderID == id);
+
             if (salesOrder != null)
             {
+                if (salesOrder.EngineeringPackage != null)
+                {
+                    int packageId = salesOrder.EngineeringPackage.EngineeringPackageID;
+
+                    var relatedSpecialities = _context.EngineeringPackageEngineers
+                        .Where(es => es.EngineeringPackageID == packageId);
+                    _context.EngineeringPackageEngineers.RemoveRange(relatedSpecialities);
+                    _context.EngineeringPackages.Remove(salesOrder.EngineeringPackage);
+                }
                 _context.SalesOrders.Remove(salesOrder);
+
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
