@@ -49,11 +49,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 }
                 filterCount++;
             }
-            if (!string.IsNullOrEmpty(searchPhone))
-            {
-                vendors = vendors.Where(v => EF.Functions.Like(v.PhoneNumber, $"%{searchPhone}%"));
-                filterCount++;
-            }
             if (!string.IsNullOrEmpty(searchEmail))
             {
                 vendors = vendors.Where(v => EF.Functions.Like(v.Email, $"%{searchEmail}%"));
@@ -82,12 +77,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 "ContactPerson" => sortDirection == "asc"
                     ? vendors.OrderBy(c => c.ContactFirstName).ThenBy(c => c.ContactLastName)
                     : vendors.OrderByDescending(c => c.ContactFirstName).ThenByDescending(c => c.ContactLastName),
-                "PhoneNumber" => sortDirection == "asc" ? vendors.OrderBy(v => v.PhoneNumber) : vendors.OrderByDescending(v => v.PhoneNumber),
                 "Email" => sortDirection == "asc" ? vendors.OrderBy(v => v.Email) : vendors.OrderByDescending(v => v.Email),
-                "Address" => sortDirection == "asc" ? vendors.OrderBy(v => v.Address) : vendors.OrderByDescending(v => v.Address),
-                "City" => sortDirection == "asc" ? vendors.OrderBy(v => v.City) : vendors.OrderByDescending(v => v.City),
-                "Country" => sortDirection == "asc" ? vendors.OrderBy(v => v.Country) : vendors.OrderByDescending(v => v.Country),
-                "PostalCode" => sortDirection == "asc" ? vendors.OrderBy(v => v.PostalCode) : vendors.OrderByDescending(v => v.PostalCode),
                 _ => sortDirection == "asc" ? vendors.OrderBy(v => v.Name) : vendors.OrderByDescending(v => v.Name),
             };
 
