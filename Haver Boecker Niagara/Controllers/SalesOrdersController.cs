@@ -131,8 +131,10 @@ namespace Haver_Boecker_Niagara.Controllers
 
         public IActionResult Create()
         {
+            SalesOrder salesOrder = new SalesOrder();
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
+            PopulatePurchaseOrders(salesOrder);
             return View();
         }
 
@@ -181,6 +183,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
+            PopulatePurchaseOrders(salesOrder);
             return View(salesOrder);
         }
         public async Task<IActionResult> Edit(int? id)
@@ -197,6 +200,9 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
+
+            PopulatePurchaseOrders(salesOrder);
+
             return View(salesOrder);
         }
 
@@ -236,6 +242,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
+            PopulatePurchaseOrders(salesOrder);
 
             return View(salesOrder);
         }
