@@ -9,6 +9,9 @@ using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.Utilities;
+using Haver_Boecker_Niagara.ViewModels;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Security.AccessControl;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -135,10 +138,11 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
+        public async Task<IActionResult> Create(string[] selectedOptions,
             [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] SalesOrder salesOrder,
             List<int> SelectedPurchaseOrderIds)
         {
+            UpdatePurchaseOrders(selectedOptions, salesOrder);
             if (ModelState.IsValid)
             {
                 DateTime today = DateTime.Today;
@@ -201,12 +205,14 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder)
+        public async Task<IActionResult> Edit(int id, string[] selectedOptions, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder)
         {
             if (id != salesOrder.SalesOrderID)
             {
                 return NotFound();
             }
+
+            UpdatePurchaseOrders(selectedOptions, salesOrder);
 
             if (ModelState.IsValid)
             {
@@ -285,6 +291,75 @@ namespace Haver_Boecker_Niagara.Controllers
         private bool SalesOrderExists(int id)
         {
             return _context.SalesOrders.Any(e => e.SalesOrderID == id);
+        }
+
+        private void PopulatePurchaseOrders(SalesOrder salesOrder)
+        {
+            var allOptions = _context.PurchaseOrders;
+            var currentOptionHS = new HashSet<int>(salesOrder.PurchaseOrders.Select(p => p.PurchaseOrderID));
+
+            var selected = new List<ListOptionVM>();
+            var available = new List<ListOptionVM>();
+            foreach (var p in allOptions)
+            {
+                if (currentOptionHS.Contains(p.PurchaseOrderID))
+                {
+                    selected.Add(new ListOptionVM
+                    {
+                        ID = p.PurchaseOrderID,
+                        DisplayText = p.PurchaseOrderNumber
+                    });
+                }
+                else
+                {
+                    available.Add(new ListOptionVM
+                    {
+                        ID = p.PurchaseOrderID,
+                        DisplayText = p.PurchaseOrderNumber
+                    });
+                }
+
+                ViewData["selOpts"] = new MultiSelectList(selected.OrderBy(p => p.DisplayText), "ID", "DisplayText");
+                ViewData["availOpts"] = new MultiSelectList(available.OrderBy(p => p.DisplayText), "ID", "DisplayText");
+            }
+        }
+
+        private void UpdatePurchaseOrders(string[] selectedOptions, SalesOrder salesOrderToUpdate)
+        {
+            if (selectedOptions == null)
+            {
+                salesOrderToUpdate.PurchaseOrders = new List<PurchaseOrder>();
+                return;
+            }
+
+            var selectedOptionsHS = new HashSet<string>(selectedOptions);
+            var currentOptionsHS = new HashSet<int>(salesOrderToUpdate.PurchaseOrders.Select(p => p.PurchaseOrderID));
+            foreach (var p in _context.PurchaseOrders)
+            {
+                if (selectedOptionsHS.Contains(p.PurchaseOrderID.ToString()))
+                {
+                    if (!currentOptionsHS.Contains(p.PurchaseOrderID))
+                    {
+                        salesOrderToUpdate.PurchaseOrders.Add(new PurchaseOrder
+                        {
+                            PurchaseOrderID = p.PurchaseOrderID,
+                            SalesOrderID = salesOrderToUpdate.SalesOrderID
+                        });
+                    }
+                }
+                else
+                {
+                    if (currentOptionsHS.Contains(p.PurchaseOrderID))
+                    {
+                        PurchaseOrder? purchaseOrderToRemove = salesOrderToUpdate.PurchaseOrders
+                            .FirstOrDefault(p => p.PurchaseOrderID == p.PurchaseOrderID);
+                        if (purchaseOrderToRemove != null)
+                        {
+                            _context.Remove(purchaseOrderToRemove);
+                        }
+                    }
+                }
+            }
         }
     }
 }
