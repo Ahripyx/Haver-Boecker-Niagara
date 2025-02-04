@@ -1,4 +1,4 @@
-﻿@model Haver_Boecker_Niagara.Models.SalesOrder
+@model Haver_Boecker_Niagara.Models.SalesOrder
 
 @{
     ViewData["Title"] = "Create";
@@ -41,9 +41,22 @@
                 <input asp-for="ExtraNotes" class="form-control" />
                 <span asp-validation-for="ExtraNotes" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PurchaseOrders" class="control-label"> Purchase Orders : </label>
-                <select asp-for="PurchaseOrders" class="form-control" asp-items="ViewBag.PurchaseOrders" multiple="multiple"></select>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Purchase Orders Selected</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
+                            <strong>-</strong>
+                        </button>
+                        @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label"> Choose Purchase Orders</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
+                            <strong>+</strong>
+                        </button>
+                        @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+                </div>
             </div>
             <div class="mt-2 form-group">
                 <input type="submit" value="Create" class="btn btn-primary" id="btnCreate" />
@@ -59,4 +72,5 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="~/js/multiselect.js"></script>
 }

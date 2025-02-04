@@ -23,17 +23,13 @@
         <div class="form-horizontal">
             <div class="collapse  @ViewData["ShowFilter"]" id="collapseFilter">
                 <div class="col">
+
+
                     <div class="row">
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Filter by Phone Number:</label>
-                            @Html.TextBox("SearchPhone", null, new { @class = "form-control" })
-                        </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Filter by Email Address:</label>
                             @Html.TextBox("SearchEmail", null, new { @class = "form-control" })
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="form-group col-md-3">
                             <label class="control-label">Filter by Customer Name:</label>
                             @Html.TextBox("SearchName", null, new { @class = "form-control" })
@@ -74,8 +70,7 @@
                             </button>
                         </th>
                         <th>
-                            <button type="submit" name="actionButton" value="PhoneNumber" class="btn btn-toolbar"
-                                    formaction="@Url.Action("Index", new { sortField = "PhoneNumber", sortDirection = (ViewData["SortField"] as string == "PhoneNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                            <button type="submit" name="actionButton" value="PhoneNumber" class="btn btn-toolbar" disabled>
                                 @Html.DisplayNameFor(model => model.PhoneNumber)
                             </button>
                         </th>
@@ -83,30 +78,6 @@
                             <button type="submit" name="actionButton" value="Email" class="btn btn-toolbar"
                                     formaction="@Url.Action("Index", new { sortField = "Email", sortDirection = (ViewData["SortField"] as string == "Email" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
                                 @Html.DisplayNameFor(model => model.Email)
-                            </button>
-                        </th>
-                        <th>
-                            <button type="submit" name="actionButton" value="Address" class="btn btn-toolbar"
-                                    formaction="@Url.Action("Index", new { sortField = "Address", sortDirection = (ViewData["SortField"] as string == "Address" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                                @Html.DisplayNameFor(model => model.Address)
-                            </button>
-                        </th>
-                        <th>
-                            <button type="submit" name="actionButton" value="City" class="btn btn-toolbar"
-                                    formaction="@Url.Action("Index", new { sortField = "City", sortDirection = (ViewData["SortField"] as string == "City" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                                @Html.DisplayNameFor(model => model.City)
-                            </button>
-                        </th>
-                        <th>
-                            <button type="submit" name="actionButton" value="Country" class="btn btn-toolbar"
-                                    formaction="@Url.Action("Index", new { sortField = "Country", sortDirection = (ViewData["SortField"] as string == "Country" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                                @Html.DisplayNameFor(model => model.Country)
-                            </button>
-                        </th>
-                        <th>
-                            <button type="submit" name="actionButton" value="PostalCode" class="btn btn-toolbar"
-                                    formaction="@Url.Action("Index", new { sortField = "PostalCode", sortDirection = (ViewData["SortField"] as string == "PostalCode" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                                @Html.DisplayNameFor(model => model.PostalCode)
                             </button>
                         </th>
                         <th></th>
@@ -128,19 +99,6 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Address)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.City)
-                            </td>
-
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Country)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PostalCode)
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.CustomerID" class="ed-det-del-btn">Edit</a> 

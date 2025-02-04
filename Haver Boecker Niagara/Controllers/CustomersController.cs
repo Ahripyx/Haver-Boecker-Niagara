@@ -19,7 +19,7 @@ namespace Haver_Boecker_Niagara.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchPhone, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
+        public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
             string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode" };
             ViewData["Filtering"] = "btn-outline-secondary";
@@ -46,11 +46,6 @@ namespace Haver_Boecker_Niagara.Controllers
                     customers = customers.Where(c => EF.Functions.Like(c.ContactFirstName, $"%{nameParts[0]}%")
                                                   && EF.Functions.Like(c.ContactLastName, $"%{nameParts[1]}%"));
                 }
-                filterCount++;
-            }
-            if (!string.IsNullOrEmpty(searchPhone))
-            {
-                customers = customers.Where(c => EF.Functions.Like(c.PhoneNumber, $"%{searchPhone}%"));
                 filterCount++;
             }
             if (!string.IsNullOrEmpty(searchEmail))
@@ -82,12 +77,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 "ContactPerson" => sortDirection == "asc"
                     ? customers.OrderBy(c => c.ContactFirstName).ThenBy(c => c.ContactLastName)
                     : customers.OrderByDescending(c => c.ContactFirstName).ThenByDescending(c => c.ContactLastName),
-                "PhoneNumber" => sortDirection == "asc" ? customers.OrderBy(c => c.PhoneNumber) : customers.OrderByDescending(c => c.PhoneNumber),
                 "Email" => sortDirection == "asc" ? customers.OrderBy(c => c.Email) : customers.OrderByDescending(c => c.Email),
-                "Address" => sortDirection == "asc" ? customers.OrderBy(c => c.Address) : customers.OrderByDescending(c => c.Address),
-                "City" => sortDirection == "asc" ? customers.OrderBy(c => c.City) : customers.OrderByDescending(c => c.City),
-                "Country" => sortDirection == "asc" ? customers.OrderBy(c => c.Country) : customers.OrderByDescending(c => c.Country),
-                "PostalCode" => sortDirection == "asc" ? customers.OrderBy(c => c.PostalCode) : customers.OrderByDescending(c => c.PostalCode),
                 _ => sortDirection == "asc" ? customers.OrderBy(c => c.Name) : customers.OrderByDescending(c => c.Name),
             };
 
