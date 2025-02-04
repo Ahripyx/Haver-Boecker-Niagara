@@ -120,6 +120,7 @@ namespace Haver_Boecker_Niagara.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(engineer);
+      
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

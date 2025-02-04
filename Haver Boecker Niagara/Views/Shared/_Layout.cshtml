@@ -18,22 +18,21 @@
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                         <img src="~/Logo.png" alt="Haver_Boecker_Niagara" />
                     </a>
-                    <!--
-                        <div class="d-flex align-items-center text-white" style="margin-right: 2rem;">
-                            <div class="me-3">
-                                <i class="bi bi-bell" style="color: white;"></i>
-                            </div>
-                            <div class="text-end me-3">
-                                <span class="small fw-bolder">BitBusters</span><br />
-                                <div class="text-start me-3">
-                                    <small class="text-start">Admin</small>
-                                </div>
-                            </div>
-                            <a class="btn" href="@Url.Action("_Login", "Home")" id="logout-icon">
-                                <i class="bi bi-box-arrow-right" style="color: white; padding-left:0;"></i>
-                            </a>
+
+                    <div class="d-flex align-items-center text-white" style="margin-right: 2rem;">
+                        <div class="me-3">
+                            <i class="bi bi-bell" style="color: white;"></i>
                         </div>
-                    -->
+                        <div class="text-end me-3">
+                            <span class="small fw-bolder">BitBusters</span><br />
+                            <div class="text-start me-3">
+                                <small class="text-start">Admin</small>
+                            </div>
+                        </div>
+                        <a class="btn">
+                            <i class="bi bi-box-arrow-right" style="color: white; padding-left:0;" id="logout-icon"></i>
+                        </a>
+                    </div>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -47,9 +46,7 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Engineers" asp-action="Index">Engineers</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="OperationsSchedules" asp-action="Index">Operations</a>
-                        </li>
+            
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Vendors" asp-action="Index">Vendors</a>
                         </li>
@@ -68,8 +65,30 @@
 
                     </ul>
                 </div>
-
-
+                <!--Logout popup hide-->
+                <div class="popup-conteiner">
+                    <div class="popup-content">
+                        <i class="fa-solid fa-circle-info close-toast" id="infoIcon"></i>
+                        <p>You are about to log out <br />
+                            Are you sure you want to do it?</p>
+                        <div class="popup-btns">
+                            <button id="btnCancel" class="btn-cancel">Cancel</button>
+                            <button id="btnLogOut" data-logut-url="@Url.Action("_Login", "Home")" >Log Out</button>
+                        </div>
+                    </div>
+                </div>
+                <!--Close form popup hide-->
+                <div class="popup-close-conteiner">
+                    <div class="popup-content">
+                        <i class="fa-solid fa-triangle-exclamation close-toast" id="warningIcon"></i>
+                        <p>Once you close the form this action cannot be changed <br />
+                            Are you sure you want to continue?</p>
+                        <div class="popup-btns">
+                            <button id="btnCloseCancel" class="btn-cancel">Cancel</button>
+                            <button id="btnContinue">Continue</button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </nav>
@@ -91,10 +110,10 @@
         </li>
         <li class="toast info">
             <div class="column">
-                <i class="fa-solid fa-triangle-exclamation close-toast"></i>
-                <span>Info</span>
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Success Applying Filters</span>
             </div>
-            <i class="fa-solid fa-xmark"></i>
+            <i class="fa-solid fa-xmark close-toast"></i>
         </li>
         <li class="toast warning">
             <div class="column">
@@ -110,8 +129,8 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer >
+        <div >
             &copy; 2025 - Haver_Boecker_Niagara - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>

@@ -1,7 +1,135 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using Haver_Boecker_Niagara.ViewModels
+@model DashboardViewModel
+@* Step 3 Create the landing page using bootsrap *@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Customers</h5>
+                    <h3 class="text-primary">@Model.TotalCustomers</h3> @* This is taking from the HomeController *@
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Confirmed Sales Orders</h5>
+                    <h3 class="text-success">@Model.ConfirmedSalesOrders</h3>
+                </div>
+            </div>
+        </div>
 
-<div class="text-center">
-    <h1 class="display-4"></h1>
-</div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Machines</h5>
+                    <h3 class="text-danger">@Model.TotalMachines</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Vendors</h5>
+                    <h3 class="text-warning">@Model.TotalVendors</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row  main-chart-container">
+        <div class="col-md-3  ">
+            <canvas id="customersChart"></canvas>
+        </div>
+        <div class="col-md-3 chart-container">
+            <canvas id="salesOrdersChart"></canvas>
+        </div>
+        <div class="col-md-3 ">
+            <canvas id="machinesChart"></canvas> @* We need this for the charts they use the IDs you see at the Script behind *@
+        </div>
+
+        <div class="col-md-3 ">
+            <canvas id="vendorsChart"></canvas>
+        </div>
+    </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-3 landing-btns">
+            <a href="/Customers" class="btn btn-primary btn-block ">Manage Customers</a>
+        </div>
+        <div class="col-md-3 landing-btns">
+            <a href="/SalesOrders" class="btn btn-primary btn-block">Manage Sales Orders</a>
+        </div>
+        <div class="col-md-3 landing-btns">
+            <a href="/Machine" class="btn btn-primary btn-block">Manage Machines</a>
+        </div>
+        <div class="col-md-3 landing-btns">
+            <a href="/Vendors" class="btn btn-primary btn-block">Manage Vendors</a> @* There are the buttons not much of logic here *@
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> @* We need this library to do the charts *@
+<script>
+    var ctx1 = document.getElementById('machinesChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            datasets: [{
+                label: 'Machines',
+                data: [@Model.TotalMachines],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        }
+    });
+
+    var ctx2 = document.getElementById('salesOrdersChart').getContext('2d'); 
+    new Chart(ctx2, {
+        type: 'pie', //The type of chart you want
+        data: {
+            labels: ['Confirmed', 'Pending'], //The labels you want to show like the X and Y
+            datasets: [{
+                data: [@Model.ConfirmedSalesOrders, @Model.PendingSalesOrders], //<style></style>
+                backgroundColor: ['#28a745', '#dc3545'],
+            
+                
+            }]
+        }
+    });
+    var ctx3 = document.getElementById('vendorsChart').getContext('2d'); //The ids I talk about before 
+      new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+                datasets: [{
+                    label: "Total Vendors",
+                    data: [@Model.TotalVendors],
+                    backgroundColor: ["rgba(54, 162, 235, 0.5)"],
+                    borderColor: "rgba(54, 162, 235, 1)"
+                }]
+            }
+        });
+      document.addEventListener("DOMContentLoaded", function () {
+        var customersData = @Html.Raw(Json.Serialize(Model.CustomerData));
+        var customerCountry = @Html.Raw(Json.Serialize(Model.CustomerCountry.Values));
+        var country = @Html.Raw(Json.Serialize(Model.CustomerCountry.Keys));
+        new Chart(document.getElementById('customersChart'), {
+            type: 'bar',
+            data: {
+                labels: [country ],
+                datasets: [{
+                    label: "Total Customers",
+                    data: customerCountry,
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    backgroundColor: "rgba(54, 162, 235, 0.5)"
+                }]
+            },
+        });
+    });
+</script>

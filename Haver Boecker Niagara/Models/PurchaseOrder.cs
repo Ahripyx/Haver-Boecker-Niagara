@@ -9,6 +9,7 @@ namespace Haver_Boecker_Niagara.Models
     {
         public int PurchaseOrderID { get; set; }
 
+        [DisplayName("Purchase Order Number")]
         public string PurchaseOrderNumber { get; set; }
 
 
