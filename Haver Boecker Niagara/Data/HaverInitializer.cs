@@ -39,14 +39,14 @@ namespace Haver_Boecker_Niagara.Data
                 if (SeedSampleData)
                 {
                     try
-
                     {
                         string[] firstNames = { "John", "Michael", "Emily", "Sarah", "David", "James", "Sophia", "Daniel", "Olivia", "Robert" };
                         string[] lastNames = { "Smith", "Johnson", "Brown", "Davis", "Miller", "Wilson", "Moore", "Anderson", "Taylor", "Thomas" };
                         string[] cities = { "New York", "Los Angeles", "Chicago", "Houston", "San Francisco", "London", "Berlin", "Toronto", "Sydney", "Paris" };
                         string[] countries = { "USA", "UK", "Germany", "Canada", "Australia", "France", "Italy", "Spain", "Netherlands", "Sweden" };
 
-                        if (!context.Customers.Any()) { 
+                        if (!context.Customers.Any())
+                        {
                             string[] companyNames = { "Acme Corp", "BrightTech Ltd", "Summit Solutions", "Global Enterprises", "Pioneer Logistics",
                               "Vertex Systems", "Nexus Industries", "PrimeTech Solutions", "Western Dynamics", "Liberty Innovations" };
                             for (int i = 0; i < 10; i++)
@@ -130,28 +130,9 @@ namespace Haver_Boecker_Niagara.Data
                                     Status = "Confirmed",
                                     CustomerID = customers[i - 1].CustomerID,
                                     EngineeringPackageID = engPackages[i - 1].EngineeringPackageID,
-                                    AirSeal = true,
-                                    Base = false,
-                                    CoatingOrLining = true,
-                                    Disassembly = true,
-                                    Media = false,
-                                    SparePartsMedia = true
-                                });
-                            }
-                            context.SaveChanges();
-                        }
-
-                        if (!context.OperationsSchedules.Any())
-                        {
-                            var salesOrders = context.SalesOrders.ToList();
-                            for (int i = 1; i <= 3; i++)
-                            {
-                                context.OperationsSchedules.Add(new OperationsSchedule
-                                {
-                                    SalesOrderID = salesOrders[i - 1].SalesOrderID,
-                                    DeliveryDate = DateTime.UtcNow.AddMonths(1),
-                                    ExtraNotes = "Initial assembly scheduled.",
-                                    NamePlateStatus = false
+                                    CompletionDate = DateTime.UtcNow.AddDays(5),
+                                    ActualCompletionDate = DateTime.UtcNow.AddDays(18),
+                                    ExtraNotes = "N/A"
                                 });
                             }
                             context.SaveChanges();
@@ -169,7 +150,18 @@ namespace Haver_Boecker_Niagara.Data
                                     MachineClass = "T",
                                     MachineSizeDesc = $"Size {i}",
                                     SalesOrderID = salesOrders[i % salesOrders.Count].SalesOrderID,
-                                    InternalPONumber = $"PO-{2000 + i}"
+                                    InternalPONumber = $"PO-{2000 + i}",
+                                    AirSeal = true,
+                                    Base = false,
+                                    CoatingOrLining = true,
+                                    Disassembly = true,
+                                    Media = false,
+                                    SparePartsMedia = true,
+                                    PreOrderNotes = $"Pre-order notes {i}",
+                                    ScopeNotes = $"Scope notes {i}",
+                                    ActualAssemblyHours = (i * 2).ToString(),
+                                    ActualReworkHours = (i).ToString(),
+                                    BudgetedAssemblyHours = (i * 3).ToString()
                                 });
                             }
                             context.SaveChanges();
@@ -186,7 +178,7 @@ namespace Haver_Boecker_Niagara.Data
                                     PurchaseOrderNumber = $"PO-300{i}",
                                     PODueDate = DateTime.UtcNow.AddDays(30),
                                     VendorID = vendors[i % vendors.Count].VendorID,
-                                    SalesOrderID = salesOrders[i % salesOrders.Count].SalesOrderID,
+                                    SalesOrderID = salesOrders[i % salesOrders.Count].SalesOrderID
                                 });
                             }
                             context.SaveChanges();

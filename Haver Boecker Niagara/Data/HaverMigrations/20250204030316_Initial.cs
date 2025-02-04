@@ -98,12 +98,9 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     Status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     CustomerID = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Media = table.Column<bool>(type: "INTEGER", nullable: false),
-                    SparePartsMedia = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Base = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AirSeal = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CoatingOrLining = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Disassembly = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CompletionDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ActualCompletionDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ExtraNotes = table.Column<string>(type: "TEXT", nullable: true),
                     EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -157,9 +154,21 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .Annotation("Sqlite:Autoincrement", true),
                     SerialNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     InternalPONumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    NamePlateStatus = table.Column<bool>(type: "INTEGER", nullable: false),
                     MachineSize = table.Column<int>(type: "INTEGER", nullable: false),
                     MachineClass = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     MachineSizeDesc = table.Column<string>(type: "TEXT", nullable: false),
+                    Media = table.Column<bool>(type: "INTEGER", nullable: false),
+                    SparePartsMedia = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Base = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AirSeal = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CoatingOrLining = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Disassembly = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PreOrderNotes = table.Column<string>(type: "TEXT", nullable: true),
+                    ScopeNotes = table.Column<string>(type: "TEXT", nullable: true),
+                    ActualAssemblyHours = table.Column<string>(type: "TEXT", nullable: true),
+                    ActualReworkHours = table.Column<string>(type: "TEXT", nullable: true),
+                    BudgetedAssemblyHours = table.Column<string>(type: "TEXT", nullable: true),
                     SalesOrderID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -174,33 +183,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OperationsSchedules",
-                columns: table => new
-                {
-                    OperationsID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SalesOrderID = table.Column<int>(type: "INTEGER", nullable: true),
-                    DeliveryDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    PreOrderNotes = table.Column<string>(type: "TEXT", nullable: true),
-                    ScopeNotes = table.Column<string>(type: "TEXT", nullable: true),
-                    ActualAssemblyHours = table.Column<string>(type: "TEXT", nullable: true),
-                    ActualReworkHours = table.Column<string>(type: "TEXT", nullable: true),
-                    BudgetedAssemblyHours = table.Column<string>(type: "TEXT", nullable: true),
-                    NamePlateStatus = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ExtraNotes = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OperationsSchedules", x => x.OperationsID);
-                    table.ForeignKey(
-                        name: "FK_OperationsSchedules_SalesOrders_SalesOrderID",
-                        column: x => x.SalesOrderID,
-                        principalTable: "SalesOrders",
-                        principalColumn: "SalesOrderID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PurchaseOrders",
                 columns: table => new
                 {
@@ -208,6 +190,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .Annotation("Sqlite:Autoincrement", true),
                     PurchaseOrderNumber = table.Column<string>(type: "TEXT", nullable: false),
                     PODueDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    POActualDueDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     VendorID = table.Column<int>(type: "INTEGER", nullable: true),
                     SalesOrderID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
@@ -244,11 +227,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 column: "SalesOrderID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OperationsSchedules_SalesOrderID",
-                table: "OperationsSchedules",
-                column: "SalesOrderID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrders_SalesOrderID",
                 table: "PurchaseOrders",
                 column: "SalesOrderID");
@@ -278,9 +256,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
             migrationBuilder.DropTable(
                 name: "Machines");
-
-            migrationBuilder.DropTable(
-                name: "OperationsSchedules");
 
             migrationBuilder.DropTable(
                 name: "PurchaseOrders");

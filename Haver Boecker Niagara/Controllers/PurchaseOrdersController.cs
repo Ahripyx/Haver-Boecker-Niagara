@@ -77,6 +77,7 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 p.PurchaseOrderID,
                 p.PurchaseOrderNumber,
+                p.POActualDueDate,
                 VendorName = p.Vendor.Name,
                 OrderNumber = p.SalesOrder.OrderNumber, 
                 p.PODueDate
@@ -111,6 +112,7 @@ namespace Haver_Boecker_Niagara.Controllers
                     PurchaseOrderID = p.PurchaseOrderID,
                     PurchaseOrderNumber = p.PurchaseOrderNumber,
                     PODueDate = p.PODueDate,
+                    POActualDueDate = p.POActualDueDate,
                     Vendor = new Vendor { Name = p.VendorName },
                     SalesOrder = new SalesOrder { OrderNumber = p.OrderNumber },
                 }),
