@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const logoutIcon = document.querySelector('#logout-icon');
     const btnClose = document.querySelector('#btnClose');
     const btnContinue = document.querySelector('#btnContinue');
+    const btnFitler = document.querySelector('#btnFilter');
 
     /*//////////////////////////////////////
     Toast Notifications 
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const removeToast = (t) => {
         if (t) {
             t.style.display = 'none';
-            setTimeout(() => toast.remove(), 500);
+            setTimeout(() => t.remove(), 500);
         }
     }
     document.querySelectorAll('.close-toast').forEach(i => {
@@ -51,6 +52,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
             })
             if (error) {
                 if (toastError) {
+                    sessionStorage.removeItem("showToast");
                     toastError.style.display = 'flex';
                     setTimeout(() => {
                         toastError.style.display = "none";
@@ -87,8 +89,24 @@ document.addEventListener("DOMContentLoaded", (e) => {
         });
     }
 
-
-    
+    if (btnFitler) {
+        console.log('btnFilter exist');
+        btnFitler.addEventListener('click', () => {
+            sessionStorage.setItem("showInfoToast", "true");
+        })
+    }
+    window.addEventListener('load', () => {
+        if (sessionStorage.getItem('showInfoToast') === 'true') {
+            if (toastInfo) {
+                toastInfo.style.display = 'flex';
+                sessionStorage.removeItem('showInfoToast');
+                setTimeout(() => {
+                    toastInfo.style.display = 'none';
+                    sessionStorage.removeItem('showInfoToast');
+                }, 5000)
+            }
+        }
+    })
     const showToast = sessionStorage.getItem("showToast");
 
     if (showToast === "true") {

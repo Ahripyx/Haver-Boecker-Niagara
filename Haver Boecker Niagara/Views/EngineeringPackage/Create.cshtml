@@ -4,40 +4,42 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+@* <h1>Create</h1> *@
 
-<h4>Engineering Package</h4>
+
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="create-container mt-4"></div>
+    <h4>Engineering Package</h4>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
-            <div class="form-group">
-                <label asp-for="PackageReleaseDate" class="control-label"></label>
-                <input asp-for="PackageReleaseDate" type="date" class="form-control" />
-                <span asp-validation-for="PackageReleaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApprovalDrawingDate" class="control-label"></label>
-                <input asp-for="ApprovalDrawingDate" type="date" class="form-control" />
-                <span asp-validation-for="ApprovalDrawingDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ActualPackageReleaseDate" class="control-label"></label>
-                <input asp-for="ActualPackageReleaseDate" type="date" class="form-control" />
-                <span asp-validation-for="ActualPackageReleaseDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ActualApprovalDrawingDate" class="control-label"></label>
-                <input asp-for="ActualApprovalDrawingDate" type="date" class="form-control" />
-                <span asp-validation-for="ActualApprovalDrawingDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="mt-2 btn btn-primary" id="btnCreate" />
-            </div>
-        </form>
-    </div>
+                <div class="form-group">
+                    <label asp-for="PackageReleaseDate" class="control-label"></label>
+                    <input asp-for="PackageReleaseDate" type="date" class="form-control" />
+                    <span asp-validation-for="PackageReleaseDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ApprovalDrawingDate" class="control-label"></label>
+                    <input asp-for="ApprovalDrawingDate" type="date" class="form-control" />
+                    <span asp-validation-for="ApprovalDrawingDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ActualPackageReleaseDate" class="control-label"></label>
+                    <input asp-for="ActualPackageReleaseDate" type="date" class="form-control" />
+                    <span asp-validation-for="ActualPackageReleaseDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ActualApprovalDrawingDate" class="control-label"></label>
+                    <input asp-for="ActualApprovalDrawingDate" type="date" class="form-control" />
+                    <span asp-validation-for="ActualApprovalDrawingDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="mt-2 btn btn-primary" id="btnCreate" />
+                </div>
+            </form>
+        </div>
 </div>
 
 <div class="mt-1">

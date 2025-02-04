@@ -50,7 +50,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: inherit;
 }
 
 /* login btn style */
@@ -66,10 +66,10 @@ footer {
     margin-right: 70px;
 }
 
-    .login-button:hover {
-        background-color: #f0f0f0;
-        color: #001a33;
-    }
+.login-button:hover {
+    background-color: #f0f0f0;
+    color: #001a33;
+}
 
 .navbar {
     padding: 0 !important;
@@ -126,10 +126,10 @@ footer {
     font-family: 'Open Sans', sans-serif;
 }
 
-    .nav-link:hover {
-        color: white;
-        transform: translateY(-5px);
-    }
+.nav-link:hover {
+    color: white;
+    transform: translateY(-5px);
+}
 
 /* expand search /filtering container styling  */
 .card.card-body {
@@ -153,10 +153,10 @@ footer {
     transition: all 0.3s ease-in-out;
 }
 
-    .form-group .form-control:focus {
-        border-color: #002F5F;
-        background-color: #ffffff;
-    }
+.form-group .form-control:focus {
+    border-color: #002F5F;
+    background-color: #ffffff;
+}
 
 input[name="actionButton"][value="Filter"] {
     background-color: #002F5F;
@@ -164,40 +164,41 @@ input[name="actionButton"][value="Filter"] {
     border: 2px solid #002F5F;
     border-radius: 5px;
     padding: 5px 20px;
-    font-size: 12px;
+    font-size: smaller;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
 
-    input[name="actionButton"][value="Filter"]:hover {
-        background-color: #001F40;
-        box-shadow: 0 3px 6px rgba(0, 47, 95, 0.5);
-    }
+input[name="actionButton"][value="Filter"]:hover {
+    background-color: #001F40;
+    box-shadow: 0 3px 6px rgba(0, 47, 95, 0.5);
+}
 
 a.btn-clear {
     color: #002F5F;
     border: 2px solid #002F5F;
     border-radius: 5px;
     padding: 5px 20px;
-    font-size: 12px;
+    font-size: smaller;
     text-decoration: none;
     transition: all 0.3s ease-in-out;
     display: inline-block;
+    margin-top: 10px;
 }
 
-    a.btn-clear:hover {
-        background-color: rgba(0, 47, 95, 0.1);
-        color: #002F5F;
-        box-shadow: 0 3px 6px rgba(0, 47, 95, 0.5);
-    }
+a.btn-clear:hover {
+    background-color: rgba(0, 47, 95, 0.1);
+    color: #002F5F;
+    box-shadow: 0 3px 6px rgba(0, 47, 95, 0.5);
+}
 
 
 /*Create form */
 h4 {
     font-weight: 400;
     color: #5F696D;
-    margin-left: 270px;
-    margin-top: 20px;
+    margin-top: 1.25rem;
+    margin-bottom: 1rem
 }
 
 .customer-form-container {
@@ -210,7 +211,9 @@ h4 {
     margin-left: auto;
     margin-right: auto;
 }
-
+.card-container{
+    background-color:var(--white);
+}
 
 .form-group label {
     font-weight: 400;
@@ -326,9 +329,10 @@ h1 {
     font-weight: normal;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    width: 10%;
+    width: auto;
     text-align: center;
-    padding: 8px 0px;
+    padding-left: 28px;
+    padding-right: 28px;
 }
 
     .search-btn:hover {
@@ -340,14 +344,16 @@ h1 {
     background-color: #4CAF50;
     color: white;
     border: none;
+    border: none;
     border-radius: 5px;
     font-size: 15px;
     font-weight: normal;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    width: 12.5%;
+    width: auto;
     text-align: center;
-    padding: 8px;
+    padding-left: 12px;
+    padding-right: 12px;
     margin-right: 4px;
 }
 
@@ -643,7 +649,7 @@ table-layout: fixed;
         background: var(--white);
         justify-content: space-between;
         animation: show_toast 0.3s ease forwards;
-        top: 9.375rem;
+        top: 6rem;
     }
 
 @keyframes show_toast {
@@ -814,6 +820,63 @@ table-layout: fixed;
     font-size: x-large;
 }
 
+#btnCreate{
+    background-color: var(--blue)
+}
+/*Create pages*/
+.create-container {
+    margin-top: 4rem !important
+}
+.required-fields{
+    color: var(--red) !important;
+}
+.control-label{
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+/*landing page*/
+.landing-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+}
+.landing-logo img {
+    max-width: 15%;
+    height: auto;
+}
+.card {
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+.card:hover {
+    transform: scale(1.05);
+}
+
+
+#salesOrdersChart {
+    max-width: 12.5rem !important;
+}
+.main-chart-container {
+   justify-content: space-between;
+}
+.landing-btns {
+    display: flex;
+    justify-content: center;
+}
+.landing-btns a {
+    background-color: var(--blue);
+}
+#customersChart{
+    padding-left:0;
+    margin-right:10px
+}
+.chart-container {
+    display:flex;
+    justify-content:center;
+    height:150px;
+}
 @media (min-width: 768px) {
     html {
         font-size: 1rem;
