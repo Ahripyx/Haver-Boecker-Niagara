@@ -858,9 +858,7 @@ table-layout: fixed;
 #salesOrdersChart {
     max-width: 12.5rem !important;
 }
-.main-chart-container {
-   justify-content: space-between;
-}
+
 .landing-btns {
     display: flex;
     justify-content: center;
