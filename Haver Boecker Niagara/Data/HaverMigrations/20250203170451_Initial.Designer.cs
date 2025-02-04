@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250128052543_Initial")]
+    [Migration("20250203170451_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -140,6 +140,27 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ActualAssemblyHours")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ActualReworkHours")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("AirSeal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Base")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BudgetedAssemblyHours")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("CoatingOrLining")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Disassembly")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("InternalPONumber")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -157,13 +178,28 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Media")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("NamePlateStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PreOrderNotes")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("SalesOrderID")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ScopeNotes")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("SparePartsMedia")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("MachineID");
 
@@ -172,52 +208,14 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.ToTable("Machines");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.OperationsSchedule", b =>
-                {
-                    b.Property<int>("OperationsID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ActualAssemblyHours")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ActualReworkHours")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("BudgetedAssemblyHours")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DeliveryDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ExtraNotes")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("NamePlateStatus")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("PreOrderNotes")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("SalesOrderID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ScopeNotes")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("OperationsID");
-
-                    b.HasIndex("SalesOrderID");
-
-                    b.ToTable("OperationsSchedules");
-                });
-
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.PurchaseOrder", b =>
                 {
                     b.Property<int>("PurchaseOrderID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("POActualDueDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("PODueDate")
                         .HasColumnType("TEXT");
@@ -247,26 +245,21 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("AirSeal")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime?>("ActualCompletionDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<bool>("Base")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("CoatingOrLining")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTime?>("CompletionDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CustomerID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Disassembly")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("EngineeringPackageID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Media")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ExtraNotes")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OrderNumber")
                         .IsRequired()
@@ -275,9 +268,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("SparePartsMedia")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -371,16 +361,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Navigation("SalesOrder");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.OperationsSchedule", b =>
-                {
-                    b.HasOne("Haver_Boecker_Niagara.Models.SalesOrder", "SalesOrder")
-                        .WithMany("OperationsSchedules")
-                        .HasForeignKey("SalesOrderID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("SalesOrder");
-                });
-
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.PurchaseOrder", b =>
                 {
                     b.HasOne("Haver_Boecker_Niagara.Models.SalesOrder", "SalesOrder")
@@ -429,8 +409,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.SalesOrder", b =>
                 {
                     b.Navigation("Machines");
-
-                    b.Navigation("OperationsSchedules");
 
                     b.Navigation("PurchaseOrders");
                 });

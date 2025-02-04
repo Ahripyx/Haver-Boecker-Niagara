@@ -9,6 +9,7 @@ using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.Utilities;
+using System.Reflection.PortableExecutable;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -20,42 +21,46 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             _context = context;
         }
-
         public async Task<IActionResult> Index(
-            int? pageSizeID,
+            string? searchOrderNo,
+            string? searchCustomer,
+            string? searchStatus,
             int? page,
-            string? SearchOrderNo,
-            string? SearchCustomer,
-            string? SearchStatus,
+            int? pageSizeID,
             string? actionButton,
             string sortDirection = "asc",
-            string sortField = ""
+            string sortField = "OrderNumber"
         )
         {
-            string[] sortOptions = { "OrderNumber", "Customer", "Status", "Price" };
-            var filterCount = 0;
+            string[] sortOptions = { "OrderNumber", "CustomerName", "Status", "Price" };
             ViewData["Filtering"] = "btn-outline-secondary";
-
-            IQueryable<SalesOrder> salesOrders = _context.SalesOrders
-                .Include(s => s.Customer)
-                .Include(s => s.EngineeringPackage)
+            int filterCount = 0;
+            var salesOrders = _context.SalesOrders
+                .Include(p => p.Machines)
+                .Include(p => p.Customer)
+                .Include(p => p.PurchaseOrders)
+                .ThenInclude(po => po.Vendor)
+                .Include(p => p.EngineeringPackage)
+                .ThenInclude(po => po.Engineers)
                 .AsNoTracking();
 
-            if (!string.IsNullOrEmpty(SearchOrderNo))
+
+            ViewBag.SalesOrders = new SelectList(await _context.SalesOrders.Select(s => new { s.OrderNumber, s.SalesOrderID }).ToListAsync(), "OrderNumber", "OrderNumber");
+            ViewBag.Customers = new SelectList(await _context.Customers.Select(c => new { c.CustomerID, c.Name }).ToListAsync(), "Name", "Name");
+
+            if (!string.IsNullOrEmpty(searchOrderNo))
             {
-                salesOrders = salesOrders.Where(s => s.OrderNumber.ToLower().Contains(SearchOrderNo.ToLower()));
+                salesOrders = salesOrders.Where(s => s.OrderNumber.Contains(searchOrderNo));
                 filterCount++;
             }
-
-            if (!string.IsNullOrEmpty(SearchCustomer))
+            if (!string.IsNullOrEmpty(searchCustomer))
             {
-                salesOrders = salesOrders.Where(s => s.Customer.Name.ToLower().Contains(SearchCustomer.ToLower()));
+                salesOrders = salesOrders.Where(s => s.Customer.Name.Contains(searchCustomer));
                 filterCount++;
             }
-
-            if (!string.IsNullOrEmpty(SearchStatus))
+            if (!string.IsNullOrEmpty(searchStatus))
             {
-                salesOrders = salesOrders.Where(s => s.Status.ToLower().Contains(SearchStatus.ToLower()));
+                salesOrders = salesOrders.Where(s => s.Status.Contains(searchStatus));
                 filterCount++;
             }
 
@@ -81,19 +86,15 @@ namespace Haver_Boecker_Niagara.Controllers
                 "OrderNumber" => sortDirection == "asc"
                     ? salesOrders.OrderBy(s => s.OrderNumber)
                     : salesOrders.OrderByDescending(s => s.OrderNumber),
-
-                "Customer" => sortDirection == "asc"
+                "CustomerName" => sortDirection == "asc"
                     ? salesOrders.OrderBy(s => s.Customer.Name)
                     : salesOrders.OrderByDescending(s => s.Customer.Name),
-
                 "Status" => sortDirection == "asc"
                     ? salesOrders.OrderBy(s => s.Status)
                     : salesOrders.OrderByDescending(s => s.Status),
-
                 "Price" => sortDirection == "asc"
                     ? salesOrders.OrderBy(s => s.Price)
                     : salesOrders.OrderByDescending(s => s.Price),
-
                 _ => salesOrders.OrderBy(s => s.OrderNumber)
             };
 
@@ -102,10 +103,13 @@ namespace Haver_Boecker_Niagara.Controllers
 
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+
             var pagedData = await PaginatedList<SalesOrder>.CreateAsync(salesOrders, page ?? 1, pageSize);
 
             return View(pagedData);
         }
+
+
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -117,6 +121,8 @@ namespace Haver_Boecker_Niagara.Controllers
             var salesOrder = await _context.SalesOrders
                 .Include(s => s.Customer)
                 .Include(s => s.EngineeringPackage)
+                .Include(s => s.Machines)
+                .Include(s =>s.PurchaseOrders)
                 .FirstOrDefaultAsync(m => m.SalesOrderID == id);
             if (salesOrder == null)
             {
