@@ -134,16 +134,13 @@ namespace Haver_Boecker_Niagara.Controllers
 
         public IActionResult Create()
         {
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
+            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerID");
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] SalesOrder salesOrder,
-            List<int> SelectedPurchaseOrderIds)
+        public async Task<IActionResult> Create([Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes,EngineeringPackageID")] SalesOrder salesOrder , List<int> SelectedPurchaseOrderIds)
         {
             if (ModelState.IsValid)
             {
@@ -155,7 +152,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 {
                     PackageReleaseDate = nextFriday,
                     ApprovalDrawingDate = nextFriday,
-                    Engineers = new HashSet<Engineer>() 
+                    Engineers = new HashSet<Engineer>()
                 };
 
                 _context.EngineeringPackages.Add(newEngineeringPackage);
@@ -165,6 +162,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
                 _context.SalesOrders.Add(salesOrder);
                 await _context.SaveChangesAsync();
+
                 if (SelectedPurchaseOrderIds != null && SelectedPurchaseOrderIds.Any())
                 {
                     foreach (var purchaseOrderId in SelectedPurchaseOrderIds)
@@ -185,6 +183,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
             return View(salesOrder);
         }
+        // GET: SalesOrders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -202,12 +201,9 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(salesOrder);
         }
 
-        // POST: SalesOrders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder)
+        public async Task<IActionResult> Edit(int id, [Bind("SalesOrderID,Price,Status,CustomerID,CompletionDate,ActualCompletionDate,ExtraNotes")] SalesOrder salesOrder)
         {
             if (id != salesOrder.SalesOrderID)
             {
@@ -218,7 +214,24 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 try
                 {
-                    _context.Update(salesOrder);
+                    var existingOrder = await _context.SalesOrders
+                        .FirstOrDefaultAsync(s => s.SalesOrderID == id);
+
+                    if (existingOrder == null)
+                    {
+                        return NotFound();
+                    }
+
+                    salesOrder.EngineeringPackageID = existingOrder.EngineeringPackageID;
+                    salesOrder.OrderNumber = existingOrder.OrderNumber;
+
+                    existingOrder.Price = salesOrder.Price;
+                    existingOrder.Status = salesOrder.Status;
+                    existingOrder.CustomerID = salesOrder.CustomerID;
+                    existingOrder.CompletionDate = salesOrder.CompletionDate;
+                    existingOrder.ActualCompletionDate = salesOrder.ActualCompletionDate;
+                    existingOrder.ExtraNotes = salesOrder.ExtraNotes;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -234,11 +247,12 @@ namespace Haver_Boecker_Niagara.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
-
             return View(salesOrder);
         }
+
 
         // GET: SalesOrders/Delete/5
         public async Task<IActionResult> Delete(int? id)

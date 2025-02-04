@@ -255,7 +255,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ExtraNotes")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("OrderNumber")

@@ -32,6 +32,16 @@
                 <span asp-validation-for="OrderNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="CompletionDate" class="control-label"></label>
+                <input asp-for="CompletionDate" class="form-control" />
+                <span asp-validation-for="CompletionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExtraNotes" class="control-label"></label>
+                <input asp-for="ExtraNotes" class="form-control" />
+                <span asp-validation-for="ExtraNotes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="PurchaseOrders" class="control-label"> Purchase Orders : </label>
                 <select asp-for="PurchaseOrders" class="form-control" asp-items="ViewBag.PurchaseOrders" multiple="multiple"></select>
             </div>

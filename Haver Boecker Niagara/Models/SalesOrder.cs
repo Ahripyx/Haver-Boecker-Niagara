@@ -59,7 +59,7 @@ namespace Haver_Boecker_Niagara.Models
         }
 
         [DisplayName("Comments/Notes")]
-        public string ExtraNotes { get; set; }
+        public string? ExtraNotes { get; set; }
 
 
         [DisplayName("Engineering Package")]

@@ -100,7 +100,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     OrderNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     CompletionDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     ActualCompletionDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ExtraNotes = table.Column<string>(type: "TEXT", nullable: false),
+                    ExtraNotes = table.Column<string>(type: "TEXT", nullable: true),
                     EngineeringPackageID = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
