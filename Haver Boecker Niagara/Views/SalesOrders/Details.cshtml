@@ -1,139 +1,134 @@
 ﻿@model Haver_Boecker_Niagara.Models.SalesOrder
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Sales Order Details";
 }
 
+<h1>Sales Order Details</h1>
 
-<div class="detailed-container">
-    <h1>SalesOrder Details</h1>
-    <div class="container-detailed-3">
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Price)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Price)
-                </dd>
-            </dl>
-        </div>
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Status)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Status)
-                </dd>
-            </dl>
-        </div>
-    </div>
-    <div class="container-detailed-3">
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Customer)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Customer.CustomerID)
-                </dd>
-            </dl>
-        </div>
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.OrderNumber)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.OrderNumber)
-                </dd>
-            </dl>
-        </div>
-    </div>
-    <div class="container-detailed-3">
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Media)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Media)
-                </dd>
-            </dl>
-        </div>
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.SparePartsMedia)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.SparePartsMedia)
-                </dd>
-            </dl>
-        </div>
-    </div>
-    <div class="container-detailed-3">
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Base)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Base)
-                </dd>
-            </dl>
-        </div>
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.AirSeal)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.AirSeal)
-                </dd>
-            </dl>
-        </div>
-    </div>
-    <div class="container-detailed-3">
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.CoatingOrLining)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CoatingOrLining)
-                </dd>
-            </dl>
-        </div>
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Disassembly)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Disassembly)
-                </dd>
-            </dl>
-        </div>
-    </div>
-    <div class="container-detailed-3">
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.EngineeringPackage)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.EngineeringPackage.EngineeringPackageID)
-                </dd>
+<div>
+    <h4>Sales Order Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.OrderNumber)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.OrderNumber)</dd>
 
-            </dl>
-        </div>
-        
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Customer.Name)</dt>
+        <dd class="col-sm-10">@(Model.Customer?.Name ?? "N/A")</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Status)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Status)</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Price)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Price)</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.CompletionDate)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.EstimatedCompletionSummary)</dd>
+
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ActualCompletionDate)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.ActualCompletionSummary)</dd>
+    </dl>
+</div>
+
+<div>
+    <h4>Purchase Orders</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>PO Number</th>
+                <th>Vendor</th>
+                <th>Due Date</th>
+                <th>Actual Due Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var po in Model.PurchaseOrders)
+            {
+                <tr>
+                    <td>@po.PurchaseOrderNumber</td>
+                    <td>@(po.Vendor?.Name ?? "N/A")</td>
+                    <td>@po.PODueDateSummary</td>
+                    <td>@(po.POActualDueDateSummary ?? "N/A")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h4>Machines</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Serial Number</th>
+                <th>Internal PO Number</th>
+                <th>Machine Size</th>
+                <th>Machine Class</th>
+                <th>Machine Desc</th>
+                <th>Budgeted Assembly Hours</th>
+                <th>Actual Assembly Hours</th>
+                <th>Actual Rework Hours</th>
+                <th>Media</th>
+                <th>Spare Parts</th>
+                <th>Coating or Lining</th>
+                <th>Base</th>
+                <th>Air Seal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var machine in Model.Machines)
+            {
+                <tr>
+                    <td>@machine.SerialNumber</td>
+                    <td>@machine.InternalPONumber</td>
+                    <td>@machine.MachineSize</td>
+                    <td>@machine.MachineClass</td>
+                    <td>@machine.MachineSizeDesc</td>
+                    <td>@machine.BudgetedAssemblyHours Hours</td>
+                    <td>@machine.ActualAssemblyHours Hours</td>
+                    <td>@machine.ActualReworkHours Hours</td>
+                    <td>@(@machine.Media ? "❌" : "✅")</td>
+                    <td>@(@machine.SparePartsMedia ? "❌" : "✅")</td>
+                    <td>@(@machine.CoatingOrLining ? "❌" : "✅")</td>
+                    <td>@(@machine.Base ? "❌" : "✅")</td>
+                    <td>@(@machine.AirSeal ? "❌" : "✅")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div>
+    <h4>Notes</h4>
+    <div class="row">
+        @foreach (var machine in Model.Machines)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="p-3 border rounded shadow-sm h-100">
+                    <h5 class="fw-bold">Machine: @machine.MachineDescription (@machine.SerialNumber)</h5>
+
+                    @if (!string.IsNullOrEmpty(machine.PreOrderNotes))
+                    {
+                        <p><strong>Pre-Order Notes:</strong> @machine.PreOrderNotes</p>
+                    }
+                    @if (!string.IsNullOrEmpty(machine.ScopeNotes))
+                    {
+                        <p><strong>Production Notes:</strong> @machine.ScopeNotes</p>
+                    }
+                    @if (string.IsNullOrEmpty(machine.PreOrderNotes) && string.IsNullOrEmpty(machine.ScopeNotes))
+                    {
+                        <p><em>No notes available for this machine.</em></p>
+                    }
+                </div>
+            </div>
+        }
     </div>
-    <div class="btn-edit-container">
-        <br />
-        <a asp-action="Edit" asp-route-id="@Model?.SalesOrderID" class="btn-edit">Edit</a> 
-        <a asp-action="Index" class="btn-primary-close" id="btnClose">Close</a>
-    </div>
+</div>
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.SalesOrderID" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn-primary-close" id="btnClose">Close</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

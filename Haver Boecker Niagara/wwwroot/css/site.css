@@ -225,9 +225,8 @@ h4 {
     border-radius: 5px;
     border: 1px solid #C0C0C0;
     line-height: 1.2;
-    background-color: #FFFFFF;
-    width: 100%; 
-    padding: 10px; 
+    background-color: #FFFFFF; 
+    padding: 0.5em; 
     font-size: 1rem;
     box-sizing: border-box; 
 }
@@ -240,10 +239,6 @@ h4 {
     flex-wrap: wrap; 
 }
 
-.form-group {
-    flex: 1; 
-    min-width: calc(50% - 10px); 
-}
 
 .form-btn-group {
     display: flex;
@@ -314,7 +309,7 @@ body {
 h1 {
     font-weight: bold;
     font-size: 35px;
-    margin-bottom: 5%;
+    margin-bottom: 1.5rem;
 }
 
 

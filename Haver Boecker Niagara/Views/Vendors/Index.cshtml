@@ -3,16 +3,25 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="main-container">
+<form asp-action="Index" method="get">
+
+    <div class="main-container">
     <h1>Vendors</h1>
 
 
-    <form asp-action="Index" method="get">
         <input type="hidden" name="sortDirection" value="@ViewData["SortDirection"]" />
         <input type="hidden" name="sortField" value="@ViewData["SortField"]" />
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <button class="search-btn btn @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
+                    data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                Search @ViewData["numberFilters"]
+            </button>
+            <a asp-action="Create" class="btn create-btn">Create New</a>
+        </div>
+
         <div class="form-horizontal">
             <div class="collapse @ViewData["ShowFilter"]" id="collapseFilter">
-                <div class="card card-body">
+                <div class="col">
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label class="control-label">Search Vendor Name:</label>
@@ -22,6 +31,8 @@
                             <label class="control-label">Search Contact</label>
                             @Html.TextBox("SearchContact", null, new { @class = "form-control" })
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-md-3">
                             <label class="control-label">Search Phone</label>
                             @Html.TextBox("SearchPhone", null, new { @class = "form-control" })
@@ -40,13 +51,7 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <button class="search-btn btn @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
-                    data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                Search @ViewData["numberFilters"]
-            </button>
-            <a asp-action="Create" class="btn create-btn">Create New</a>
-        </div>
+        
 
         <table class="table">
             <thead>
@@ -140,7 +145,8 @@
                     </tr>
                 }
             </tbody>
-        </table> 
-    </form>
-</div>
+        </table>
+    </div>
+
 <partial name="_PagingNavBar" />
+</form>

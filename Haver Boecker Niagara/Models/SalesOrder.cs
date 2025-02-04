@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Haver_Boecker_Niagara.Models
 {
@@ -24,20 +25,42 @@ namespace Haver_Boecker_Niagara.Models
         [Display(Name = "Order Number")]
         [StringLength(50, ErrorMessage = "Order number cannot exceed 50 characters.")]
         public string OrderNumber { get; set; }
-        public bool Media { get; set; } = false;
 
-        [DisplayName("Spare Parts / Media")]
-        public bool SparePartsMedia { get; set; } = false;
+        [DisplayName("Est. Coompletion Date")]
+        public DateTime? CompletionDate { get; set; }
 
-        public bool Base { get; set; } = false;
+        [NotMapped]
+        public string EstimatedCompletionSummary
+        {
+            get
+            {
+                if (CompletionDate != null)
+                {
+                    return CompletionDate!.Value.ToShortDateString();
+                }
+                return "N/A";
+            }
+        }
 
-        [DisplayName("Air Seal")]
-        public bool AirSeal { get; set; } = false;
+        [DisplayName("Actual Release Date")]
+        public DateTime? ActualCompletionDate { get; set; }
 
-        [DisplayName("Coating / Lining")]
-        public bool CoatingOrLining { get; set; } = false;
 
-        public bool Disassembly { get; set; } = false;
+        [NotMapped]
+        public string ActualCompletionSummary
+        {
+            get
+            {
+                if (ActualCompletionDate != null)
+                {
+                    return ActualCompletionDate!.Value.ToShortDateString();
+                }
+                return "N/A";
+            }
+        }
+
+        [DisplayName("Comments/Notes")]
+        public string? ExtraNotes { get; set; }
 
 
         [DisplayName("Engineering Package")]
@@ -45,8 +68,6 @@ namespace Haver_Boecker_Niagara.Models
 
         public EngineeringPackage? EngineeringPackage { get; set; }
         public ICollection<PurchaseOrder>? PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
-
-        public ICollection<OperationsSchedule>? OperationsSchedules { get; set; } = new HashSet<OperationsSchedule>();  // This property is already here
 
         public ICollection<Machine>? Machines { get; set; } = new HashSet<Machine>();
     }

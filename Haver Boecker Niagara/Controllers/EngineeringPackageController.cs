@@ -33,39 +33,47 @@ namespace Haver_Boecker_Niagara.Controllers
             int? pageSizeID,
             string? actionButton,
             string sortDirection = "asc",
-            string sortField = "ActualAprv"
-        ) { 
-            string[] sortOptions = { "EstimatedRel", "EstimatedAprv", "ActualRel", "ActualAprv" };
+            string sortField = "ActualAprv",
+            string? orderNumber = null 
+        )
+        {
+            string[] sortOptions = { "EstimatedRel", "EstimatedAprv", "ActualRel", "ActualAprv", "OrderNumber" }; 
             ViewData["Filtering"] = "btn-outline-secondary";
             int filterCount = 0;
 
-            string[] filterCriterias = 
-            { 
-                "None", 
-                "Estimated Release Date", 
-                "Estimated Approval Date", 
-                "Actual Release Date", 
-                "Actual Approval Date" 
-            };
-            if (FilterCriteria == null || ViewData["FilterCriteria"] == null) {
-      
-               ViewData["FilterCriteria"] = new SelectList(filterCriterias, null);
-            } else
+            string[] filterCriterias =
             {
-               ViewData["SelectedCriteria"] = FilterCriteria;
+                "None",
+                "Estimated Release Date",
+                "Estimated Approval Date",
+                "Actual Release Date",
+                "Actual Approval Date",
+                "Order Number" 
+            };
+
+            if (FilterCriteria == null || ViewData["FilterCriteria"] == null)
+            {
+                ViewData["FilterCriteria"] = new SelectList(filterCriterias, null);
+            }
+            else
+            {
+                ViewData["SelectedCriteria"] = FilterCriteria;
             }
 
             if (startDate == null)
             {
                 startDate = DateTime.MinValue;
-            } else
+            }
+            else
             {
                 ViewData["startDate"] = startDate;
             }
+
             if (endDate == null)
             {
                 endDate = DateTime.MaxValue;
-            } else
+            }
+            else
             {
                 ViewData["endDate"] = endDate;
             }
@@ -78,6 +86,7 @@ namespace Haver_Boecker_Niagara.Controllers
             var engPackages = _context
                               .EngineeringPackages
                               .Include(p => p.Engineers)
+                              .Include(p => p.SalesOrder) 
                               .AsTracking();
 
             if (!String.IsNullOrEmpty(FilterCriteria) && FilterCriteria != "None")
@@ -85,25 +94,27 @@ namespace Haver_Boecker_Niagara.Controllers
                 filterCount++;
             }
 
-
-            engPackages = (FilterCriteria) switch
+            engPackages = FilterCriteria switch
             {
-                "Estimated Release Date" => 
-                    engPackages.Where(p => p.PackageReleaseDate.Value >= startDate 
+                "Estimated Release Date" =>
+                    engPackages.Where(p => p.PackageReleaseDate.Value >= startDate
                                         && p.PackageReleaseDate.Value <= endDate),
-                
-                "Estimated Approval Date" => 
-                    engPackages.Where(p => p.ApprovalDrawingDate.Value >= startDate 
+
+                "Estimated Approval Date" =>
+                    engPackages.Where(p => p.ApprovalDrawingDate.Value >= startDate
                                         && p.ApprovalDrawingDate.Value <= endDate),
-                
-                "Actual Release Date" => 
-                    engPackages.Where(p => p.ActualPackageReleaseDate.Value >= startDate 
+
+                "Actual Release Date" =>
+                    engPackages.Where(p => p.ActualPackageReleaseDate.Value >= startDate
                                         && p.ActualPackageReleaseDate.Value <= endDate),
-                
-                "Actual Approval Date" => 
-                    engPackages.Where(p => p.ActualApprovalDrawingDate.Value >= startDate 
+
+                "Actual Approval Date" =>
+                    engPackages.Where(p => p.ActualApprovalDrawingDate.Value >= startDate
                                         && p.ActualApprovalDrawingDate.Value <= endDate),
-                
+
+                "Order Number" => 
+                    engPackages.Where(p => p.SalesOrder != null && p.SalesOrder.OrderNumber.Contains(orderNumber)),
+
                 _ => engPackages
             };
 
@@ -126,28 +137,31 @@ namespace Haver_Boecker_Niagara.Controllers
 
             engPackages = sortField switch
             {
-                "EstimatedRel" => sortDirection == "asc" 
-                ? engPackages.OrderBy(c => c.PackageReleaseDate) 
-                : engPackages.OrderByDescending(c => c.PackageReleaseDate),
+                "EstimatedRel" => sortDirection == "asc"
+                    ? engPackages.OrderBy(c => c.PackageReleaseDate)
+                    : engPackages.OrderByDescending(c => c.PackageReleaseDate),
 
-                "EstimatedAprv" => sortDirection == "asc" 
-                ? engPackages.OrderBy(c => c.ApprovalDrawingDate) 
-                : engPackages.OrderByDescending(c => c.ApprovalDrawingDate),
+                "EstimatedAprv" => sortDirection == "asc"
+                    ? engPackages.OrderBy(c => c.ApprovalDrawingDate)
+                    : engPackages.OrderByDescending(c => c.ApprovalDrawingDate),
 
-                "ActualRel" => sortDirection == "asc" 
-                ? engPackages.OrderBy(c => c.ActualPackageReleaseDate) 
-                : engPackages.OrderByDescending(c => c.ActualPackageReleaseDate),
+                "ActualRel" => sortDirection == "asc"
+                    ? engPackages.OrderBy(c => c.ActualPackageReleaseDate)
+                    : engPackages.OrderByDescending(c => c.ActualPackageReleaseDate),
 
-                "ActualAprv" => sortDirection == "asc" 
-                ? engPackages.OrderBy(c => c.ActualApprovalDrawingDate) 
-                : engPackages.OrderByDescending(c => c.ActualApprovalDrawingDate),
+                "ActualAprv" => sortDirection == "asc"
+                    ? engPackages.OrderBy(c => c.ActualApprovalDrawingDate)
+                    : engPackages.OrderByDescending(c => c.ActualApprovalDrawingDate),
+
+                "OrderNumber" => sortDirection == "asc"
+                    ? engPackages.OrderBy(c => c.SalesOrder.OrderNumber)
+                    : engPackages.OrderByDescending(c => c.SalesOrder.OrderNumber),
 
                 _ => engPackages
             };
 
             ViewData["SortField"] = sortField;
             ViewData["SortDirection"] = sortDirection;
-
 
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
@@ -156,7 +170,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(pagedData);
         }
 
-        // GET: EngineeringPackage/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -166,14 +180,19 @@ namespace Haver_Boecker_Niagara.Controllers
 
             var engineeringPackage = await _context.EngineeringPackages
                 .Include(p => p.Engineers)
+                .Include(p => p.SalesOrder)
                 .FirstOrDefaultAsync(m => m.EngineeringPackageID == id);
+
             if (engineeringPackage == null)
             {
                 return NotFound();
             }
 
+            ViewData["OrderNumber"] = engineeringPackage.SalesOrder?.OrderNumber ?? "N/A";
+
             return View(engineeringPackage);
         }
+
 
         // GET: EngineeringPackage/Create
         public IActionResult Create()

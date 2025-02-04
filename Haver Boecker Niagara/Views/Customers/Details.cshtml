@@ -4,123 +4,79 @@
     ViewData["Title"] = "Details";
 }
 
-@* <h1>Details</h1> *@
+<h1>Details</h1> 
 
-<div class="detailed-container">
-    <h1>Customer Details</h1>
-        <div class="container-detailed-3">
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Name)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Name)
-                    </dd>
-                </dl>
-            </div>
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.ContactPerson)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.ContactPerson)
-                    </dd>
-                </dl>
-            </div>
-        </div>
-        <div class="container-detailed-3">
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.PhoneNumber)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.PhoneNumber)
-                    </dd>
-                </dl>
-            </div>
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Email)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Email)
-                    </dd>
-                </dl>
-            </div>
-        </div>
-        <div class="container-detailed-3">
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Address)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Address)
-                    </dd>
-                </dl>
-            </div>
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.City)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.City)
-                    </dd>
-                </dl>
-            </div>
-        </div>
-        <div class="container-detailed-3">
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Country)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Country)
-                    </dd>
-                </dl>
-            </div>
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.PostalCode)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.PostalCode)
-                    </dd>
-                </dl>
-            </div>
-        </div>
-    <div class="container-detailed-3">
+<div>
+    <h4>Customer Details</h4>
+    <hr />
+    <div class="customer-form-container">
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ContactPerson)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ContactPerson)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PhoneNumber)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.City)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Country)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Country)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PostalCode)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PostalCode)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreatedAt)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.UpdatedAt)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UpdatedAt)
+            </dd>
+        </dl>
+
         <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.CreatedAt)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CreatedAt)
-                </dd>
-            </dl>
-        </div>
-        <div>
-            <dl class="column">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.UpdatedAt)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.UpdatedAt)
-                </dd>
-            </dl>
+            <a asp-action="Edit" asp-route-id="@Model?.CustomerID" class="btn btn-primary">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+
         </div>
     </div>
-    <div class="btn-edit-container">
-        <br/>
-        <a asp-action="Edit" asp-route-id="@Model?.CustomerID" class="btn-edit">Edit</a>
-        <a asp-action="Index" class="btn-primary-close" id="btnClose">Close</a>
-    </div> 
 </div>
