@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Haver_Boecker_Niagara.Models.Vendor>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vendors";
 }
 
 <form asp-action="Index" method="get">
@@ -31,15 +31,18 @@
                             <label class="control-label">Search Contact</label>
                             @Html.TextBox("SearchContact", null, new { @class = "form-control" })
                         </div>
+                        
+                    </div>
+                    <div class="row">
                         <div class="form-group col-md-3">
                             <label class="control-label">Search Email</label>
                             @Html.TextBox("SearchEmail", null, new { @class = "form-control" })
                         </div>
-                        <div class="form-group col-md-2 align-self-end">
-                            <input type="submit" name="actionButton" value="Filter"
-                                   class="btn btn-outline-primary" id="btnFilter" />
-                            <a asp-action="Index" class="btn-clear">Clear</a>
-                        </div>
+                    </div>
+                    <div class="form-group col-md-2 align-self-end">
+                        <input type="submit" name="actionButton" value="Filter"
+                               class="btn btn-outline-primary" id="btnFilter" />
+                        <a asp-action="Index" class="btn-clear">Clear</a>
                     </div>
                 </div>
             </div>

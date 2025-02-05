@@ -26,7 +26,7 @@ namespace Haver_Boecker_Niagara.Models
         [StringLength(50, ErrorMessage = "Order number cannot exceed 50 characters.")]
         public string OrderNumber { get; set; }
 
-        [DisplayName("Est. Coompletion Date")]
+        [DisplayName("Est. Completion Date")]
         public DateTime? CompletionDate { get; set; }
 
         [NotMapped]
