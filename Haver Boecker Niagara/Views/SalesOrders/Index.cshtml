@@ -58,7 +58,6 @@
                     <th>Machines</th>
                     <th>Package</th>
                     <th>Purchase Orders</th>
-                    <th>PO Due Date </th>
                     <th>Vendors</th>
                     <th>Estimated Completion</th>
                     <th>Actual Completion</th>
@@ -105,8 +104,8 @@
                                     engineers += @eng.Initials + "/";
                                 }
                                 <div>@engineers.Remove(@engineers.Length - 1)</div>
-                                <div>@item.EngineeringPackage.ActualReleaseSummary</div>
-                                <div>@item.EngineeringPackage.ActualApprovalSummary</div>
+                                <div>@item.EngineeringPackage.ApprovalDrawingDate</div>
+                                <div>@item.EngineeringPackage.PackageReleaseDate</div>
                             }
 
                         </td>
@@ -115,19 +114,6 @@
                             @foreach (var po in item.PurchaseOrders)
                             {
                                 <div>@po.PurchaseOrderNumber</div>
-                            }
-                        </td>
-                        <td>
-                            @foreach (var po in item.PurchaseOrders)
-                            {
-                                @if (@po.POActualDueDate is null)
-                                {
-                                    <div>@po.PODueDateSummary / N/A</div>
-                                }
-                                else
-                                {
-                                <div>@po.PODueDateSummary / @po.POActualDueDateSummary</div>
-                                }
                             }
                         </td>
                         <td>

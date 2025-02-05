@@ -139,7 +139,6 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             SalesOrder salesOrder = new SalesOrder();
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
-
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
             PopulatePurchaseOrders(salesOrder);
             return View();
