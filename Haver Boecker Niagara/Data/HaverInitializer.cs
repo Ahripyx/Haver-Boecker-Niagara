@@ -149,7 +149,6 @@ namespace Haver_Boecker_Niagara.Data
                                     MachineSize = 300 + (i * 10),
                                     MachineClass = "T",
                                     MachineSizeDesc = $"Size {i}",
-                                    SalesOrderID = salesOrders[i % salesOrders.Count].SalesOrderID,
                                     InternalPONumber = $"PO-{2000 + i}",
                                     AirSeal = true,
                                     Base = false,

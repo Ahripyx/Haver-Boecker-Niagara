@@ -125,7 +125,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 .Include(s => s.Customer)
                 .Include(s => s.EngineeringPackage)
                 .Include(s => s.Machines)
-                .Include(s =>s.PurchaseOrders)
+                .Include(s => s.PurchaseOrders)
                 .FirstOrDefaultAsync(m => m.SalesOrderID == id);
             if (salesOrder == null)
             {
@@ -139,6 +139,7 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             SalesOrder salesOrder = new SalesOrder();
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
+
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
             PopulatePurchaseOrders(salesOrder);
             return View();

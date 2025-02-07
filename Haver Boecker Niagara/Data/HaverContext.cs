@@ -27,18 +27,13 @@ namespace Haver_Boecker_Niagara.Data
             modelBuilder.Entity<PurchaseOrder>().HasKey(po => po.PurchaseOrderID);
             modelBuilder.Entity<Machine>().HasKey(m => m.MachineID);
             modelBuilder.Entity<SalesOrder>().HasKey(so => so.SalesOrderID);
+            modelBuilder.Entity<MachineSalesOrder>().HasKey(m => m.MachineSalesOrderID);
             modelBuilder.Entity<EngineeringPackageEngineer>().HasKey(epe => epe.EngineeringPackageEngineerID);
 
             modelBuilder.Entity<SalesOrder>()
                 .HasOne(so => so.Customer)
                 .WithMany(c => c.SaleOrders)
                 .HasForeignKey(so => so.CustomerID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Machine>()
-                .HasOne(m => m.SalesOrder)
-                .WithMany(so => so.Machines)
-                .HasForeignKey(m => m.SalesOrderID)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<SalesOrder>()
@@ -58,6 +53,11 @@ namespace Haver_Boecker_Niagara.Data
                 .WithMany(so => so.PurchaseOrders)
                 .HasForeignKey(po => po.SalesOrderID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Machine>()
+                .HasMany(m => m.SalesOrders)
+                .WithMany(s => s.Machines)
+                .UsingEntity<MachineSalesOrder>();
 
             modelBuilder.Entity<EngineeringPackage>()
                 .HasMany(ep => ep.Engineers)

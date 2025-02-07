@@ -131,7 +131,106 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.ToTable("EngineeringPackageEngineers");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.Machine", b =>
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.MachineSalesOrder", b =>
+                {
+                    b.Property<int>("MachineSalesOrderID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MachineID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SalesOrderID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("MachineSalesOrderID");
+
+                    b.HasIndex("MachineID");
+
+                    b.HasIndex("SalesOrderID");
+
+                    b.ToTable("MachineSalesOrder");
+                });
+
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.PurchaseOrder", b =>
+                {
+                    b.Property<int>("PurchaseOrderID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("POActualDueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("PODueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PurchaseOrderNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SalesOrderID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("VendorID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("PurchaseOrderID");
+
+                    b.HasIndex("SalesOrderID");
+
+                    b.HasIndex("VendorID");
+
+                    b.ToTable("PurchaseOrders");
+                });
+
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.Vendor", b =>
+                {
+                    b.Property<int>("VendorID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContactFirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContactLastName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("VendorID");
+
+                    b.ToTable("Vendors");
+                });
+
+            modelBuilder.Entity("Machine", b =>
                 {
                     b.Property<int>("MachineID")
                         .ValueGeneratedOnAdd()
@@ -184,9 +283,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<string>("PreOrderNotes")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SalesOrderID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("ScopeNotes")
                         .HasColumnType("TEXT");
 
@@ -200,43 +296,10 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
                     b.HasKey("MachineID");
 
-                    b.HasIndex("SalesOrderID");
-
                     b.ToTable("Machines");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.PurchaseOrder", b =>
-                {
-                    b.Property<int>("PurchaseOrderID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("POActualDueDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("PODueDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PurchaseOrderNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("SalesOrderID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("VendorID")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("PurchaseOrderID");
-
-                    b.HasIndex("SalesOrderID");
-
-                    b.HasIndex("VendorID");
-
-                    b.ToTable("PurchaseOrders");
-                });
-
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.SalesOrder", b =>
+            modelBuilder.Entity("SalesOrder", b =>
                 {
                     b.Property<int>("SalesOrderID")
                         .ValueGeneratedOnAdd()
@@ -280,53 +343,6 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.ToTable("SalesOrders");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.Vendor", b =>
-                {
-                    b.Property<int>("VendorID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("City")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ContactFirstName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ContactLastName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("VendorID");
-
-                    b.ToTable("Vendors");
-                });
-
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.EngineeringPackageEngineer", b =>
                 {
                     b.HasOne("Haver_Boecker_Niagara.Models.Engineer", "Engineer")
@@ -346,20 +362,28 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Navigation("EngineeringPackage");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.Machine", b =>
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.MachineSalesOrder", b =>
                 {
-                    b.HasOne("Haver_Boecker_Niagara.Models.SalesOrder", "SalesOrder")
-                        .WithMany("Machines")
+                    b.HasOne("Machine", "Machine")
+                        .WithMany()
+                        .HasForeignKey("MachineID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SalesOrder", "SalesOrder")
+                        .WithMany()
                         .HasForeignKey("SalesOrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Machine");
 
                     b.Navigation("SalesOrder");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.PurchaseOrder", b =>
                 {
-                    b.HasOne("Haver_Boecker_Niagara.Models.SalesOrder", "SalesOrder")
+                    b.HasOne("SalesOrder", "SalesOrder")
                         .WithMany("PurchaseOrders")
                         .HasForeignKey("SalesOrderID")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -374,7 +398,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Navigation("Vendor");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.SalesOrder", b =>
+            modelBuilder.Entity("SalesOrder", b =>
                 {
                     b.HasOne("Haver_Boecker_Niagara.Models.Customer", "Customer")
                         .WithMany("SaleOrders")
@@ -384,7 +408,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
                     b.HasOne("Haver_Boecker_Niagara.Models.EngineeringPackage", "EngineeringPackage")
                         .WithOne("SalesOrder")
-                        .HasForeignKey("Haver_Boecker_Niagara.Models.SalesOrder", "EngineeringPackageID")
+                        .HasForeignKey("SalesOrder", "EngineeringPackageID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Customer");
@@ -402,14 +426,12 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Navigation("SalesOrder");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.SalesOrder", b =>
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.Vendor", b =>
                 {
-                    b.Navigation("Machines");
-
                     b.Navigation("PurchaseOrders");
                 });
 
-            modelBuilder.Entity("Haver_Boecker_Niagara.Models.Vendor", b =>
+            modelBuilder.Entity("SalesOrder", b =>
                 {
                     b.Navigation("PurchaseOrders");
                 });

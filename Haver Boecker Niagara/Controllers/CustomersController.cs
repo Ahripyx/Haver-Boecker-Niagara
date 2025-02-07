@@ -103,22 +103,21 @@ namespace Haver_Boecker_Niagara.Controllers
         // GET: Customers/Create
         public IActionResult Create() => View();
 
-        // POST: Customers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Customer customer)
         {
             if (ModelState.IsValid)
             {
                 customer.CreatedAt = DateTime.UtcNow;
                 customer.UpdatedAt = DateTime.UtcNow;
-
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
         }
+
 
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -129,12 +128,14 @@ namespace Haver_Boecker_Niagara.Controllers
             return customer == null ? NotFound() : View(customer);
         }
 
-        // POST: Customers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Customer customer)
         {
-            if (id != customer.CustomerID) return NotFound();
+            if (id != customer.CustomerID)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
@@ -153,6 +154,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             return View(customer);
         }
+
 
         // GET: Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)

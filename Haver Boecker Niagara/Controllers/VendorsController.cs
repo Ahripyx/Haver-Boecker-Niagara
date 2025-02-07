@@ -101,20 +101,17 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(vendor);
         }
-
-        // GET: Vendors/Create
+        // GET: Vendotr/Create
         public IActionResult Create() => View();
 
-        // POST: Vendors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Vendor vendor)
+        public async Task<IActionResult> Create([Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Vendor vendor)
         {
             if (ModelState.IsValid)
             {
                 vendor.CreatedAt = DateTime.UtcNow;
                 vendor.UpdatedAt = DateTime.UtcNow;
-
                 _context.Add(vendor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -122,23 +119,24 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(vendor);
         }
 
+
         // GET: Vendors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
             var vendor = await _context.Vendors.FindAsync(id);
-            if (vendor == null) return NotFound();
-
-            return View(vendor);
+            return vendor == null ? NotFound() : View(vendor);
         }
 
-        // POST: Vendors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Vendor vendor)
+        public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Vendor vendor)
         {
-            if (id != vendor.VendorID) return NotFound();
+            if (id != vendor.VendorID)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
