@@ -29,6 +29,9 @@
                     <label>Search by Customer:</label>
                     @Html.TextBox("SearchCustomer", null, new { @class = "form-control" })
                 </div>
+                
+            </div>
+            <div class="row">
                 <div class="form-group col-md-3">
                     <label>Search by Status:</label>
                     @Html.TextBox("SearchStatus", null, new { @class = "form-control" })
@@ -43,7 +46,7 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    @foreach (var header in new[] { "OrderNumber", "Customer", "Status" })
+                    @foreach (var header in new[] { "Order", "Customer", "Status" })
                     {
                         <th>
                             <button type="submit" name="actionButton" value="@header" class="btn p-0 fw-bold"
@@ -58,11 +61,9 @@
                     <th>Machines</th>
                     <th>Package</th>
                     <th>Purchase Orders</th>
-                    <th>PO Due Date </th>
                     <th>Vendors</th>
-                    <th>Estimated Completion</th>
-                    <th>Actual Completion</th>
-                    <th>Actions</th>
+                    <th>Estimated/Actual Completion</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -105,8 +106,8 @@
                                     engineers += @eng.Initials + "/";
                                 }
                                 <div>@engineers.Remove(@engineers.Length - 1)</div>
-                                <div>@item.EngineeringPackage.ActualReleaseSummary</div>
-                                <div>@item.EngineeringPackage.ActualApprovalSummary</div>
+                                <div>@item.EngineeringPackage.ApprovalDrawingDate</div>
+                                <div>@item.EngineeringPackage.PackageReleaseDate</div>
                             }
 
                         </td>
@@ -115,19 +116,6 @@
                             @foreach (var po in item.PurchaseOrders)
                             {
                                 <div>@po.PurchaseOrderNumber</div>
-                            }
-                        </td>
-                        <td>
-                            @foreach (var po in item.PurchaseOrders)
-                            {
-                                @if (@po.POActualDueDate is null)
-                                {
-                                    <div>@po.PODueDateSummary / N/A</div>
-                                }
-                                else
-                                {
-                                <div>@po.PODueDateSummary / @po.POActualDueDateSummary</div>
-                                }
                             }
                         </td>
                         <td>
@@ -144,9 +132,7 @@
                             }
                         </td>
 
-                        <td>@item.EstimatedCompletionSummary</td>
-                        <td>@item.ActualCompletionSummary</td>
-
+                        <td>@item.EstimatedCompletionSummary/@item.ActualCompletionSummary  </td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.SalesOrderID" class="ed-det-del-btn">Edit</a>
                             <a asp-action="Details" asp-route-id="@item.SalesOrderID" class="ed-det-del-btn ">Details</a>
@@ -156,7 +142,6 @@
             </tbody>
         </table>
 
-        @* Paging controls *@
         <partial name="_PagingNavBar" />
     </div>
 </form>

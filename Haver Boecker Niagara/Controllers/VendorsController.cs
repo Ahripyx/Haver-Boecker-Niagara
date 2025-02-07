@@ -49,11 +49,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 }
                 filterCount++;
             }
-            if (!string.IsNullOrEmpty(searchPhone))
-            {
-                vendors = vendors.Where(v => EF.Functions.Like(v.PhoneNumber, $"%{searchPhone}%"));
-                filterCount++;
-            }
             if (!string.IsNullOrEmpty(searchEmail))
             {
                 vendors = vendors.Where(v => EF.Functions.Like(v.Email, $"%{searchEmail}%"));
@@ -82,12 +77,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 "ContactPerson" => sortDirection == "asc"
                     ? vendors.OrderBy(c => c.ContactFirstName).ThenBy(c => c.ContactLastName)
                     : vendors.OrderByDescending(c => c.ContactFirstName).ThenByDescending(c => c.ContactLastName),
-                "PhoneNumber" => sortDirection == "asc" ? vendors.OrderBy(v => v.PhoneNumber) : vendors.OrderByDescending(v => v.PhoneNumber),
                 "Email" => sortDirection == "asc" ? vendors.OrderBy(v => v.Email) : vendors.OrderByDescending(v => v.Email),
-                "Address" => sortDirection == "asc" ? vendors.OrderBy(v => v.Address) : vendors.OrderByDescending(v => v.Address),
-                "City" => sortDirection == "asc" ? vendors.OrderBy(v => v.City) : vendors.OrderByDescending(v => v.City),
-                "Country" => sortDirection == "asc" ? vendors.OrderBy(v => v.Country) : vendors.OrderByDescending(v => v.Country),
-                "PostalCode" => sortDirection == "asc" ? vendors.OrderBy(v => v.PostalCode) : vendors.OrderByDescending(v => v.PostalCode),
                 _ => sortDirection == "asc" ? vendors.OrderBy(v => v.Name) : vendors.OrderByDescending(v => v.Name),
             };
 
@@ -111,20 +101,17 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(vendor);
         }
-
-        // GET: Vendors/Create
+        // GET: Vendotr/Create
         public IActionResult Create() => View();
 
-        // POST: Vendors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Vendor vendor)
+        public async Task<IActionResult> Create([Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Vendor vendor)
         {
             if (ModelState.IsValid)
             {
                 vendor.CreatedAt = DateTime.UtcNow;
                 vendor.UpdatedAt = DateTime.UtcNow;
-
                 _context.Add(vendor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -132,23 +119,24 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(vendor);
         }
 
+
         // GET: Vendors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
             var vendor = await _context.Vendors.FindAsync(id);
-            if (vendor == null) return NotFound();
-
-            return View(vendor);
+            return vendor == null ? NotFound() : View(vendor);
         }
 
-        // POST: Vendors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactPerson,PhoneNumber,Email,Address,City,State,Country,PostalCode")] Vendor vendor)
+        public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Vendor vendor)
         {
-            if (id != vendor.VendorID) return NotFound();
+            if (id != vendor.VendorID)
+            {
+                return NotFound();
+            }
 
             if (ModelState.IsValid)
             {

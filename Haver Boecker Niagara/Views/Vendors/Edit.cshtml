@@ -18,10 +18,17 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ContactPerson" class="control-label"></label>
-                <input asp-for="ContactPerson" class="form-control" />
-                <span asp-validation-for="ContactPerson" class="text-danger"></span>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ContactFirstName" class="control-label"></label>
+                    <input asp-for="ContactFirstName" class="form-control" />
+                    <span asp-validation-for="ContactFirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ContactLastName" class="control-label"></label>
+                    <input asp-for="ContactLastName" class="form-control" />
+                    <span asp-validation-for="ContactLastName" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>

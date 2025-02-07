@@ -26,7 +26,6 @@ namespace Haver_Boecker_Niagara.Controllers
         (
             int? pageSizeID, 
             int? page, 
-            string? SearchOrderNo, 
             string? SearchSerialNo, 
             string? SearchPONo, 
             string? actionButton, 
@@ -34,25 +33,17 @@ namespace Haver_Boecker_Niagara.Controllers
             string sortField = ""
         ) {
 
-            string[] sortOptions = { "OrderNo", "Size", "Class", "Description" };
+            string[] sortOptions = { "Size", "Class", "Description" };
             
-            // reset state of filter button
             var filterCount = 0;
             ViewData["Filtering"] = "btn-outline-secondary";
 
             IQueryable<Machine> machines = _context
                                            .Machines
-                                           .Include(m => m.SalesOrder)
+                                           .Include(m => m.SalesOrders)
                                            .AsNoTracking();
 
-            if (!String.IsNullOrEmpty(SearchOrderNo))
-            {
-                machines = machines.Where(p => p.SalesOrder
-                                                .OrderNumber
-                                                .ToLower()
-                                                .Contains(SearchOrderNo.ToLower()));
-                filterCount++;
-            }
+
             if (!String.IsNullOrEmpty(SearchSerialNo))
             {
                 machines = machines.Where(p => p.SerialNumber
@@ -68,7 +59,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 filterCount++;
             }
 
-            // set state of filter button if necessary
             if (filterCount > 0)
             {
                 ViewData["Filtering"] = "btn-danger";
@@ -76,7 +66,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 ViewData["ShowFilter"] = "show";
             }
 
-            // sorting
             if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
             {
                 page = 1;
@@ -89,9 +78,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             machines = sortField switch
             {
-                "OrderNo" => sortDirection == "asc" 
-                ? machines.OrderBy(p => p.SalesOrder.OrderNumber) 
-                : machines.OrderByDescending(p => p.SalesOrder.OrderNumber),
+
                 
                 "Size" => sortDirection == "asc" 
                 ? machines.OrderBy(p => p.MachineSize) 
@@ -104,14 +91,13 @@ namespace Haver_Boecker_Niagara.Controllers
                 "Description" => sortDirection == "asc" 
                 ? machines.OrderBy(p => p.MachineSizeDesc) 
                 : machines.OrderByDescending(p => p.MachineSizeDesc),
-                
-                _ => machines.OrderBy(p => p.SalesOrder.OrderNumber)
+                _ => sortDirection == "asc" ? machines.OrderBy(p => p.MachineSize) : machines.OrderByDescending(p => p.MachineSize),
+
+
             };
 
             ViewData["SortField"] = sortField;
             ViewData["SortDirection"] = sortDirection;
-
-            // pagination
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
             var pagedData = await PaginatedList<Machine>.CreateAsync(machines, page ?? 1, pageSize);
@@ -128,7 +114,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var machine = await _context.Machines
-                .Include(m => m.SalesOrder)
+                .Include(m => m.SalesOrders)
                 .FirstOrDefaultAsync(m => m.MachineID == id);
             if (machine == null)
             {
@@ -158,7 +144,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", machine.SalesOrderID);
+            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", machine.SalesOrders);
             return View(machine);
         }
 
@@ -175,7 +161,7 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 return NotFound();
             }
-            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", machine.SalesOrderID);
+            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", machine.SalesOrders);
             return View(machine);
         }
 
@@ -214,7 +200,7 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 ModelState.AddModelError("", "Your changes are invalid. Please double check them and try again.");
             }
-            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", machine.SalesOrderID);
+            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", machine.SalesOrders);
             return View(machine);
         }
 
@@ -227,7 +213,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var machine = await _context.Machines
-                .Include(m => m.SalesOrder)
+                .Include(m => m.SalesOrders)
                 .FirstOrDefaultAsync(m => m.MachineID == id);
             if (machine == null)
             {
