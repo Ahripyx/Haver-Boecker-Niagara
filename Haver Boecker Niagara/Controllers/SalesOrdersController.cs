@@ -12,6 +12,9 @@ using Haver_Boecker_Niagara.Utilities;
 using Haver_Boecker_Niagara.ViewModels;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Security.AccessControl;
+using OfficeOpenXml.Style;
+using OfficeOpenXml;
+using System.Drawing;
 
 
 namespace Haver_Boecker_Niagara.Controllers
@@ -319,6 +322,70 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DownloadMachineSchedule()
+        {
+            var salesOrders = await _context.SalesOrders
+                .Include(s => s.Customer)
+                .Include(s => s.Machines)
+                .Include(s => s.EngineeringPackage)
+                    .ThenInclude(ep => ep.Engineers)
+                .Include(s => s.PurchaseOrders)
+                    .ThenInclude(po => po.Vendor)
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (!salesOrders.Any())
+                return NotFound("No data available.");
+
+            using var excel = new ExcelPackage();
+            var workSheet = excel.Workbook.Worksheets.Add("MachineSchedules");
+
+            // Headers
+            var headers = new string[]
+            {
+            "Sales Order", "Customer Name", "Machines", "Serial & IPO", "Engineering Info",
+            "Vendors", "Purchase Orders", "Delivery Date", "Notes"
+            };
+
+            for (int i = 0; i < headers.Length; i++)
+            {
+                workSheet.Cells[1, i + 1].Value = headers[i];
+                workSheet.Cells[1, i + 1].Style.Font.Bold = true;
+                workSheet.Cells[1, i + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                workSheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                workSheet.Cells[1, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            }
+
+            // Data Rows
+            int row = 2;
+            foreach (var order in salesOrders)
+            {
+                workSheet.Cells[row, 1].Value = order.OrderNumber;
+                workSheet.Cells[row, 2].Value = order.Customer?.Name ?? "N/A";
+                workSheet.Cells[row, 3].Value = string.Join(", ", order.Machines.Select(m => m.MachineDescription));
+                workSheet.Cells[row, 4].Value = string.Join(", ", order.Machines.Select(m => $"{m.SerialNumber} / {m.InternalPONumber}"));
+                workSheet.Cells[row, 5].Value = string.Join("\n", new string[]
+                {
+                string.Join(", ", order.EngineeringPackage?.Engineers?.Select(e => e.Name) ?? new List<string>()),
+                order.EngineeringPackage?.EstimatedReleaseSummary ?? "N/A",
+                order.EngineeringPackage?.EstimatedApprovalSummary ?? "N/A"
+                });
+
+                workSheet.Cells[row, 6].Value = string.Join("\n", order.PurchaseOrders.Select(po => po.Vendor?.Name ?? "N/A"));
+                workSheet.Cells[row, 7].Value = string.Join("\n", order.PurchaseOrders.Select(po => $"{po.PurchaseOrderNumber} ({po.PODueDateSummary})"));
+                workSheet.Cells[row, 8].Value = order.EstimatedCompletionSummary + " (" + order.ActualCompletionSummary + ")";
+                workSheet.Cells[row, 9].Value = order.ExtraNotes ?? "No Extra Notes";
+
+                row++;
+            }
+
+            // Auto-fit columns for better display
+            workSheet.Cells.AutoFitColumns();
+
+            var fileData = excel.GetAsByteArray();
+            return File(fileData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MachineSchedules.xlsx");
         }
 
         private bool SalesOrderExists(int id)
