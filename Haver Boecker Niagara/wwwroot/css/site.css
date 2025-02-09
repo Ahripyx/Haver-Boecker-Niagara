@@ -271,8 +271,12 @@ h4 {
     cursor: pointer;
     text-transform: uppercase;
     transition: all 0.3s ease-in-out;
-    width: 10%;
+    display: inline-flex;
+    justify-content:center;
+    padding: 8px 20px;
+    min-width: 50px;
 }
+
 .btn-edit {
     background-color: #002F5F;
 }
@@ -307,9 +311,8 @@ body {
 }
 
 h1 {
-    font-weight: bold;
     font-size: 35px;
-    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 
