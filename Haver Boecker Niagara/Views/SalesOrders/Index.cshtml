@@ -91,45 +91,59 @@
                             }
                         </td>
 
-                        <td class="my-auto">
-                            @if (item.EngineeringPackage.Engineers.Count == 0)
-                            {
-                                <span class="d-block">N/A</span>
-                                <div>@item.EngineeringPackage.ActualReleaseSummary</div>
-                                <div>@item.EngineeringPackage.ActualApprovalSummary</div>
-                            }
-                            else{
-                            string engineers = "";
+                        <td>
+                            <button class="ed-det-del-btn " type="button" data-bs-toggle="collapse" data-bs-target="#engineer-@item.SalesOrderID">
+                                Toggle Engineer
+                            </button>
+                            <div class="collapse mt-2" id="engineer-@item.SalesOrderID">
+                                @if (item.EngineeringPackage.Engineers.Count == 0)
+                                {
+                                    <span class="d-block">N/A</span>
+                                    <div>@item.EngineeringPackage.ActualReleaseSummary</div>
+                                    <div>@item.EngineeringPackage.ActualApprovalSummary</div>
+                                }
+                                else{
+                                string engineers = "";
                                 
-                            @foreach (var eng in item.EngineeringPackage.Engineers)
-                            {
-                                    engineers += @eng.Initials + "/";
+                                @foreach (var eng in item.EngineeringPackage.Engineers)
+                                {
+                                        engineers += @eng.Initials + "/";
+                                    }
+                                    <div>@engineers.Remove(@engineers.Length - 1)</div>
+                                    <div>@item.EngineeringPackage.ApprovalDrawingDate</div>
+                                    <div>@item.EngineeringPackage.PackageReleaseDate</div>
                                 }
-                                <div>@engineers.Remove(@engineers.Length - 1)</div>
-                                <div>@item.EngineeringPackage.ApprovalDrawingDate</div>
-                                <div>@item.EngineeringPackage.PackageReleaseDate</div>
-                            }
-
+                            </div>
                         </td>
 
                         <td>
-                            @foreach (var po in item.PurchaseOrders)
-                            {
-                                <div>@po.PurchaseOrderNumber</div>
-                            }
+                            <button class="ed-det-del-btn" type="button" data-bs-toggle="collapse" data-bs-target="#po-@item.SalesOrderID">
+                                Toggle PO
+                            </button>
+                            <div class="collapse mt-2" id="po-@item.SalesOrderID">
+                                @foreach (var po in item.PurchaseOrders)
+                                {
+                                    <div>@po.PurchaseOrderNumber</div>
+                                }
+                            </div>
                         </td>
                         <td>
-                            @foreach (var vendor in item.PurchaseOrders)
-                            {
-                                @if (@vendor.Vendor is null)
+                            <button class="ed-det-del-btn" type="button" data-bs-toggle="collapse" data-bs-target="#vendor-@item.SalesOrderID">
+                                Toggle vendors
+                            </button>
+                            <div class="collapse mt-2" id="vendor-@item.SalesOrderID">
+                                @foreach (var vendor in item.PurchaseOrders)
                                 {
-                                    <div>N/A</div>
+                                    @if (@vendor.Vendor is null)
+                                    {
+                                        <div>N/A</div>
+                                    }
+                                    else
+                                    {
+                                        <div>@vendor.Vendor.Name</div>
+                                    }
                                 }
-                                else
-                                {
-                                    <div>@vendor.Vendor.Name</div>
-                                }
-                            }
+                            </div>
                         </td>
 
                         <td>@item.EstimatedCompletionSummary/@item.ActualCompletionSummary  </td>

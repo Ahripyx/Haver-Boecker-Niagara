@@ -81,16 +81,25 @@ footer {
     justify-content: space-between;
     display: flex;
 }
-
-
-/* menu styling */
-.nav-bottom {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    border-top: 1px solid white; /* line between logo and menu */
-    padding-top: 10px;
+/*For the index in sales order little debug */
+.ed-det-del-btn {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
+td {
+    height: 3.125rem;
+    vertical-align: middle !important;
+}
+
+    /* menu styling */
+    .nav-bottom {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        border-top: 1px solid white; /* line between logo and menu */
+        padding-top: 10px;
+    }
 
 .navbar-collapse {
     border-top: 1px solid rgba(255, 255, 255, 0.3);
