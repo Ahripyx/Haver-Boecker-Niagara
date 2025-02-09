@@ -4,11 +4,9 @@
     ViewData["Title"] = "Create";
 }
 
-@* <h1>Create</h1> *@
-<div class="create-container mt-4">
-    <div>
-        <h4>Create Customer</h4>
-    </div>
+<h1>Create Customer</h1>
+<hr />
+
     <div class="p-4 shadow-sm card-container">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -95,7 +93,7 @@
             </div>
         </form>
     </div>
-</div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

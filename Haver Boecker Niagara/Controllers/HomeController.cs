@@ -19,7 +19,7 @@ namespace Haver_Boecker_Niagara.Controllers
         public IActionResult Index()
         {
             var TotalCustomers = _context.Customers.Count();
-            var confirmedSalesOrders = _context.SalesOrders.Count(g => g.Status == "Confirmed");
+            var confirmedSalesOrders = _context.SalesOrders.Count();
             var pendingSalesOrders = _context.SalesOrders.Count(g => g.Status == "Pending");
             var  totalVendors = _context.Vendors.Count();
             var totalMachines = _context.Machines.Count();
