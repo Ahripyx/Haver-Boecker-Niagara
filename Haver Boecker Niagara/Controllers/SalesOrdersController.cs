@@ -147,7 +147,7 @@ namespace Haver_Boecker_Niagara.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] SalesOrder salesOrder, string? chkAddPO = "off")
+            [Bind("Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes")] SalesOrder salesOrder, string? chkAddPO = "off")
 
         {
             if (ModelState.IsValid)
@@ -211,6 +211,48 @@ namespace Haver_Boecker_Niagara.Controllers
                 _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Edit), new { ID = salesOrderVM.SalesOrderID });
+        }
+
+
+        public async Task<IActionResult> EditPurchaseOrder([Bind("PurchaseOrderID,PurchaseOrderNumber,PODueDate,POActualDueDate,VendorID")] PurchaseOrder purchaseOrderToUpdate,
+            [Bind("SalesOrderID")] SalesOrderVM salesOrderVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var salesOrder = await _context.SalesOrders.Include(p => p.PurchaseOrders).Where(p=> p.SalesOrderID == salesOrderVM.SalesOrderID).FirstOrDefaultAsync();
+                var purchaseOrder = await _context.PurchaseOrders.FindAsync(purchaseOrderToUpdate.PurchaseOrderID);
+                if (salesOrder == null || purchaseOrder == null)
+                {
+                    return BadRequest();
+                }
+                // remove old
+                _context.PurchaseOrders.Remove(purchaseOrder);
+                salesOrder.PurchaseOrders.Remove(purchaseOrder);
+                // add new
+                _context.PurchaseOrders.Add(purchaseOrderToUpdate);
+                salesOrder.PurchaseOrders.Add(purchaseOrderToUpdate);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Edit), new { ID = salesOrderVM.SalesOrderID });
+        }
+
+        public ActionResult SetViewBag(string selectedOptions)
+        {
+            if (String.IsNullOrEmpty(selectedOptions))
+            {
+                return BadRequest();
+            }
+            string[] selectedOptions2 = selectedOptions.Split(',');
+            if (selectedOptions2.Count() == 1)
+            {
+                var purchaseOrder = _context.PurchaseOrders.Include(p => p.Vendor).Where(p => p.PurchaseOrderID == int.Parse(selectedOptions2[0])).FirstOrDefault();
+                ViewData["VendorID"] = new SelectList(_context.Vendors, "VendorID", "Name", purchaseOrder.VendorID);
+                return PartialView("_purchaseOrderModalEdit", purchaseOrder);
+
+            } else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
@@ -404,7 +446,7 @@ namespace Haver_Boecker_Niagara.Controllers
                     });
                 }
 
-                ViewData["selOpts"] = new MultiSelectList(selected.OrderBy(p => p.DisplayText), "ID", "DisplayText");
+                ViewData["selOpts"] = new SelectList(selected.OrderBy(p => p.DisplayText), "ID", "DisplayText");
             }
         }
 
