@@ -102,8 +102,8 @@
         $(document).ready(function () {
             $("#btnEdit").click(function () {
                 var sels = $("#selectedOptions").val();
-                if (!sels || sels.length === 0 ) {
-                    alert("Please select at least one option.");
+                if (!sels || sels.length != 1 ) {
+                    alert("Please select one option to edit.");
                     return;
                 }
                 var selectedIdsString = sels.join(",");
