@@ -13,7 +13,7 @@ public class SalesOrder
     public decimal Price { get; set; }
 
     [Required]
-    public Status Status { get; set; } = Status.Open;
+    public Status Status { get; set; }
 
     [Required]
     public int? CustomerID { get; set; }
