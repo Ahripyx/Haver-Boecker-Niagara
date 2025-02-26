@@ -15,6 +15,7 @@ using System.Security.AccessControl;
 using OfficeOpenXml.Style;
 using OfficeOpenXml;
 using System.Drawing;
+using SQLitePCL;
 
 
 namespace Haver_Boecker_Niagara.Controllers
@@ -30,7 +31,7 @@ namespace Haver_Boecker_Niagara.Controllers
         public async Task<IActionResult> Index(
             string? searchOrderNo,
             string? searchCustomer,
-            string? searchStatus,
+            Status? searchStatus,
             int? page,
             int? pageSizeID,
             string? actionButton,
@@ -38,7 +39,7 @@ namespace Haver_Boecker_Niagara.Controllers
             string sortField = "OrderNumber"
         )
         {
-            string[] sortOptions = { "OrderNumber", "CustomerName", "Status", "Price" };
+            string[] sortOptions = { "OrderNumber", "CustomerName" };
             ViewData["Filtering"] = "btn-outline-secondary";
             int filterCount = 0;
             var salesOrders = _context.SalesOrders
@@ -56,19 +57,20 @@ namespace Haver_Boecker_Niagara.Controllers
 
             if (!string.IsNullOrEmpty(searchOrderNo))
             {
-                salesOrders = salesOrders.Where(s => s.OrderNumber.Contains(searchOrderNo));
+                salesOrders = salesOrders.Where(s => s.OrderNumber.ToLower().Contains(searchOrderNo.ToLower()));
                 filterCount++;
             }
             if (!string.IsNullOrEmpty(searchCustomer))
             {
-                salesOrders = salesOrders.Where(s => s.Customer.Name.Contains(searchCustomer));
+                salesOrders = salesOrders.Where(s => s.Customer.Name.ToLower().Contains(searchCustomer.ToLower()));
                 filterCount++;
             }
-            if (!string.IsNullOrEmpty(searchStatus))
+            if (searchStatus != null)
             {
-                salesOrders = salesOrders.Where(s => s.Status.Contains(searchStatus));
+                salesOrders = salesOrders.Where(s => s.Status == searchStatus);
                 filterCount++;
             }
+
 
             if (filterCount > 0)
             {
@@ -95,18 +97,13 @@ namespace Haver_Boecker_Niagara.Controllers
                 "CustomerName" => sortDirection == "asc"
                     ? salesOrders.OrderBy(s => s.Customer.Name)
                     : salesOrders.OrderByDescending(s => s.Customer.Name),
-                "Status" => sortDirection == "asc"
-                    ? salesOrders.OrderBy(s => s.Status)
-                    : salesOrders.OrderByDescending(s => s.Status),
-                "Price" => sortDirection == "asc"
-                    ? salesOrders.OrderBy(s => s.Price)
-                    : salesOrders.OrderByDescending(s => s.Price),
-                _ => salesOrders.OrderBy(s => s.OrderNumber)
+                _ => salesOrders
             };
 
             ViewData["SortField"] = sortField;
             ViewData["SortDirection"] = sortDirection;
-
+            var opts = new[] { Status.Open, Status.Closed };
+            ViewData["Statuses"] = new SelectList(opts, searchStatus);
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
 
@@ -128,7 +125,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 .Include(s => s.Customer)
                 .Include(s => s.EngineeringPackage)
                 .Include(s => s.Machines)
-                .Include(s => s.PurchaseOrders)
+                .Include(s => s.PurchaseOrders!).ThenInclude(p => p.Vendor)
                 .FirstOrDefaultAsync(m => m.SalesOrderID == id);
             if (salesOrder == null)
             {
@@ -149,12 +146,10 @@ namespace Haver_Boecker_Niagara.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string[] selectedOptions,
-            [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] SalesOrder salesOrder,
-            List<int> SelectedPurchaseOrderIds)
+        public async Task<IActionResult> Create(
+            [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] SalesOrder salesOrder, string? chkAddPO = "off")
 
         {
-            UpdatePurchaseOrders(selectedOptions, salesOrder);
             if (ModelState.IsValid)
             {
                 DateTime today = DateTime.Today;
@@ -176,25 +171,14 @@ namespace Haver_Boecker_Niagara.Controllers
                 _context.SalesOrders.Add(salesOrder);
                 await _context.SaveChangesAsync();
 
-                if (SelectedPurchaseOrderIds != null && SelectedPurchaseOrderIds.Any())
+                if (chkAddPO == "on")
                 {
-                    foreach (var purchaseOrderId in SelectedPurchaseOrderIds)
-                    {
-                        var purchaseOrder = await _context.PurchaseOrders.FindAsync(purchaseOrderId);
-                        if (purchaseOrder != null)
-                        {
-                            salesOrder.PurchaseOrders.Add(purchaseOrder);
-                        }
-                    }
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Edit), new { ID = salesOrder.SalesOrderID });
                 }
-
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
-            ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
-            PopulatePurchaseOrders(salesOrder);
             return View(salesOrder);
         }
         // GET: SalesOrders/Edit/5
@@ -205,23 +189,33 @@ namespace Haver_Boecker_Niagara.Controllers
                 return NotFound();
             }
 
-            var salesOrder = await _context.SalesOrders.FindAsync(id);
+            var salesOrder = await _context.SalesOrders.Include(p => p.PurchaseOrders).FirstOrDefaultAsync(p => p.SalesOrderID == id);
             if (salesOrder == null)
             {
                 return NotFound();
             }
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
-            ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
-
+            ViewData["VendorID"] = new SelectList(_context.Vendors, "VendorID", "Name");
             PopulatePurchaseOrders(salesOrder);
 
             return View(salesOrder);
         }
 
+        public IActionResult CreatePurchaseOrder([Bind("PurchaseOrderNumber,PODueDate,VendorID")] PurchaseOrder purchaseOrder,
+            [Bind("SalesOrderID")] SalesOrderVM salesOrderVM)
+        {
+            if (ModelState.IsValid)
+            {
+                purchaseOrder.SalesOrderID = salesOrderVM.SalesOrderID;
+                _context.PurchaseOrders.Add(purchaseOrder);
+                _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Edit), new { ID = salesOrderVM.SalesOrderID });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Edit(int id, string[] selectedOptions, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,EngineeringPackageID")] SalesOrder salesOrder)
+        public async Task<IActionResult> Edit(int id, string[] selectedOptions, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes,EngineeringPackageID")] SalesOrder salesOrder)
         {
             if (id != salesOrder.SalesOrderID)
             {
@@ -399,7 +393,6 @@ namespace Haver_Boecker_Niagara.Controllers
             var currentOptionHS = new HashSet<int>(salesOrder.PurchaseOrders.Select(p => p.PurchaseOrderID));
 
             var selected = new List<ListOptionVM>();
-            var available = new List<ListOptionVM>();
             foreach (var p in allOptions)
             {
                 if (currentOptionHS.Contains(p.PurchaseOrderID))
@@ -410,21 +403,12 @@ namespace Haver_Boecker_Niagara.Controllers
                         DisplayText = p.PurchaseOrderNumber
                     });
                 }
-                else
-                {
-                    available.Add(new ListOptionVM
-                    {
-                        ID = p.PurchaseOrderID,
-                        DisplayText = p.PurchaseOrderNumber
-                    });
-                }
 
                 ViewData["selOpts"] = new MultiSelectList(selected.OrderBy(p => p.DisplayText), "ID", "DisplayText");
-                ViewData["availOpts"] = new MultiSelectList(available.OrderBy(p => p.DisplayText), "ID", "DisplayText");
             }
         }
 
-        private void UpdatePurchaseOrders(string[] selectedOptions, SalesOrder salesOrderToUpdate)
+        private async void UpdatePurchaseOrders(string[] selectedOptions, SalesOrder salesOrderToUpdate)
         {
             if (selectedOptions == null)
             {
@@ -433,32 +417,19 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var selectedOptionsHS = new HashSet<string>(selectedOptions);
-            var currentOptionsHS = new HashSet<int>(salesOrderToUpdate.PurchaseOrders.Select(p => p.PurchaseOrderID));
-            foreach (var p in _context.PurchaseOrders)
+            var currentOptionsHS = new HashSet<int>(await _context.PurchaseOrders.Where(p => p.SalesOrderID == salesOrderToUpdate.SalesOrderID).Select(p => p.PurchaseOrderID).ToListAsync());
+            foreach (int p in currentOptionsHS)
             {
-                if (selectedOptionsHS.Contains(p.PurchaseOrderID.ToString()))
+                
+                if (!selectedOptionsHS.Contains(p.ToString()))
                 {
-                    if (!currentOptionsHS.Contains(p.PurchaseOrderID))
+                    PurchaseOrder? purchaseOrderToRemove = await _context.PurchaseOrders.FindAsync(p);
+                    if (purchaseOrderToRemove != null)
                     {
-                        salesOrderToUpdate.PurchaseOrders.Add(new PurchaseOrder
-                        {
-                            PurchaseOrderID = p.PurchaseOrderID,
-                            SalesOrderID = salesOrderToUpdate.SalesOrderID
-                        });
+                        _context.Remove(purchaseOrderToRemove);
                     }
                 }
-                else
-                {
-                    if (currentOptionsHS.Contains(p.PurchaseOrderID))
-                    {
-                        PurchaseOrder? purchaseOrderToRemove = salesOrderToUpdate.PurchaseOrders
-                            .FirstOrDefault(p => p.PurchaseOrderID == p.PurchaseOrderID);
-                        if (purchaseOrderToRemove != null)
-                        {
-                            _context.Remove(purchaseOrderToRemove);
-                        }
-                    }
-                }
+                
             }
         }
     }

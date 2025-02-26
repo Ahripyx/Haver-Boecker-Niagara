@@ -13,8 +13,7 @@ public class SalesOrder
     public decimal Price { get; set; }
 
     [Required]
-    [StringLength(20, ErrorMessage = "Status cannot exceed 20 characters.")]
-    public string Status { get; set; }
+    public Status Status { get; set; } = Status.Open;
 
     [Required]
     public int? CustomerID { get; set; }

@@ -57,51 +57,61 @@
 
 <div>
     <h4>Machines</h4>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Serial Number</th>
-                <th>Internal PO Number</th>
-                <th>Machine Size</th>
-                <th>Machine Class</th>
-                <th>Machine Desc</th>
-                <th>Budgeted Assembly Hours</th>
-                <th>Actual Assembly Hours</th>
-                <th>Actual Rework Hours</th>
-                <th>Media</th>
-                <th>Spare Parts</th>
-                <th>Coating or Lining</th>
-                <th>Base</th>
-                <th>Air Seal</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var machine in Model.Machines)
-            {
+    @if (Model.Machines.Count > 0)
+    {
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@machine.SerialNumber</td>
-                    <td>@machine.InternalPONumber</td>
-                    <td>@machine.MachineSize</td>
-                    <td>@machine.MachineClass</td>
-                    <td>@machine.MachineSizeDesc</td>
-                    <td>@machine.BudgetedAssemblyHours Hours</td>
-                    <td>@machine.ActualAssemblyHours Hours</td>
-                    <td>@machine.ActualReworkHours Hours</td>
-                    <td>@(@machine.Media ? "❌" : "✅")</td>
-                    <td>@(@machine.SparePartsMedia ? "❌" : "✅")</td>
-                    <td>@(@machine.CoatingOrLining ? "❌" : "✅")</td>
-                    <td>@(@machine.Base ? "❌" : "✅")</td>
-                    <td>@(@machine.AirSeal ? "❌" : "✅")</td>
+                    <th>Serial Number</th>
+                    <th>Internal PO Number</th>
+                    <th>Machine Size</th>
+                    <th>Machine Class</th>
+                    <th>Machine Desc</th>
+                    <th>Budgeted Assembly Hours</th>
+                    <th>Actual Assembly Hours</th>
+                    <th>Actual Rework Hours</th>
+                    <th>Media</th>
+                    <th>Spare Parts</th>
+                    <th>Coating or Lining</th>
+                    <th>Base</th>
+                    <th>Air Seal</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var machine in Model.Machines)
+                {
+                    <tr>
+                        <td>@machine.SerialNumber</td>
+                        <td>@machine.InternalPONumber</td>
+                        <td>@machine.MachineSize</td>
+                        <td>@machine.MachineClass</td>
+                        <td>@machine.MachineSizeDesc</td>
+                        <td>@machine.BudgetedAssemblyHours Hours</td>
+                        <td>@machine.ActualAssemblyHours Hours</td>
+                        <td>@machine.ActualReworkHours Hours</td>
+                        <td>@(@machine.Media ? "❌" : "✅")</td>
+                        <td>@(@machine.SparePartsMedia ? "❌" : "✅")</td>
+                        <td>@(@machine.CoatingOrLining ? "❌" : "✅")</td>
+                        <td>@(@machine.Base ? "❌" : "✅")</td>
+                        <td>@(@machine.AirSeal ? "❌" : "✅")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else {
+        <p>There are no machines associated with this order.</p>
+    }
+    
 </div>
 
 
 <div>
     <h4>Notes</h4>
     <div class="row">
+        <div class="form-group">
+            <label class="form-label text-decoration-underline">Sales Order notes</label>
+            <p>@Model.ExtraNotes</p>
+        </div>
         @foreach (var machine in Model.Machines)
         {
             <div class="col-md-6 mb-4">

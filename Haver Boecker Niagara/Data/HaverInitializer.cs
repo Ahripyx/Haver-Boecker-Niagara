@@ -127,7 +127,7 @@ namespace Haver_Boecker_Niagara.Data
                                 {
                                     OrderNumber = $"SO-100{i}",
                                     Price = i * 10000,
-                                    Status = "Confirmed",
+                                    Status = Status.Closed,
                                     CustomerID = customers[i - 1].CustomerID,
                                     EngineeringPackageID = engPackages[i - 1].EngineeringPackageID,
                                     CompletionDate = DateTime.UtcNow.AddDays(5),

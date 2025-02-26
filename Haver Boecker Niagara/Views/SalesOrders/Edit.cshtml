@@ -27,7 +27,9 @@
 
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(Status))">
+                    
+                </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
 
@@ -54,32 +56,35 @@
                 <span asp-validation-for="ExtraNotes" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="EngineeringPackageID" class="control-label"></label>
-                <input asp-for="EngineeringPackageID" class="form-control" readonly />
+            <div class="form-group mt-1">
+                <label asp-for="EngineeringPackageID" class="control-label">Engineering Package ID:</label><strong>  @Model.EngineeringPackageID</strong>
             </div>
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="control-label"> Purchase Orders Selected</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
-                            <strong>-</strong>
+            <div class="form-group col-md-12 mt-2">
+                <div class="d-flex justify-content-between">
+                    <label class="control-label">Related Purchase Orders</label>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" id="btnDelete" class="btn btn-danger btn-sm">
+                            <strong>Delete</strong>
                         </button>
-                        @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label class="control-label"> Choose Purchase Orders</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
-                            <strong>+</strong>
+                        <button type="button" title="Click to create a new Purchase Order." data-bs-toggle="modal" data-bs-target="#purchaseOrderModal" class="btn btn-primary btn-sm">
+                            <strong>Create</strong>
                         </button>
-                        @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
                     </div>
+                </div>
+                <div class="form-group col-md-12">
+                        
+                    @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
                 </div>
             </div>
 
             <div class="mt-2 form-group">
-                <input type="submit" value="Save" class="btn btn-primary" id="btnEdit" />
+                <input type="submit" value="Save" class="btn btn-primary" id="btnSubmit" />
             </div>
+
         </form>
+
+        <partial name="_purchaseOrderModal" model=@(new PurchaseOrder { SalesOrderID = Model.SalesOrderID })/>
+
     </div>
 </div>
 
@@ -91,5 +96,5 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script src="~/js/multiselect.js"></script>
+    <script src="~/js/managePurchaseOrder.js"></script>
 }
