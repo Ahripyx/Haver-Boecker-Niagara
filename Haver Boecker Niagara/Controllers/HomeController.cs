@@ -19,8 +19,8 @@ namespace Haver_Boecker_Niagara.Controllers
         public IActionResult Index()
         {
             var TotalCustomers = _context.Customers.Count();
-            var confirmedSalesOrders = _context.SalesOrders.Count(g => g.Status == Status.Closed);
-            var pendingSalesOrders = _context.SalesOrders.Count(g => g.Status == Status.Open);
+            var confirmedSalesOrders = _context.SalesOrders.Where(g => g.Status == Status.Closed).Count();
+            var pendingSalesOrders = _context.SalesOrders.Where(g => g.Status == Status.Open).Count();
             var  totalVendors = _context.Vendors.Count();
             var totalMachines = _context.Machines.Count();
             
@@ -32,6 +32,7 @@ namespace Haver_Boecker_Niagara.Controllers
             var customerCountry = _context.Customers
                 .GroupBy(g => g.Country)
                 .ToDictionary(g => g.Key, g => g.Count());
+
             var model = new DashboardViewModel
             {
                 TotalCustomers = TotalCustomers,
