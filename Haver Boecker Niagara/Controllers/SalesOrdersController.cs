@@ -147,7 +147,7 @@ namespace Haver_Boecker_Niagara.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes")] SalesOrder salesOrder, string? chkAddPO = "off")
+            [Bind("Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes")] SalesOrder salesOrder, string? chkAddPO = "off", string? chkAddMachine = "off")
 
         {
             if (ModelState.IsValid)
@@ -171,7 +171,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 _context.SalesOrders.Add(salesOrder);
                 await _context.SaveChangesAsync();
 
-                if (chkAddPO == "on")
+                if (chkAddPO == "on" || chkAddMachine == "on")
                 {
                     return RedirectToAction(nameof(Edit), new { ID = salesOrder.SalesOrderID });
                 }
@@ -189,7 +189,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 return NotFound();
             }
 
-            var salesOrder = await _context.SalesOrders.Include(p => p.PurchaseOrders).FirstOrDefaultAsync(p => p.SalesOrderID == id);
+            var salesOrder = await _context.SalesOrders.Include(p => p.PurchaseOrders).Include(p => p.Machines).FirstOrDefaultAsync(p => p.SalesOrderID == id);
             if (salesOrder == null)
             {
                 return NotFound();
@@ -197,18 +197,18 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
             ViewData["VendorID"] = new SelectList(_context.Vendors, "VendorID", "Name");
             PopulatePurchaseOrders(salesOrder);
-
+            PopulateMachines(salesOrder);
             return View(salesOrder);
         }
 
-        public IActionResult CreatePurchaseOrder([Bind("PurchaseOrderNumber,PODueDate,VendorID")] PurchaseOrder purchaseOrder,
+        public async Task<IActionResult> CreatePurchaseOrder([Bind("PurchaseOrderNumber,PODueDate,VendorID")] PurchaseOrder purchaseOrder,
             [Bind("SalesOrderID")] SalesOrderVM salesOrderVM)
         {
             if (ModelState.IsValid)
             {
                 purchaseOrder.SalesOrderID = salesOrderVM.SalesOrderID;
                 _context.PurchaseOrders.Add(purchaseOrder);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Edit), new { ID = salesOrderVM.SalesOrderID });
         }
@@ -236,7 +236,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return RedirectToAction(nameof(Edit), new { ID = salesOrderVM.SalesOrderID });
         }
 
-        public ActionResult SetViewBag(string selectedOptions)
+        public ActionResult SetPOViewBag(string selectedOptions)
         {
             if (String.IsNullOrEmpty(selectedOptions))
             {
@@ -255,22 +255,108 @@ namespace Haver_Boecker_Niagara.Controllers
             }
         }
 
+        public async Task<IActionResult> EditMachine(int id, [Bind("MachineID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] Machine machine)
+        {
+            if (ModelState.IsValid)
+            {
+                var oldMachine = await _context.Machines
+                    .Include(p => p.SalesOrders)
+                    .Where(p => p.MachineID == machine.MachineID)
+                    .FirstOrDefaultAsync();
+
+                var salesOrder = await _context.SalesOrders.FindAsync(id);
+
+                oldMachine.SerialNumber = machine.SerialNumber;
+                oldMachine.InternalPONumber = machine.InternalPONumber;
+                oldMachine.MachineSize = machine.MachineSize;
+                oldMachine.MachineClass = machine.MachineClass;
+                oldMachine.MachineSizeDesc = machine.MachineSizeDesc;
+                oldMachine.Media = machine.Media;
+                oldMachine.SparePartsMedia = machine.SparePartsMedia;
+                oldMachine.Base = machine.Base;
+                oldMachine.AirSeal = machine.AirSeal;
+                oldMachine.CoatingOrLining = machine.CoatingOrLining;
+                oldMachine.Disassembly = machine.Disassembly;
+
+                _context.Machines.Update(oldMachine);
+
+                if (!oldMachine.SalesOrders.Contains(salesOrder))
+                {
+                    _context.MachineSalesOrders.Add(new MachineSalesOrder { MachineID = oldMachine.MachineID, SalesOrderID = id });
+                }
+                await _context.SaveChangesAsync();
+
+            }
+            return RedirectToAction(nameof(Edit), new { ID = id });
+        }
+
+        public ActionResult SetMachineViewBag(string selectedOptions, string id)
+        {
+            if (String.IsNullOrEmpty(selectedOptions))
+            {
+                return BadRequest();
+            }
+            string[] selectedOptions2 = selectedOptions.Split(',');
+            if (selectedOptions2.Count() == 1)
+            {
+                var machine = _context.Machines.Where(p => p.MachineID == int.Parse(selectedOptions2[0])).FirstOrDefault();
+                ViewData["id"] = id;
+                return PartialView("_machineModalEdit", machine);
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> CreateMachine([Bind("SalesOrderID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] MachineVM machine)
+        {
+            if (ModelState.IsValid)
+            {
+                var realMachine = new Machine
+                {
+                    SerialNumber = machine.SerialNumber,
+                    InternalPONumber = machine.InternalPONumber,
+                    MachineSize = machine.MachineSize,
+                    MachineClass = machine.MachineClass,
+                    MachineSizeDesc = machine.MachineSizeDesc,
+                    Media = machine.Media,
+                    SparePartsMedia = machine.SparePartsMedia,
+                    Base = machine.Base,
+                    AirSeal = machine.AirSeal,
+                    CoatingOrLining = machine.CoatingOrLining,
+                    Disassembly = machine.Disassembly
+                };
+                _context.Machines.Add(realMachine);
+                await _context.SaveChangesAsync();
+
+                _context.MachineSalesOrders.Add(new MachineSalesOrder { MachineID = realMachine.MachineID, SalesOrderID = machine.SalesOrderID });
+                await _context.SaveChangesAsync();
+
+            }
+            return RedirectToAction(nameof(Edit), new { ID = machine.SalesOrderID });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, string[] selectedOptions, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes,EngineeringPackageID")] SalesOrder salesOrder)
+        public async Task<IActionResult> Edit(int id, string[] selectedPOOptions, string[] selectedMachineOptions, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes,EngineeringPackageID")] SalesOrder salesOrder)
         {
             if (id != salesOrder.SalesOrderID)
             {
                 return NotFound();
             }
 
-            UpdatePurchaseOrders(selectedOptions, salesOrder);
+            UpdatePurchaseOrders(selectedPOOptions, salesOrder);
+            UpdateMachines(selectedMachineOptions, salesOrder);
 
             if (ModelState.IsValid)
             {
                 try
                 {
                     var existingOrder = await _context.SalesOrders
+                        .Include(p => p.EngineeringPackage)
+                        .Include(p => p.Machines)
                         .FirstOrDefaultAsync(s => s.SalesOrderID == id);
 
                     if (existingOrder == null)
@@ -307,7 +393,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
             ViewData["PurchaseOrders"] = new SelectList(_context.PurchaseOrders, "PurchaseOrderID", "PurchaseOrderNumber");
             PopulatePurchaseOrders(salesOrder);
-
+            PopulateMachines(salesOrder);
             return View(salesOrder);
         }
 
@@ -429,6 +515,37 @@ namespace Haver_Boecker_Niagara.Controllers
             return _context.SalesOrders.Any(e => e.SalesOrderID == id);
         }
 
+        private void PopulateMachines(SalesOrder salesOrder)
+        {
+            var allOptions = _context.Machines;
+            var currentOptionHS = new HashSet<int>(salesOrder.Machines.Select(p => p.MachineID));
+
+            var selected = new List<ListOptionVM>();
+            var available = new List<ListOptionVM>();
+            foreach (var p in allOptions)
+            {
+                if (currentOptionHS.Contains(p.MachineID))
+                {
+                    selected.Add(new ListOptionVM
+                    {
+                        ID = p.MachineID,
+                        DisplayText = p.SerialNumber
+                    });
+                } else
+                {
+                    available.Add(new ListOptionVM
+                    {
+                        ID = p.MachineID,
+                        DisplayText = p.SerialNumber
+                    });
+                }
+
+                
+            }
+            ViewData["selMachineOpts"] = new SelectList(selected.OrderBy(p => p.DisplayText), "ID", "DisplayText");
+            ViewData["availMachineOpts"] = new SelectList(available.OrderBy(p => p.DisplayText), "ID", "DisplayText");
+        }
+
         private void PopulatePurchaseOrders(SalesOrder salesOrder)
         {
             var allOptions = _context.PurchaseOrders;
@@ -446,7 +563,7 @@ namespace Haver_Boecker_Niagara.Controllers
                     });
                 }
 
-                ViewData["selOpts"] = new SelectList(selected.OrderBy(p => p.DisplayText), "ID", "DisplayText");
+                ViewData["selPOOpts"] = new SelectList(selected.OrderBy(p => p.DisplayText), "ID", "DisplayText");
             }
         }
 
@@ -459,7 +576,12 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var selectedOptionsHS = new HashSet<string>(selectedOptions);
-            var currentOptionsHS = new HashSet<int>(await _context.PurchaseOrders.Where(p => p.SalesOrderID == salesOrderToUpdate.SalesOrderID).Select(p => p.PurchaseOrderID).ToListAsync());
+            var currentOptionsHS = new HashSet<int>(
+                await _context.PurchaseOrders
+                .Where(p => p.SalesOrderID == salesOrderToUpdate.SalesOrderID)
+                .Select(p => p.PurchaseOrderID)
+                .ToListAsync()
+            );
             foreach (int p in currentOptionsHS)
             {
                 
@@ -472,6 +594,46 @@ namespace Haver_Boecker_Niagara.Controllers
                     }
                 }
                 
+            }
+        }
+
+        private async void UpdateMachines(string[] selectedOptions, SalesOrder salesOrderToUpdate)
+        {
+            if (selectedOptions == null)
+            {
+                salesOrderToUpdate.Machines = new List<Machine>();
+                return;
+            }
+
+            var selectedOptionsHS = new HashSet<string>(selectedOptions);
+            var currentOptionsHS = new HashSet<int>(
+                await _context.MachineSalesOrders
+                .Where(p => p.SalesOrderID == salesOrderToUpdate.SalesOrderID)
+                .Select(p => p.MachineID)
+                .ToListAsync()
+                );
+            foreach (var p in _context.Machines)
+            {
+                if (selectedOptionsHS.Contains(p.MachineID.ToString()))
+                {
+                    if (!currentOptionsHS.Contains(p.MachineID))
+                    {
+                        _context.MachineSalesOrders.Add(new MachineSalesOrder { MachineID = p.MachineID, SalesOrderID = salesOrderToUpdate.SalesOrderID });
+                    }
+                }
+                else
+                {
+                    if (currentOptionsHS.Contains(p.MachineID))
+                    {
+                        MachineSalesOrder? machineToRemove = await _context.MachineSalesOrders
+                            .Where(e => e.MachineID == p.MachineID && salesOrderToUpdate.SalesOrderID == e.SalesOrderID)
+                            .FirstOrDefaultAsync();
+                        if (machineToRemove != null)
+                        {
+                            _context.MachineSalesOrders.Remove(machineToRemove);
+                        }
+                    }
+                }
             }
         }
     }

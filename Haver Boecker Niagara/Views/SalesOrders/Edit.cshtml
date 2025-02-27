@@ -63,10 +63,10 @@
                 <div class="d-flex justify-content-between">
                     <label class="control-label">Related Purchase Orders</label>
                     <div class="d-flex justify-content-end">
-                        <button type="button" id="btnDelete" title="Click to delete the selected Purchase Order." class="btn btn-danger btn-sm">
+                        <button type="button" id="btnDeletePO" title="Click to delete the selected Purchase Order." class="btn btn-danger btn-sm">
                             <strong>Delete</strong>
                         </button>
-                        <button asp-action="SetViewBag" type="button" id="btnEdit" title="Click to edit the selected Purchase Order." class="btn btn-primary btn-sm">
+                        <button asp-action="SetPOViewBag" type="button" id="btnEditPO" title="Click to edit the selected Purchase Order." class="btn btn-primary btn-sm">
                             <strong>Edit</strong>
                         </button>
                         <button type="button" title="Click to create a new Purchase Order." data-bs-toggle="modal" data-bs-target="#purchaseOrderModal" class="btn btn-success btn-sm">
@@ -75,10 +75,42 @@
                     </div>
                 </div>
                 <div class="form-group col-md-12">
-                    @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 8, @class = "form-control" })
+                    @Html.ListBox("selectedPOOptions", (MultiSelectList)ViewBag.selPOOpts, new { @size = 8, @class = "form-control" })
                 </div>
             </div>
+            <div class="col d-flex">
+                <div class="form-group col-md-12 mt-2">
+                    <div class="d-flex justify-content-between">
+                        <label class="control-label">Related Machines</label>
+                        <div class="d-flex justify-content-end">
+                            <button type="button" id="btnLeft" title="Click to remove the selected Machine" class="btn btn-danger btn-sm">
+                                <strong>Remove</strong>
+                            </button>
+                            <button asp-action="SetMachineViewBag" type="button" id="btnEditMachine" title="Click to edit the selected Machine." class="btn btn-primary btn-sm">
+                                <strong>Edit</strong>
+                            </button>
+                            <button type="button" title="Click to create a new Machine." data-bs-toggle="modal" data-bs-target="#machineModal" data-backdrop="static" class="btn btn-success btn-sm">
+                                <strong>Create</strong>
+                            </button>
+                        </div>
+                    </div>
+                    @Html.ListBox("selectedMachineOptions", (MultiSelectList)ViewBag.selMachineOpts, new { @size = 8, @class = "form-control" })
 
+
+
+                </div>
+                <div class="form-group col-md-12 mx-4">
+                    <div class="d-flex justify-content-between">
+                        <label class="control-label">All Machines</label>
+                        <button type="button" id="btnRight" title="Click to add the selected Machine" class="btn btn-success btn-sm">
+                            <strong>Add</strong>
+                        </button>
+                    </div>
+                    @Html.ListBox("availableMachineOptions", (MultiSelectList)ViewBag.availMachineOpts, new { @size = 8, @class = "form-control" })
+
+                </div>
+            </div>
+            
             <div class="mt-2 form-group">
                 <input type="submit" value="Save" class="btn btn-primary" id="btnSubmit" />
             </div>
@@ -86,7 +118,9 @@
         </form>
 
         <partial name="_purchaseOrderModal" model=@(new PurchaseOrder { SalesOrderID = Model.SalesOrderID })/>
-        <div id="partialContainer"></div>
+        <partial name="_machineModal" model=@(new MachineVM { SalesOrderID = Model.SalesOrderID }) />
+        <div id="partialPOContainer"></div>
+        <div id="partialMachineContainer"></div>
     </div>
 </div>
 
@@ -100,21 +134,48 @@
     }
     <script>
         $(document).ready(function () {
-            $("#btnEdit").click(function () {
-                var sels = $("#selectedOptions").val();
+            $("#btnEditPO").click(function () {
+                var sels = $("#selectedPOOptions").val();
                 if (!sels || sels.length != 1 ) {
                     alert("Please select one option to edit.");
                     return;
                 }
                 var selectedIdsString = sels.join(",");
                 $.ajax({
-                    url: '@Url.Action("SetViewBag", "SalesOrders")',
+                    url: '@Url.Action("SetPOViewBag", "SalesOrders")',
                     type: 'GET',
                     data: { selectedOptions: selectedIdsString },
                     traditional: true,
                     success: function (data) {
-                        $("#partialContainer").html(data);
+                        $("#partialPOContainer").html(data);
                         var modalElement = document.getElementById('purchaseOrderModalEdit');
+                        if (modalElement) {
+                            var myModal = new bootstrap.Modal(modalElement, { backdrop: 'static' });
+                            myModal.show();
+                        } else {
+                            console.error("Modal element not found!");
+                        }
+                    },
+                    error: function () {
+                        alert("Error loading partial view.");
+                    }
+                });
+            });
+            $("#btnEditMachine").click(function () {
+                var sels = $("#selectedMachineOptions").val();
+                if (!sels || sels.length != 1 ) {
+                    alert("Please select one option to edit.");
+                    return;
+                }
+                var selectedIdsString = sels.join(",");
+                $.ajax({
+                    url: '@Url.Action("SetMachineViewBag", "SalesOrders")',
+                    type: 'GET',
+                    data: { selectedOptions: selectedIdsString, id: @(Url.ActionContext.RouteData.Values["id"]) },
+                    traditional: true,
+                    success: function (data) {
+                        $("#partialMachineContainer").html(data);
+                        var modalElement = document.getElementById('machineModalEdit');
                         if (modalElement) {
                             var myModal = new bootstrap.Modal(modalElement, { backdrop: 'static' });
                             myModal.show();
@@ -130,4 +191,5 @@
         });
     </script>
     <script src="~/js/managePurchaseOrder.js"></script>
+    <script src="~/js/manageMachine.js"></script>
 }

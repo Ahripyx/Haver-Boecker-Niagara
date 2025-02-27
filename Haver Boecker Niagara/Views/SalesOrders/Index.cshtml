@@ -102,26 +102,31 @@
                         </td>
 
                         <td class="my-auto">
-                            @if (item.EngineeringPackage.Engineers.Count == 0)
-                            {
-                                <span class="d-block">Eng: None</span>
-                            }
-                            else
-                            {
-                                string engineers = "";
-
-                                @foreach (var eng in item.EngineeringPackage.Engineers)
+                            @if (item.EngineeringPackage == null) {
+                                <span>No Engineering Package</span>
+                            } else {
+                                @if (item.EngineeringPackage.Engineers.Count == 0)
                                 {
-                                    engineers += @eng.Initials + "/";
+                                    <span class="d-block">Eng: None</span>
                                 }
-                                <div>@engineers.Remove(@engineers.Length - 1)</div>
+                                else
+                                {
+                                    string engineers = "";
 
+                                    @foreach (var eng in item.EngineeringPackage.Engineers)
+                                    {
+                                        engineers += @eng.Initials + "/";
+                                    }
+                                    <div>@engineers.Remove(@engineers.Length - 1)</div>
+
+                                }
+                                <div>Est. A: @item.EngineeringPackage.ApprovalDrawingDate</div>
+                                <div>Est. R: @item.EngineeringPackage.PackageReleaseDate</div>
+
+                                <div>Act. A: @item.EngineeringPackage.ActualApprovalSummary</div>
+                                <div>Act. R: @item.EngineeringPackage.ActualReleaseSummary</div>
                             }
-                            <div>Est. A: @item.EngineeringPackage.ApprovalDrawingDate</div>
-                            <div>Est. R: @item.EngineeringPackage.PackageReleaseDate</div>
-
-                            <div>Act. A: @item.EngineeringPackage.ActualApprovalSummary</div>
-                            <div>Act. R: @item.EngineeringPackage.ActualReleaseSummary</div>
+                            
 
                         </td>
 

@@ -1,12 +1,12 @@
-﻿let DDLforChosen = document.getElementById("selectedOptions");
+﻿let DDLforChosenPO = document.getElementById("selectedPOOptions");
 
 /*function to switch list items from one ddl to another
 use the sender param for the DDL from which the user is multi-selecting
 use the receiver param for the DDL that gets the options*/
-function removeOptions(event, senderDDL) {
+function removePOOptions(event, senderDDL) {
     //find all selected option tags - selectedOptions becomes a nodelist 
     let senderID = senderDDL.id;
-    let selectedOptions = document.querySelectorAll(`#${senderID} option:checked`);
+    let selectedOptions = senderDDL.querySelectorAll(`#${senderID} option:checked`);
     event.preventDefault();
 
     if (selectedOptions.length === 0) {
@@ -20,9 +20,9 @@ function removeOptions(event, senderDDL) {
 }
 
 //create closures so that we can access the event & the 2 parameters
-let removeOpts = (event) => removeOptions(event, DDLforChosen);
+let removeOpts = (event) => removePOOptions(event, DDLforChosenPO);
 //assign the closures as the event handlers for each button
-document.getElementById("btnDelete").addEventListener("click", removeOpts);
+document.getElementById("btnDeletePO").addEventListener("click", removeOpts);
 document.getElementById("btnSubmit").addEventListener("click", function () {
-    DDLforChosen.childNodes.forEach(opt => opt.selected = "selected");
+    DDLforChosenPO.childNodes.forEach(opt => opt.selected = "selected");
 })

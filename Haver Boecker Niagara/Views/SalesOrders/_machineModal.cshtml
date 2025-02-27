@@ -1,0 +1,83 @@
+﻿<!-- Modal-->
+@model Haver_Boecker_Niagara.Models.MachineVM
+
+<div class="modal fade" id="machineModal" tabindex="-1" role="dialog" aria-labelledby="machineModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="machineModalLabel">Create Machine</h4>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <form>
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="SalesOrderID" />
+
+                            <div class="form-group">
+                                <label asp-for="SerialNumber" class="control-label"></label>
+                                <input asp-for="SerialNumber" class="form-control" />
+                                <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="InternalPONumber" class="control-label"></label>
+                                <input asp-for="InternalPONumber" class="form-control" />
+                                <span asp-validation-for="InternalPONumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="MachineSize" class="control-label"></label>
+                                <input asp-for="MachineSize" class="form-control" />
+                                <span asp-validation-for="MachineSize" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="MachineClass" class="control-label"></label>
+                                <input asp-for="MachineClass" class="form-control" />
+                                <span asp-validation-for="MachineClass" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="MachineSizeDesc" class="control-label"></label>
+                                <input asp-for="MachineSizeDesc" class="form-control" />
+                                <span asp-validation-for="MachineSizeDesc" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="Media" /> @Html.DisplayNameFor(model => model.Media)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="SparePartsMedia" /> @Html.DisplayNameFor(model => model.SparePartsMedia)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="Base" /> @Html.DisplayNameFor(model => model.Base)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="AirSeal" /> @Html.DisplayNameFor(model => model.AirSeal)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="CoatingOrLining" /> @Html.DisplayNameFor(model => model.CoatingOrLining)
+                                </label>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="Disassembly" /> @Html.DisplayNameFor(model => model.Disassembly)
+                                </label>
+                            </div>
+                            <div class="mt-2 form-group">
+                                <button asp-action="CreateMachine" value="Create" class="btn btn-primary" id="btnCreateMachine">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
