@@ -31,31 +31,37 @@ namespace Haver_Boecker_Niagara.Models {
 
         [DisplayName("Description")]
         public string MachineSizeDesc { get; set; }
-
-        [DisplayName("Machine Description")]
-        public string MachineDescription => $"{MachineClass} {MachineSize} {MachineSizeDesc}";
-
+       
+        
         public bool Media { get; set; } = false;
+
+        [DisplayName("Spare Parts/Media")]
         public bool SparePartsMedia { get; set; } = false;
+
         public bool Base { get; set; } = false;
+
+        [DisplayName("Air Seal")]
+
         public bool AirSeal { get; set; } = false;
+
+        [DisplayName("Coating/Lining")]
         public bool CoatingOrLining { get; set; } = false;
         public bool Disassembly { get; set; } = false;
 
-        [DisplayName("Pre-Order")]
+        [DisplayName("Pre-Order Notes")]
         public string? PreOrderNotes { get; set; }
 
-        [DisplayName("Scope")]
+        [DisplayName("Scope Notes")]
         public string? ScopeNotes { get; set; }
 
         [DisplayName("Actual Assembly Hours")]
-        public string? ActualAssemblyHours { get; set; }
+        public int? ActualAssemblyHours { get; set; }
 
         [DisplayName("Actual Rework Hours")]
-        public string? ActualReworkHours { get; set; }
+        public int? ActualReworkHours { get; set; }
 
         [DisplayName("Budgeted Assembly Hours")]
-        public string? BudgetedAssemblyHours { get; set; }
+        public int? BudgetedAssemblyHours { get; set; }
 
         public static MachineVM FromMachine(Machine machine, int salesOrderID)
         {

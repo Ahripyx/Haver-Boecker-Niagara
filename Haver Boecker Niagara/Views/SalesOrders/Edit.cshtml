@@ -13,10 +13,10 @@
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="SalesOrderID" />
+            <input type="hidden" asp-for="OrderNumber" />
 
             <div class="form-group">
-                <label asp-for="OrderNumber" class="control-label"></label>
-                <input asp-for="OrderNumber" class="form-control" readonly />
+                <label asp-for="OrderNumber" class="control-label"></label><span id="OrderNumber">: <strong>@Model.OrderNumber</strong></span>
             </div>
 
             <div class="form-group">

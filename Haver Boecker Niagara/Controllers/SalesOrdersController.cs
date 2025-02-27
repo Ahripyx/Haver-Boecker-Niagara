@@ -255,7 +255,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
         }
 
-        public async Task<IActionResult> EditMachine(int id, [Bind("MachineID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] Machine machine)
+        public async Task<IActionResult> EditMachine(int id, [Bind("MachineID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,BudgetedAssemblyHours,ActualAssemblyHours,ActualReworkHours")] Machine machine)
         {
             if (ModelState.IsValid)
             {
@@ -277,6 +277,11 @@ namespace Haver_Boecker_Niagara.Controllers
                 oldMachine.AirSeal = machine.AirSeal;
                 oldMachine.CoatingOrLining = machine.CoatingOrLining;
                 oldMachine.Disassembly = machine.Disassembly;
+                oldMachine.PreOrderNotes = machine.PreOrderNotes;
+                oldMachine.ScopeNotes = machine.ScopeNotes;
+                oldMachine.BudgetedAssemblyHours = machine.BudgetedAssemblyHours;
+                oldMachine.ActualAssemblyHours = machine.ActualAssemblyHours;
+                oldMachine.ActualReworkHours = machine.ActualReworkHours;
 
                 _context.Machines.Update(oldMachine);
 
@@ -310,7 +315,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
         }
 
-        public async Task<IActionResult> CreateMachine([Bind("SalesOrderID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly")] MachineVM machine)
+        public async Task<IActionResult> CreateMachine([Bind("SalesOrderID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,BudgetedAssemblyHours,ActualAssemblyHours,ActualReworkHours")] MachineVM machine)
         {
             if (ModelState.IsValid)
             {
@@ -326,7 +331,12 @@ namespace Haver_Boecker_Niagara.Controllers
                     Base = machine.Base,
                     AirSeal = machine.AirSeal,
                     CoatingOrLining = machine.CoatingOrLining,
-                    Disassembly = machine.Disassembly
+                    Disassembly = machine.Disassembly,
+                    PreOrderNotes = machine.PreOrderNotes,
+                    ScopeNotes = machine.ScopeNotes,
+                    BudgetedAssemblyHours = machine.BudgetedAssemblyHours,
+                    ActualAssemblyHours = machine.ActualAssemblyHours,
+                    ActualReworkHours = machine.ActualReworkHours
                 };
                 _context.Machines.Add(realMachine);
                 await _context.SaveChangesAsync();

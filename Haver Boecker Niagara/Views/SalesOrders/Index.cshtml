@@ -51,7 +51,7 @@
                 <tr>
                     <th>
                         <button type="submit" name="actionButton" value="OrderNumber" class="btn p-0 fw-bold"
-                                formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "OrderNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "OrderNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
                             Order # @if (ViewData["SortField"] as string == "OrderNumber")
                             {
                                 <span>@(ViewData["SortDirection"] as string == "asc" ? "▼" : "▲")</span>
@@ -60,7 +60,7 @@
                     </th>
                     <th>
                         <button type="submit" name="actionButton" value="CustomerName" class="btn p-0 fw-bold"
-                                formaction="@Url.Action("Index", new { sortField = "CustomerName", sortDirection = (ViewData["SortField"] as string == "CustomerName" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                        formaction="@Url.Action("Index", new { sortField = "CustomerName", sortDirection = (ViewData["SortField"] as string == "CustomerName" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
                             Customer @if (ViewData["SortField"] as string == "CustomerName")
                             {
                                 <span>@(ViewData["SortDirection"] as string == "asc" ? "▼" : "▲")</span>
@@ -120,13 +120,13 @@
                                     <div>@engineers.Remove(@engineers.Length - 1)</div>
 
                                 }
-                                <div>Est. A: @item.EngineeringPackage.ApprovalDrawingDate</div>
-                                <div>Est. R: @item.EngineeringPackage.PackageReleaseDate</div>
+                                <div>Est. A: @item.EngineeringPackage.EstimatedApprovalSummary</div>
+                                <div>Est. R: @item.EngineeringPackage.EstimatedReleaseSummary</div>
 
                                 <div>Act. A: @item.EngineeringPackage.ActualApprovalSummary</div>
                                 <div>Act. R: @item.EngineeringPackage.ActualReleaseSummary</div>
                             }
-                            
+
 
                         </td>
 
@@ -137,16 +137,33 @@
                             }
                         </td>
                         <td>
-                            @foreach (var vendor in item.PurchaseOrders)
-                            {
-                                @if (@vendor.Vendor is null)
+                            @{
+                                Dictionary<string, int> vendors = new Dictionary<string, int>();
+
+                            
+                                foreach (var purchaseOrder in item.PurchaseOrders)
                                 {
+                                    var vendorName = purchaseOrder.Vendor.Name;
+                                    if (!vendors.ContainsKey(vendorName)) {
+                                        vendors.Add(vendorName, item.PurchaseOrders.Where(p => p.Vendor.Name == vendorName).Count());
+                                    }
+                                }
+                                if (vendors == null) {
                                     <div>N/A</div>
+                                } else {
+                                    foreach (var vendor in vendors)
+                                    {
+                                        @if (vendor.Value == 1)
+                                        {
+                                            <div>N/A</div>
+                                        }
+                                        else
+                                        {
+                                            <div>@vendor.Key (x@(vendor.Value))</div>
+                                        }
+                                    }
                                 }
-                                else
-                                {
-                                    <div>@vendor.Vendor.Name</div>
-                                }
+                                
                             }
                         </td>
 
