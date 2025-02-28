@@ -6,92 +6,119 @@
 
 <h1>Edit Sale Order</h1>
 <hr />
-<div class="p-4 shadow-sm card-container">
-    <form asp-action="Edit" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="SalesOrderID" />
-        <div class="row">
-           <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="OrderNumber" class="control-label">Order Number <span class="required-fields">*</span></label>
-                    <input asp-for="OrderNumber" class="form-control" readonly />
-                </div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SalesOrderID" />
+            <input type="hidden" asp-for="OrderNumber" />
+
+            <div class="form-group">
+                <label asp-for="OrderNumber" class="control-label"></label><span id="OrderNumber">: <strong>@Model.OrderNumber</strong></span>
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="Price" class="control-label">Price <span class="required-fields">*</span></label>
-                    <input asp-for="Price" class="form-control" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
-                </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="Status" class="control-label">Status <span class="required-fields">*</span></label>
-                    <input asp-for="Status" class="form-control" />
-                    <span asp-validation-for="Status" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="CustomerID" class="control-label">Customer Name</label>
-                    <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="CompletionDate" class="control-label"></label>
-                    <input asp-for="CompletionDate" type="date" class="form-control" />
-                    <span asp-validation-for="CompletionDate" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="ActualCompletionDate" class="control-label"></label>
-                    <input asp-for="ActualCompletionDate" type="date" class="form-control" />
-                    <span asp-validation-for="ActualCompletionDate" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="ExtraNotes" class="control-label"></label>
-                    <input asp-for="ExtraNotes" class="form-control" />
-                    <span asp-validation-for="ExtraNotes" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="EngineeringPackageID" class="control-label"></label>
-                    <input asp-for="EngineeringPackageID" class="form-control" readonly />
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-              
-                    <label class="control-label"> Purchase Orders Selected</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
-                        <strong>-</strong>
-                    </button>
-                    @Html.ListBox("selectedOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
-            </div>
-            <div class="col-md-6">
+
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(Status))">
                     
-                <label class="control-label"> Choose Purchase Orders</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
-                    <strong>+</strong>
-                </button>
-                @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
-                    
-            </div>            
-        </div>
-            <div class="d-flex justify-content-end gap-2 mt-4">
-                <input type="submit" value="Update" class="btn-edit" id="btnEdit" />
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-    </form>
+
+            <div class="form-group">
+                <label asp-for="CustomerID" class="control-label">Customer Name</label>
+                <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CompletionDate" class="control-label"></label>
+                <input asp-for="CompletionDate" type="date" class="form-control" />
+                <span asp-validation-for="CompletionDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ActualCompletionDate" class="control-label"></label>
+                <input asp-for="ActualCompletionDate" type="date" class="form-control" />
+                <span asp-validation-for="ActualCompletionDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExtraNotes" class="control-label"></label>
+                <input asp-for="ExtraNotes" class="form-control" />
+                <span asp-validation-for="ExtraNotes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-1">
+                <label asp-for="EngineeringPackageID" class="control-label">Engineering Package ID:</label><strong>  @Model.EngineeringPackageID</strong>
+            </div>
+            <div class="form-group col-md-12 mt-2">
+                <div class="d-flex justify-content-between">
+                    <label class="control-label">Related Purchase Orders</label>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" id="btnDeletePO" title="Click to delete the selected Purchase Order." class="btn btn-danger btn-sm">
+                            <strong>Delete</strong>
+                        </button>
+                        <button asp-action="SetPOViewBag" type="button" id="btnEditPO" title="Click to edit the selected Purchase Order." class="btn btn-primary btn-sm">
+                            <strong>Edit</strong>
+                        </button>
+                        <button type="button" title="Click to create a new Purchase Order." data-bs-toggle="modal" data-bs-target="#purchaseOrderModal" class="btn btn-success btn-sm">
+                            <strong>Create</strong>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    @Html.ListBox("selectedPOOptions", (MultiSelectList)ViewBag.selPOOpts, new { @size = 8, @class = "form-control" })
+                </div>
+            </div>
+            <div class="col d-flex">
+                <div class="form-group col-md-12 mt-2">
+                    <div class="d-flex justify-content-between">
+                        <label class="control-label">Related Machines</label>
+                        <div class="d-flex justify-content-end">
+                            <button type="button" id="btnLeft" title="Click to remove the selected Machine" class="btn btn-danger btn-sm">
+                                <strong>Remove</strong>
+                            </button>
+                            <button asp-action="SetMachineViewBag" type="button" id="btnEditMachine" title="Click to edit the selected Machine." class="btn btn-primary btn-sm">
+                                <strong>Edit</strong>
+                            </button>
+                            <button type="button" title="Click to create a new Machine." data-bs-toggle="modal" data-bs-target="#machineModal" data-backdrop="static" class="btn btn-success btn-sm">
+                                <strong>Create</strong>
+                            </button>
+                        </div>
+                    </div>
+                    @Html.ListBox("selectedMachineOptions", (MultiSelectList)ViewBag.selMachineOpts, new { @size = 8, @class = "form-control" })
+
+
+
+                </div>
+                <div class="form-group col-md-12 mx-4">
+                    <div class="d-flex justify-content-between">
+                        <label class="control-label">All Machines</label>
+                        <button type="button" id="btnRight" title="Click to add the selected Machine" class="btn btn-success btn-sm">
+                            <strong>Add</strong>
+                        </button>
+                    </div>
+                    @Html.ListBox("availableMachineOptions", (MultiSelectList)ViewBag.availMachineOpts, new { @size = 8, @class = "form-control" })
+
+                </div>
+            </div>
+            
+            <div class="mt-2 form-group">
+                <input type="submit" value="Save" class="btn btn-primary" id="btnSubmit" />
+            </div>
+
+        </form>
+
+        <partial name="_purchaseOrderModal" model=@(new PurchaseOrder { SalesOrderID = Model.SalesOrderID })/>
+        <partial name="_machineModal" model=@(new MachineVM { SalesOrderID = Model.SalesOrderID }) />
+        <div id="partialPOContainer"></div>
+        <div id="partialMachineContainer"></div>
     </div>
 
 
@@ -103,5 +130,64 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script src="~/js/multiselect.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#btnEditPO").click(function () {
+                var sels = $("#selectedPOOptions").val();
+                if (!sels || sels.length != 1 ) {
+                    alert("Please select one option to edit.");
+                    return;
+                }
+                var selectedIdsString = sels.join(",");
+                $.ajax({
+                    url: '@Url.Action("SetPOViewBag", "SalesOrders")',
+                    type: 'GET',
+                    data: { selectedOptions: selectedIdsString },
+                    traditional: true,
+                    success: function (data) {
+                        $("#partialPOContainer").html(data);
+                        var modalElement = document.getElementById('purchaseOrderModalEdit');
+                        if (modalElement) {
+                            var myModal = new bootstrap.Modal(modalElement, { backdrop: 'static' });
+                            myModal.show();
+                        } else {
+                            console.error("Modal element not found!");
+                        }
+                    },
+                    error: function () {
+                        alert("Error loading partial view.");
+                    }
+                });
+            });
+            $("#btnEditMachine").click(function () {
+                var sels = $("#selectedMachineOptions").val();
+                if (!sels || sels.length != 1 ) {
+                    alert("Please select one option to edit.");
+                    return;
+                }
+                var selectedIdsString = sels.join(",");
+                $.ajax({
+                    url: '@Url.Action("SetMachineViewBag", "SalesOrders")',
+                    type: 'GET',
+                    data: { selectedOptions: selectedIdsString, id: @(Url.ActionContext.RouteData.Values["id"]) },
+                    traditional: true,
+                    success: function (data) {
+                        $("#partialMachineContainer").html(data);
+                        var modalElement = document.getElementById('machineModalEdit');
+                        if (modalElement) {
+                            var myModal = new bootstrap.Modal(modalElement, { backdrop: 'static' });
+                            myModal.show();
+                        } else {
+                            console.error("Modal element not found!");
+                        }
+                    },
+                    error: function () {
+                        alert("Error loading partial view.");
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="~/js/managePurchaseOrder.js"></script>
+    <script src="~/js/manageMachine.js"></script>
 }

@@ -36,9 +36,9 @@ namespace Haver_Boecker_Niagara.Models
         {
             get
             {
-                if (PODueDate != null)
+                if (POActualDueDate != null)
                 {
-                    return PODueDate!.Value.ToShortDateString();
+                    return POActualDueDate!.Value.ToShortDateString();
                 }
                 return "N/A";
             }

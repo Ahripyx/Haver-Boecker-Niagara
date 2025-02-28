@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     });
     //Create the toasts
     if (btnCreate) {
-        console.log('Btn exist')
+        console.log('Create button exists')
         btnCreate.addEventListener("click", () => {
             sessionStorage.setItem("showToast", "true");
             const inputs = document.querySelectorAll('input');
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         });
     }
     if (btnEdit) {
-        console.log('Btn exist')
+        console.log('Edit button exists')
         btnEdit.addEventListener("click", () => {
             sessionStorage.setItem("showToast", "true");
             const inputs = document.querySelectorAll('input');
@@ -83,14 +83,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
         });
     }
     if (btnDelete) {
-        console.log('Btn exist')
+        console.log('Delete button exists')
         btnDelete.addEventListener("click", () => {
             sessionStorage.setItem("showToast", "true");
         });
     }
 
     if (btnFitler) {
-        console.log('btnFilter exist');
+        console.log('btnFilter exists');
         btnFitler.addEventListener('click', () => {
             sessionStorage.setItem("showInfoToast", "true");
         })
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     //Popup functionality 
 
     if (logoutIcon) {
-        console.log('button there')
+        console.log('logout button exists')
         const PopupMainConteiner = document.querySelector('.popup-conteiner');
         const btnLogOut = document.querySelector('#btnLogOut');
         const btnCancel = document.querySelector('#btnCancel');
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     }
     
     if (btnClose) {
-        console.log('Btn close there')
+        console.log('close button exists')
         const PopupMainConteiner = document.querySelector('.popup-close-conteiner');
         const btnCloseCancel = document.querySelector('#btnCloseCancel');
        
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
             PopupMainConteiner.style.display = 'flex';
         });
         if (btnCloseCancel) {
-            console.log('btnCancel there')
+            console.log('btnCancel exists')
             btnCloseCancel.addEventListener('click', () => {
                 console.log('btn close clicked')
                 PopupMainConteiner.style.display = 'none';

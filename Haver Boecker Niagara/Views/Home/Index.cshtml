@@ -83,10 +83,10 @@
     new Chart(ctx1, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
             datasets: [{
                 label: 'Machines',
-                data: [@Model.TotalMachines],
+                data: @Html.Raw(Json.Serialize(ViewBag.MachineBySizes)),
                 backgroundColor: 'rgba(54, 162, 235, 0.5)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
@@ -98,7 +98,7 @@
     new Chart(ctx2, {
         type: 'pie', //The type of chart you want
         data: {
-            labels: ['Confirmed', 'Pending'], //The labels you want to show like the X and Y
+            labels: ['Closed', 'Open'], //The labels you want to show like the X and Y
             datasets: [{
                 data: [@Model.ConfirmedSalesOrders, @Model.PendingSalesOrders], //<style></style>
                 backgroundColor: ['#28a745', '#dc3545'],
@@ -111,26 +111,25 @@
       new Chart(ctx3, {
             type: 'line',
             data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                 datasets: [{
                     label: "Total Vendors",
-                    data: [@Model.TotalVendors],
+                    data: @Html.Raw(Json.Serialize(ViewBag.VendorsByMonth)),
                     backgroundColor: ["rgba(54, 162, 235, 0.5)"],
                     borderColor: "rgba(54, 162, 235, 1)"
                 }]
             }
         });
       document.addEventListener("DOMContentLoaded", function () {
-        var customersData = @Html.Raw(Json.Serialize(Model.CustomerData));
-        var customerCountry = @Html.Raw(Json.Serialize(Model.CustomerCountry.Values));
+        var customerAmounts = @Html.Raw(Json.Serialize(Model.CustomerCountry.Values));
         var country = @Html.Raw(Json.Serialize(Model.CustomerCountry.Keys));
         new Chart(document.getElementById('customersChart'), {
             type: 'bar',
             data: {
-                labels: [country ],
+                labels: country,
                 datasets: [{
                     label: "Total Customers",
-                    data: customerCountry,
+                    data: customerAmounts,
                     borderColor: "rgba(54, 162, 235, 1)",
                     backgroundColor: "rgba(54, 162, 235, 0.5)"
                 }]

@@ -2,10 +2,11 @@
 using System.ComponentModel;
 namespace Haver_Boecker_Niagara.Models { 
 
-    
-    public class Machine
+    public class MachineVM
     {
         public int MachineID { get; set; }
+
+        public int SalesOrderID { get; set; }
 
         [Required]
         [DisplayName("Serial #")]
@@ -30,10 +31,8 @@ namespace Haver_Boecker_Niagara.Models {
 
         [DisplayName("Description")]
         public string MachineSizeDesc { get; set; }
-
-        [DisplayName("Machine Description")]
-        public string MachineDescription => $"{MachineClass} {MachineSize} {MachineSizeDesc}";
-
+       
+        
         public bool Media { get; set; } = false;
 
         [DisplayName("Spare Parts/Media")]
@@ -64,6 +63,24 @@ namespace Haver_Boecker_Niagara.Models {
         [DisplayName("Budgeted Assembly Hours")]
         public int? BudgetedAssemblyHours { get; set; }
 
-        public ICollection<SalesOrder> SalesOrders { get; set; } = new HashSet<SalesOrder>();
-    }
+        public static MachineVM FromMachine(Machine machine, int salesOrderID)
+        {
+            return new MachineVM
+            {
+                MachineID = machine.MachineID,
+                SalesOrderID = salesOrderID,
+                SerialNumber = machine.SerialNumber,
+                InternalPONumber = machine.InternalPONumber,
+                MachineSize = machine.MachineSize,
+                MachineClass = machine.MachineClass,
+                MachineSizeDesc = machine.MachineSizeDesc,
+                Media = machine.Media,
+                SparePartsMedia = machine.SparePartsMedia,
+                Base = machine.Base,
+                AirSeal = machine.AirSeal,
+                CoatingOrLining = machine.CoatingOrLining,
+                Disassembly = machine.Disassembly
+            };
+        }
+    }   
 }

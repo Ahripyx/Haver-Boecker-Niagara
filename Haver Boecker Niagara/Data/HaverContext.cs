@@ -16,6 +16,8 @@ namespace Haver_Boecker_Niagara.Data
         public DbSet<SalesOrder> SalesOrders { get; set; }
         public DbSet<EngineeringPackageEngineer> EngineeringPackageEngineers { get; set; }
 
+        public DbSet<MachineSalesOrder> MachineSalesOrders { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

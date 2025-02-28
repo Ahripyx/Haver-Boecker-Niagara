@@ -127,12 +127,12 @@ namespace Haver_Boecker_Niagara.Data
                                 {
                                     OrderNumber = $"SO-100{i}",
                                     Price = i * 10000,
-                                    Status = "Confirmed",
+                                    Status = Status.Closed,
                                     CustomerID = customers[i - 1].CustomerID,
                                     EngineeringPackageID = engPackages[i - 1].EngineeringPackageID,
                                     CompletionDate = DateTime.UtcNow.AddDays(5),
                                     ActualCompletionDate = DateTime.UtcNow.AddDays(18),
-                                    ExtraNotes = "N/A"
+                                    ExtraNotes = ""
                                 });
                             }
                             context.SaveChanges();
@@ -158,9 +158,9 @@ namespace Haver_Boecker_Niagara.Data
                                     SparePartsMedia = true,
                                     PreOrderNotes = $"Pre-order notes {i}",
                                     ScopeNotes = $"Scope notes {i}",
-                                    ActualAssemblyHours = (i * 2).ToString(),
-                                    ActualReworkHours = (i).ToString(),
-                                    BudgetedAssemblyHours = (i * 3).ToString()
+                                    ActualAssemblyHours = (i * 2),
+                                    ActualReworkHours = (i),
+                                    BudgetedAssemblyHours = (i * 3)
                                 });
                             }
                             context.SaveChanges();
