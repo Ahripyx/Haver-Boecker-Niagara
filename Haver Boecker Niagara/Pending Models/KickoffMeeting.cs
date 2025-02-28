@@ -7,17 +7,11 @@ namespace Haver_Boecker_Niagara.Models
         public int MeetingID { get; set; }
         public int SalesOrderID { get; set; }
         public SalesOrder? SalesOrder { get; set; }
-        public int EnggPackageId { get; set; }
+    
+        public string OrderStatus { get; set; } //dropdown for our future showing it in the workflow of sales order 
 
-        public EngineeringPackage? EngineeringPackage { get; set; }
+        public ICollection<Milestone>? Milestones { get; set; }
 
-        [DisplayName("Pre-Orders Expected")]
-        public DateTime? PreOrdersExpected { get; set; }
-
-        [DisplayName("Readiness to Ship Expected")]
-        public DateTime? ReadinessToShipExpected { get; set; }
-        
-
-        //automatically created field that allow only edit on it inside of the details or edit of gantt
+        //field that will be connected to the sales order from which we are gonna take info for gantt
     }
 }

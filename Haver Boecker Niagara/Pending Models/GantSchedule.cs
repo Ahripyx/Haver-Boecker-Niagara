@@ -1,16 +1,25 @@
-﻿namespace Haver_Boecker_Niagara.Models
+﻿using System.ComponentModel;
+
+namespace Haver_Boecker_Niagara.Models
 {
     public class GanttSchedule
     {
         public int GanttID { get; set; }
         public int SalesOrderID { get; set; }
         public SalesOrder? SalesOrder { get; set; }
-        public DateTime PromiseDate { get; set; }
-        public DateTime DeadlineDate { get; set; }
-        public bool NCR {  get; set; }
 
-        public Customer Customer { get; set; }
-        public Engineer Engineer { get; set; }
+        public bool EngineeringOnly { get; set; }
+
+        [DisplayName("Pre-Orders Expected")]
+        public DateTime? PreOrdersExpected { get; set; }
+
+        [DisplayName("Readiness to Ship Expected")]
+        public DateTime? ReadinessToShipExpected { get; set; }
+        public DateTime PromiseDate { get; set; }
+        public DateTime? DeadlineDate { get; set; }
+        public bool NCR { get; set; }
+
+        //controller for gantt is taking all info from excel from Sales order and  on edit u can add new sales order without Machines and then field Engineering only will be our flag
     }
 
 }
