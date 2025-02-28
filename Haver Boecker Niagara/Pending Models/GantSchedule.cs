@@ -18,6 +18,8 @@ namespace Haver_Boecker_Niagara.Models
         public DateTime PromiseDate { get; set; }
         public DateTime? DeadlineDate { get; set; }
         public bool NCR { get; set; }
+        public ICollection<KickoffMeeting>? KickoffMeetings { get; set; }
+
 
         //controller for gantt is taking all info from excel from Sales order and  on edit u can add new sales order without Machines and then field Engineering only will be our flag
     }
