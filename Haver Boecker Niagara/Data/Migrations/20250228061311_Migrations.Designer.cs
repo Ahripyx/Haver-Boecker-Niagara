@@ -3,16 +3,19 @@ using System;
 using Haver_Boecker_Niagara.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.HaverMigrations
+namespace Haver_Boecker_Niagara.Data.Migrations
 {
     [DbContext(typeof(HaverContext))]
-    partial class HaverContextModelSnapshot : ModelSnapshot
+    [Migration("20250228061311_Migrations")]
+    partial class Migrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
@@ -137,11 +140,11 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ActualAssemblyHours")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ActualAssemblyHours")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("ActualReworkHours")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ActualReworkHours")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("AirSeal")
                         .HasColumnType("INTEGER");
@@ -149,8 +152,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<bool>("Base")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("BudgetedAssemblyHours")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("BudgetedAssemblyHours")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("CoatingOrLining")
                         .HasColumnType("INTEGER");
@@ -218,7 +221,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
 
                     b.HasIndex("SalesOrderID");
 
-                    b.ToTable("MachineSalesOrder");
+                    b.ToTable("MachineSalesOrders");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.PurchaseOrder", b =>

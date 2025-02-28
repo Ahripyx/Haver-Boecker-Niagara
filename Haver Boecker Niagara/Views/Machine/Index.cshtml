@@ -67,10 +67,7 @@
                         </button>
                     </th>
                     <th>
-                        <button type="submit" name="actionButton" value="Description" class="text-nowrap fw-bold btn p-0"
-                                formaction="@Url.Action("Index", new { sortField = "Description", sortDirection = (ViewData["SortField"] as string == "Description" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                            @Html.DisplayNameFor(model => model.MachineSizeDesc) <span style="font-size: 10pt;">▼▲</span>
-                        </button>
+                        Description
                     </th>
                     <th></th>
                 </tr>

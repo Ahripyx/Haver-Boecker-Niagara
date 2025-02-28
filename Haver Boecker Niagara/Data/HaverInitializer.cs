@@ -1,4 +1,5 @@
 ﻿using Haver_Boecker_Niagara.Models;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -105,7 +106,7 @@ namespace Haver_Boecker_Niagara.Data
                         if (!context.EngineeringPackages.Any())
                         {
                             var engineers = context.Engineers.ToList();
-                            for (int i = 1; i <= 5; i++)
+                            for (int i = 1; i <= 10; i++)
                             {
                                 context.EngineeringPackages.Add(new EngineeringPackage
                                 {
@@ -134,13 +135,28 @@ namespace Haver_Boecker_Niagara.Data
                                     ActualCompletionDate = DateTime.UtcNow.AddDays(18),
                                     ExtraNotes = ""
                                 });
+                                
+                            }
+                            for (int i = 6; i <= 10; i++)
+                            {
+                                context.SalesOrders.Add(new SalesOrder
+                                {
+                                    OrderNumber = $"SO-100{i}",
+                                    Price = i * 10000,
+                                    Status = Status.Open,
+                                    CustomerID = customers[i - 1].CustomerID,
+                                    EngineeringPackageID = engPackages[i - 1].EngineeringPackageID,
+                                    CompletionDate = DateTime.UtcNow.AddDays(5),
+                                    ActualCompletionDate = DateTime.UtcNow.AddDays(18),
+                                    ExtraNotes = ""
+                                });
+
                             }
                             context.SaveChanges();
                         }
 
                         if (!context.Machines.Any())
                         {
-                            var salesOrders = context.SalesOrders.ToList();
                             for (int i = 1; i <= 30; i++)
                             {
                                 context.Machines.Add(new Machine
@@ -180,6 +196,28 @@ namespace Haver_Boecker_Niagara.Data
                                     SalesOrderID = salesOrders[i % salesOrders.Count].SalesOrderID
                                 });
                             }
+                            context.SaveChanges();
+                        }
+
+                        if (!context.MachineSalesOrders.Any())
+                        {
+                            Random rnd = new();
+                            var machineSOs = new List<MachineSalesOrder>();
+                            for (int salesOrderID = 1; salesOrderID <= 10; salesOrderID++)
+                            {
+                                for (int i = 1; i <= 3; i++)
+                                {
+                                    int machineID = 1 + rnd.Next(context.Machines.Count());
+                                    MachineSalesOrder machineSO = new()
+                                    { 
+                                        MachineID = machineID, 
+                                        SalesOrderID = salesOrderID 
+                                    };
+                                    machineSOs.Add(machineSO);
+                                }
+
+                            }
+                            context.MachineSalesOrders.AddRange(machineSOs);
                             context.SaveChanges();
                         }
                     }
