@@ -6,8 +6,8 @@
 
 <h1>Edit Sale Order</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="p-4 shadow-sm card-container">
+    <div>
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="SalesOrderID" />
@@ -16,91 +16,104 @@
             <div class="form-group">
                 <label asp-for="OrderNumber" class="control-label"></label><span id="OrderNumber">: <strong>@Model.OrderNumber</strong></span>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(Status))">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label"></label>
+                        <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(Status))">
                     
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CustomerID" class="control-label">Customer Name</label>
+                        <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CompletionDate" class="control-label"></label>
+                        <input asp-for="CompletionDate" type="date" class="form-control" />
+                        <span asp-validation-for="CompletionDate" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="CustomerID" class="control-label">Customer Name</label>
-                <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="CompletionDate" class="control-label"></label>
-                <input asp-for="CompletionDate" type="date" class="form-control" />
-                <span asp-validation-for="CompletionDate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ActualCompletionDate" class="control-label"></label>
-                <input asp-for="ActualCompletionDate" type="date" class="form-control" />
-                <span asp-validation-for="ActualCompletionDate" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ExtraNotes" class="control-label"></label>
-                <input asp-for="ExtraNotes" class="form-control" />
-                <span asp-validation-for="ExtraNotes" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ActualCompletionDate" class="control-label"></label>
+                        <input asp-for="ActualCompletionDate" type="date" class="form-control" />
+                        <span asp-validation-for="ActualCompletionDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ExtraNotes" class="control-label"></label>
+                        <input asp-for="ExtraNotes" class="form-control" />
+                        <span asp-validation-for="ExtraNotes" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group mt-1">
                 <label asp-for="EngineeringPackageID" class="control-label">Engineering Package ID:</label><strong>  @Model.EngineeringPackageID</strong>
             </div>
-            <div class="form-group col-md-12 mt-2">
-                <div class="d-flex justify-content-between">
-                    <label class="control-label">Related Purchase Orders</label>
-                    <div class="d-flex justify-content-end">
-                        <button type="button" id="btnDeletePO" title="Click to delete the selected Purchase Order." class="btn btn-danger btn-sm">
-                            <strong>Delete</strong>
-                        </button>
-                        <button asp-action="SetPOViewBag" type="button" id="btnEditPO" title="Click to edit the selected Purchase Order." class="btn btn-primary btn-sm">
-                            <strong>Edit</strong>
-                        </button>
-                        <button type="button" title="Click to create a new Purchase Order." data-bs-toggle="modal" data-bs-target="#purchaseOrderModal" class="btn btn-success btn-sm">
-                            <strong>Create</strong>
-                        </button>
+            <div class="row">
+                <div class="form-group col-md-6 mt-2">
+                    <div class="d-flex justify-content-between">
+                        <label class="control-label">Related Purchase Orders</label>
+                        <div class="d-flex justify-content-end gap-1 mb-1">
+                            <button type="button" id="btnDeletePO" title="Click to delete the selected Purchase Order." class="btn btn-danger btn-sm">
+                                <strong>Delete</strong>
+                            </button>
+                            <button asp-action="SetPOViewBag" type="button" id="btnEditPO" title="Click to edit the selected Purchase Order." class="btn-edit-specific">
+                                <strong>Edit</strong>
+                            </button>
+                            <button type="button" title="Click to create a new Purchase Order." data-bs-toggle="modal" data-bs-target="#purchaseOrderModal" class="create-btn">
+                                <strong>Create</strong>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        @Html.ListBox("selectedPOOptions", (MultiSelectList)ViewBag.selPOOpts, new { @size = 8, @class = "form-control" })
                     </div>
                 </div>
-                <div class="form-group col-md-12">
-                    @Html.ListBox("selectedPOOptions", (MultiSelectList)ViewBag.selPOOpts, new { @size = 8, @class = "form-control" })
-                </div>
             </div>
-            <div class="col d-flex">
-                <div class="form-group col-md-12 mt-2">
+            <div class="row">
+                <div class="form-group col-md-6 mt-4">
                     <div class="d-flex justify-content-between">
                         <label class="control-label">Related Machines</label>
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-end gap-1 mb-1">
                             <button type="button" id="btnLeft" title="Click to remove the selected Machine" class="btn btn-danger btn-sm">
                                 <strong>Remove</strong>
                             </button>
-                            <button asp-action="SetMachineViewBag" type="button" id="btnEditMachine" title="Click to edit the selected Machine." class="btn btn-primary btn-sm">
+                            <button asp-action="SetMachineViewBag" type="button" id="btnEditMachine" title="Click to edit the selected Machine." class="btn-edit-specific">
                                 <strong>Edit</strong>
                             </button>
-                            <button type="button" title="Click to create a new Machine." data-bs-toggle="modal" data-bs-target="#machineModal" data-backdrop="static" class="btn btn-success btn-sm">
+                            <button type="button" title="Click to create a new Machine." data-bs-toggle="modal" data-bs-target="#machineModal" data-backdrop="static" class="create-btn">
                                 <strong>Create</strong>
                             </button>
                         </div>
                     </div>
                     @Html.ListBox("selectedMachineOptions", (MultiSelectList)ViewBag.selMachineOpts, new { @size = 8, @class = "form-control" })
 
-
-
                 </div>
-                <div class="form-group col-md-12 mx-4">
-                    <div class="d-flex justify-content-between">
+                <div class="form-group col-md-6 mt-4">
+                    <div class="d-flex justify-content-between mb-1">
                         <label class="control-label">All Machines</label>
-                        <button type="button" id="btnRight" title="Click to add the selected Machine" class="btn btn-success btn-sm">
+                        <button type="button" id="btnRight" title="Click to add the selected Machine" class="create-btn">
                             <strong>Add</strong>
                         </button>
                     </div>
@@ -109,8 +122,8 @@
                 </div>
             </div>
             
-            <div class="mt-2 form-group">
-                <input type="submit" value="Save" class="btn btn-primary" id="btnSubmit" />
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <input type="submit" value="Update" class="btn-edit" id="btnSubmit" />
             </div>
 
         </form>
@@ -120,7 +133,7 @@
         <div id="partialPOContainer"></div>
         <div id="partialMachineContainer"></div>
     </div>
-
+</div>
 
 <div>
     <a asp-action="Index">Back to List</a>
