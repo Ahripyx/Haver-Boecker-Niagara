@@ -13,7 +13,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <button class="search-btn btn @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
-                    data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                 Search @ViewData["NumberFilters"]
             </button>
             <a asp-action="Create" class="btn create-btn">Create New</a>
@@ -30,12 +30,14 @@
                     <label>Search by Customer:</label>
                     @Html.TextBox("SearchCustomer", null, new { @class = "form-control" })
                 </div>
-                
+
             </div>
             <div class="row">
                 <div class="form-group col-md-3">
                     <label>Search by Status:</label>
-                    @Html.TextBox("SearchStatus", null, new { @class = "form-control" })
+                    <select name="searchStatus" id="searchStatus" class="form-control" asp-items="ViewBag.Statuses">
+                        <option value="null">Any</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group mt-2 col-md-2">
@@ -47,18 +49,25 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    @foreach (var header in new[] { "Order", "Customer", "Status" })
-                    {
-                        <th>
-                            <button type="submit" name="actionButton" value="@header" class="btn p-0 fw-bold"
-                                    formaction="@Url.Action("Index", new { sortField = header, sortDirection = (ViewData["SortField"] as string == header && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
-                                @header @if (ViewData["SortField"] as string == header)
-                                {
-                                    <span>@(ViewData["SortDirection"] as string == "asc" ? "▲" : "▼")</span>
-                                }
-                            </button>
-                        </th>
-                    }
+                    <th>
+                        <button type="submit" name="actionButton" value="OrderNumber" class="btn p-0 fw-bold"
+                        formaction="@Url.Action("Index", new { sortField = "OrderNumber", sortDirection = (ViewData["SortField"] as string == "OrderNumber" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                            Order # @if (ViewData["SortField"] as string == "OrderNumber")
+                            {
+                                <span>@(ViewData["SortDirection"] as string == "asc" ? "▼" : "▲")</span>
+                            }
+                        </button>
+                    </th>
+                    <th>
+                        <button type="submit" name="actionButton" value="CustomerName" class="btn p-0 fw-bold"
+                        formaction="@Url.Action("Index", new { sortField = "CustomerName", sortDirection = (ViewData["SortField"] as string == "CustomerName" && ViewData["SortDirection"] as string == "asc") ? "desc" : "asc" })">
+                            Customer @if (ViewData["SortField"] as string == "CustomerName")
+                            {
+                                <span>@(ViewData["SortDirection"] as string == "asc" ? "▼" : "▲")</span>
+                            }
+                        </button>
+                    </th>
+                    <th>Status</th>
                     <th>Machines</th>
                     <th>Package</th>
                     <th>Purchase Orders</th>
@@ -82,7 +91,7 @@
                             {
                                 <div>@item.Customer.Name</div>
                             }
-                          
+
                         </td>
                         <td>@item.Status</td>
                         <td>
@@ -93,23 +102,31 @@
                         </td>
 
                         <td class="my-auto">
-                            @if (item.EngineeringPackage.Engineers.Count == 0)
-                            {
-                                <span class="d-block">N/A</span>
-                                <div>@item.EngineeringPackage.ActualReleaseSummary</div>
-                                <div>@item.EngineeringPackage.ActualApprovalSummary</div>
-                            }
-                            else{
-                            string engineers = "";
-                                
-                            @foreach (var eng in item.EngineeringPackage.Engineers)
-                            {
-                                    engineers += @eng.Initials + "/";
+                            @if (item.EngineeringPackage == null) {
+                                <span>No Engineering Package</span>
+                            } else {
+                                @if (item.EngineeringPackage.Engineers.Count == 0)
+                                {
+                                    <span class="d-block">Eng: None</span>
                                 }
-                                <div>@engineers.Remove(@engineers.Length - 1)</div>
-                                <div>@item.EngineeringPackage.ApprovalDrawingDate</div>
-                                <div>@item.EngineeringPackage.PackageReleaseDate</div>
+                                else
+                                {
+                                    string engineers = "";
+
+                                    @foreach (var eng in item.EngineeringPackage.Engineers)
+                                    {
+                                        engineers += @eng.Initials + "/";
+                                    }
+                                    <div>@engineers.Remove(@engineers.Length - 1)</div>
+
+                                }
+                                <div>Est. A: @item.EngineeringPackage.EstimatedApprovalSummary</div>
+                                <div>Est. R: @item.EngineeringPackage.EstimatedReleaseSummary</div>
+
+                                <div>Act. A: @item.EngineeringPackage.ActualApprovalSummary</div>
+                                <div>Act. R: @item.EngineeringPackage.ActualReleaseSummary</div>
                             }
+
 
                         </td>
 
@@ -120,20 +137,37 @@
                             }
                         </td>
                         <td>
-                            @foreach (var vendor in item.PurchaseOrders)
-                            {
-                                @if (@vendor.Vendor is null)
+                            @{
+                                Dictionary<string, int> vendors = new Dictionary<string, int>();
+
+                            
+                                foreach (var purchaseOrder in item.PurchaseOrders)
                                 {
+                                    var vendorName = purchaseOrder.Vendor.Name;
+                                    if (!vendors.ContainsKey(vendorName)) {
+                                        vendors.Add(vendorName, item.PurchaseOrders.Where(p => p.Vendor.Name == vendorName).Count());
+                                    }
+                                }
+                                if (vendors == null) {
                                     <div>N/A</div>
+                                } else {
+                                    foreach (var vendor in vendors)
+                                    {
+                                        @if (vendor.Value == 1)
+                                        {
+                                            <div>N/A</div>
+                                        }
+                                        else
+                                        {
+                                            <div>@vendor.Key (x@(vendor.Value))</div>
+                                        }
+                                    }
                                 }
-                                else
-                                {
-                                    <div>@vendor.Vendor.Name</div>
-                                }
+                                
                             }
                         </td>
 
-                        <td>@item.EstimatedCompletionSummary/@item.ActualCompletionSummary  </td>
+                        <td>@item.EstimatedCompletionSummary <br /> @item.ActualCompletionSummary  </td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.SalesOrderID" class="ed-det-del-btn">Edit</a>
                             <a asp-action="Details" asp-route-id="@item.SalesOrderID" class="ed-det-del-btn ">Details</a>

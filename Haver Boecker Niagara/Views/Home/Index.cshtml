@@ -98,7 +98,7 @@
     new Chart(ctx2, {
         type: 'pie', //The type of chart you want
         data: {
-            labels: ['Confirmed', 'Pending'], //The labels you want to show like the X and Y
+            labels: ['Closed', 'Open'], //The labels you want to show like the X and Y
             datasets: [{
                 data: [@Model.ConfirmedSalesOrders, @Model.PendingSalesOrders], //<style></style>
                 backgroundColor: ['#28a745', '#dc3545'],
@@ -121,16 +121,15 @@
             }
         });
       document.addEventListener("DOMContentLoaded", function () {
-        var customersData = @Html.Raw(Json.Serialize(Model.CustomerData));
-        var customerCountry = @Html.Raw(Json.Serialize(Model.CustomerCountry.Values));
+        var customerAmounts = @Html.Raw(Json.Serialize(Model.CustomerCountry.Values));
         var country = @Html.Raw(Json.Serialize(Model.CustomerCountry.Keys));
         new Chart(document.getElementById('customersChart'), {
             type: 'bar',
             data: {
-                labels: [country ],
+                labels: country,
                 datasets: [{
                     label: "Total Customers",
-                    data: customerCountry,
+                    data: customerAmounts,
                     borderColor: "rgba(54, 162, 235, 1)",
                     backgroundColor: "rgba(54, 162, 235, 0.5)"
                 }]
