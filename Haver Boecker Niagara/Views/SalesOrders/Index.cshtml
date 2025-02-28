@@ -104,6 +104,10 @@
                         </td>
 
                         <td class="my-auto">
+                            <button class="ed-det-del-btn" type="button" data-bs-toggle="collapse" data-bs-target="#package-@item.SalesOrderID">
+                                Toggle Package
+                            </button>
+                            <div class="collapse mt-2" id="package-@item.SalesOrderID">
                             @if (item.EngineeringPackage == null) {
                                 <span>No Engineering Package</span>
                             } else {
@@ -129,7 +133,7 @@
                                 <div>Act. R: @item.EngineeringPackage.ActualReleaseSummary</div>
                             }
 
-
+                            </div>
                         </td>
 
                         <td>
@@ -144,10 +148,12 @@
                             </div>
                         </td>
                         <td>
+                            <button class="ed-det-del-btn" type="button" data-bs-toggle="collapse" data-bs-target="#vendors-@item.SalesOrderID">
+                                Toggle vendors
+                            </button>
+                            <div class="collapse mt-2" id="vendors-@item.SalesOrderID">
                             @{
                                 Dictionary<string, int> vendors = new Dictionary<string, int>();
-
-                            
                                 foreach (var purchaseOrder in item.PurchaseOrders)
                                 {
                                     var vendorName = purchaseOrder.Vendor.Name;
@@ -172,6 +178,7 @@
                                 }
                                 
                             }
+                            </div>
                         </td>
 
                         <td>@item.EstimatedCompletionSummary <br /> @item.ActualCompletionSummary  </td>
