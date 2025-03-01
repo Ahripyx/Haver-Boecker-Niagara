@@ -71,13 +71,13 @@ namespace Haver_Boecker_Niagara.Data
                 .HasMany(ep => ep.Engineers)
                 .WithMany(e => e.EngineeringPackages)
                 .UsingEntity<EngineeringPackageEngineer>();
-//
-//            modelBuilder.Entity<GanttSchedule>()
-//                .HasOne(g => g.SalesOrder)
-//                .WithMany(so => so.GanttSchedules)
-//                .HasForeignKey(g => g.SalesOrderID)
-//                .OnDelete(DeleteBehavior.Restrict); 
-//
+
+            modelBuilder.Entity<GanttSchedule>()
+                .HasOne(g => g.SalesOrder)
+                .WithMany(so => so.GanttSchedules)
+                .HasForeignKey(g => g.SalesOrderID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<KickoffMeeting>()
                 .HasOne(k => k.GanttSchedule)
                 .WithMany(g => g.KickoffMeetings)

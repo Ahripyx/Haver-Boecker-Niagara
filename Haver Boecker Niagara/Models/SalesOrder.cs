@@ -14,8 +14,7 @@ namespace Haver_Boecker_Niagara.Models
         public decimal Price { get; set; }
 
         [Required]
-        [StringLength(20, ErrorMessage = "Status cannot exceed 20 characters.")]
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
         [Required]
         public int? CustomerID { get; set; }
@@ -49,9 +48,8 @@ namespace Haver_Boecker_Niagara.Models
         public ICollection<PurchaseOrder>? PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
 
         public ICollection<Machine> Machines { get; set; } = new HashSet<Machine>();
-
-        ///public ICollection<GanttSchedule>? GanttSchedules { get; set; } = new HashSet<GanttSchedule>();
-
+        public ICollection<GanttSchedule>? GanttSchedules { get; set; } = new HashSet<GanttSchedule>();
 
     }
 }
+
