@@ -4,24 +4,27 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Sales Order</h4>
+<h1>Create Sales Order</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="p-4 shadow-sm card-container">
+    <form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="OrderNumber" class="control-label">Order Number <span class="required-fields">*</span></label>
                 <input asp-for="OrderNumber" class="form-control" />
                 <span asp-validation-for="OrderNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label">Price <span class="required-fields">*</span></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
+        </div>
+        <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label">Price <span class="required-fields">*</span></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+        </div>
+    </div>
             <div class="form-group visually-hidden">
                 <label asp-for="Status" class="control-label">Status <span class="required-fields">*</span></label>
                 <select asp-for="Status" class="form-control " asp-items="@Html.GetEnumSelectList(typeof(Status))">
@@ -29,30 +32,42 @@
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
+        <div class="row">
+        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="CustomerID" class="control-label">Customer Name </label>
                 <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
             </div>
-            
-            <div class="form-group">
-                <label asp-for="CompletionDate" class="control-label"></label>
-                <input asp-for="CompletionDate" type="date" class="form-control" />
-                <span asp-validation-for="CompletionDate" class="text-danger"></span>
+        </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="CompletionDate" class="control-label"></label>
+                    <input asp-for="CompletionDate" type="date" class="form-control" />
+                    <span asp-validation-for="CompletionDate" class="text-danger"></span>
+                </div>
             </div>
+    </div>
+    <div class="row">
+        
+        <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="ActualCompletionDate" class="control-label"></label>
                 <input asp-for="ActualCompletionDate" type="date" class="form-control" />
                 <span asp-validation-for="ActualCompletionDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ExtraNotes" class="control-label"></label>
-                <input asp-for="ExtraNotes" class="form-control" />
-                <span asp-validation-for="ExtraNotes" class="text-danger"></span>
+        </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ExtraNotes" class="control-label"></label>
+                    <input asp-for="ExtraNotes" class="form-control" />
+                    <span asp-validation-for="ExtraNotes" class="text-danger"></span>
+                </div>
             </div>
+    </div>
             <div class="form-group">
-                
+    
 
-                <div class="col">
+            <div class="col">
                     <input type="checkbox" id="chkAddPO" name="chkAddPO" />
                     <label for="chkAddPO" class="control-label">Add purchase orders after creation?</label>  
                     <button class="rounded-circle btn-sm btn-outline-secondary" style="padding: .10rem .5rem !important;" type="button" data-placement="top" data-toggle="tooltip" title="This will redirect you to another page where you can add purchase orders, once this form is submitted.">
@@ -67,13 +82,13 @@
                     </button>
                 </div>
             </div>
-            <div class="mt-2 form-group">
+        <div class="d-flex justify-content-end gap-2 mt-4">
                 <input type="submit" value="Create" class="btn btn-primary" id="btnCreate" />
-            </div>
+        </div>
         </form>
-    </div>
-</div>
+    
 
+</div>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

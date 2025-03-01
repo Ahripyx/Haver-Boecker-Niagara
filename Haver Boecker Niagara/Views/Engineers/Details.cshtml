@@ -3,55 +3,50 @@
 @{
     ViewData["Title"] = "Details";
 }
+<h1>Engineer Details</h1>
+<hr />
 
-<div class="detailed-container">
-
+<div class="p-4 shadow-sm card-container">
     <div>
-        <h1>Engineer Details</h1>
-
-        <div class="container-detailed-3">
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.FirstName)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.FirstName)
-                    </dd>
-                </dl>
+        <div class="row">
+            <div class="col-md-6">
+                    <dl class="column">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.FirstName)
+                        </dd>
+                    </dl>
             </div>
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.LastName)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.LastName)
-                    </dd>
-                </dl>
+            <div class="col-md-6">
+                    <dl class="column">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.LastName)
+                        </dd>
+                    </dl>
             </div>
         </div>
-        <div class="container-detailed-3">
-            
-            <div>
-                <dl class="column">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Email)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Email)
-                    </dd>
-                </dl>
+        <div class="row">
+            <div class="col-md-6">            
+                    <dl class="column">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Email)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Email)
+                        </dd>
+                    </dl>
             </div>
-
         </div>
-
-
-       
-    </div>
-    <div class="btn-edit-container">
-        <br />
-        <a asp-action="Edit" asp-route-id="@Model?.EngineerID" class="btn-edit">Edit</a>
-        <a asp-action="Index" class="btn-primary-close" id="btnClose">Close</a>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <br />
+            <a asp-action="Edit" asp-route-id="@Model?.EngineerID" class="btn-edit">Edit</a>
+            <a asp-action="Index" class="btn-primary-close" id="btnClose">Close</a>
+        </div>
     </div>
 </div>
+<a asp-action="Index">Back to List</a>

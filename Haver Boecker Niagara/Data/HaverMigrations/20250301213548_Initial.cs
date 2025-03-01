@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.Migrations
+namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     /// <inheritdoc />
-    public partial class Migrations : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -176,6 +176,31 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GanttSchedules",
+                columns: table => new
+                {
+                    GanttID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SalesOrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    EngineeringOnly = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PreOrdersExpected = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ReadinessToShipExpected = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    PromiseDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DeadlineDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    NCR = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GanttSchedules", x => x.GanttID);
+                    table.ForeignKey(
+                        name: "FK_GanttSchedules_SalesOrders_SalesOrderID",
+                        column: x => x.SalesOrderID,
+                        principalTable: "SalesOrders",
+                        principalColumn: "SalesOrderID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MachineSalesOrders",
                 columns: table => new
                 {
@@ -230,6 +255,50 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "KickoffMeetings",
+                columns: table => new
+                {
+                    MeetingID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    GanttID = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrderStatus = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KickoffMeetings", x => x.MeetingID);
+                    table.ForeignKey(
+                        name: "FK_KickoffMeetings_GanttSchedules_GanttID",
+                        column: x => x.GanttID,
+                        principalTable: "GanttSchedules",
+                        principalColumn: "GanttID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Milestones",
+                columns: table => new
+                {
+                    MilestoneID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    KickOfMeetingID = table.Column<int>(type: "INTEGER", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    ActualCompletionDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Milestones", x => x.MilestoneID);
+                    table.ForeignKey(
+                        name: "FK_Milestones_KickoffMeetings_KickOfMeetingID",
+                        column: x => x.KickOfMeetingID,
+                        principalTable: "KickoffMeetings",
+                        principalColumn: "MeetingID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_EngineeringPackageEngineers_EngineerID",
                 table: "EngineeringPackageEngineers",
@@ -241,6 +310,16 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 column: "EngineeringPackageID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GanttSchedules_SalesOrderID",
+                table: "GanttSchedules",
+                column: "SalesOrderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KickoffMeetings_GanttID",
+                table: "KickoffMeetings",
+                column: "GanttID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MachineSalesOrders_MachineID",
                 table: "MachineSalesOrders",
                 column: "MachineID");
@@ -249,6 +328,11 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "IX_MachineSalesOrders_SalesOrderID",
                 table: "MachineSalesOrders",
                 column: "SalesOrderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Milestones_KickOfMeetingID",
+                table: "Milestones",
+                column: "KickOfMeetingID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrders_SalesOrderID",
@@ -282,6 +366,9 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "MachineSalesOrders");
 
             migrationBuilder.DropTable(
+                name: "Milestones");
+
+            migrationBuilder.DropTable(
                 name: "PurchaseOrders");
 
             migrationBuilder.DropTable(
@@ -291,10 +378,16 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                 name: "Machines");
 
             migrationBuilder.DropTable(
-                name: "SalesOrders");
+                name: "KickoffMeetings");
 
             migrationBuilder.DropTable(
                 name: "Vendors");
+
+            migrationBuilder.DropTable(
+                name: "GanttSchedules");
+
+            migrationBuilder.DropTable(
+                name: "SalesOrders");
 
             migrationBuilder.DropTable(
                 name: "Customers");

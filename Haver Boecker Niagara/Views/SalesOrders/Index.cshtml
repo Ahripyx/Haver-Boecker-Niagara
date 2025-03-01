@@ -11,13 +11,15 @@
         <input type="hidden" name="sortDirection" value="@ViewData["SortDirection"]" />
         <input type="hidden" name="sortField" value="@ViewData["SortField"]" />
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
             <button class="search-btn btn @ViewData["Filtering"]" type="button" data-bs-toggle="collapse" id="filterToggle"
             data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                 Search @ViewData["NumberFilters"]
             </button>
-            <a asp-action="Create" class="btn create-btn">Create New</a>
-            <a asp-action="DownloadMachineSchedule" class="btn btn-success">Download Excel</a>
+            <div class="d-flex justify-content-end ">
+                <a asp-action="Create" class="btn create-btn">Create New</a>
+                <a asp-action="DownloadMachineSchedule" class="btn btn-success">Download Excel</a>
+            </div>
         </div>
 
         <div class="collapse @ViewData["ShowFilter"]" id="collapseFilter">
@@ -100,7 +102,11 @@
                             }
                         </td>
 
-                        <td class="my-auto text-nowrap">
+                        <td class="my-auto">
+                            <button class="ed-det-del-btn" type="button" data-bs-toggle="collapse" data-bs-target="#package-@item.SalesOrderID">
+                                Toggle Package
+                            </button>
+                            <div class="collapse mt-2" id="package-@item.SalesOrderID">
                             @if (item.EngineeringPackage == null) {
                                 <span>No Engineering Package</span>
                             } else {
@@ -126,14 +132,52 @@
                                 <div>Act. R: @item.EngineeringPackage.ActualReleaseSummary</div>
                             }
 
-
+                            </div>
                         </td>
 
                         <td>
-                            @foreach (var po in item.PurchaseOrders)
-                            {
-                                <div>@po.PurchaseOrderNumber (@po.Vendor.Name)</div>
+                            <button class="ed-det-del-btn" type="button" data-bs-toggle="collapse" data-bs-target="#po-@item.SalesOrderID">
+                                Toggle PO
+                            </button>
+                            <div class="collapse mt-2" id="po-@item.SalesOrderID">
+                                @foreach (var po in item.PurchaseOrders)
+                                {
+                                    <div>@po.PurchaseOrderNumber</div>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <button class="ed-det-del-btn" type="button" data-bs-toggle="collapse" data-bs-target="#vendors-@item.SalesOrderID">
+                                Toggle vendors
+                            </button>
+                            <div class="collapse mt-2" id="vendors-@item.SalesOrderID">
+                            @{
+                                Dictionary<string, int> vendors = new Dictionary<string, int>();
+                                foreach (var purchaseOrder in item.PurchaseOrders)
+                                {
+                                    var vendorName = purchaseOrder.Vendor.Name;
+                                    if (!vendors.ContainsKey(vendorName)) {
+                                        vendors.Add(vendorName, item.PurchaseOrders.Where(p => p.Vendor.Name == vendorName).Count());
+                                    }
+                                }
+                                if (vendors == null) {
+                                    <div>N/A</div>
+                                } else {
+                                    foreach (var vendor in vendors)
+                                    {
+                                        @if (vendor.Value == 1)
+                                        {
+                                            <div>N/A</div>
+                                        }
+                                        else
+                                        {
+                                            <div>@vendor.Key (x@(vendor.Value))</div>
+                                        }
+                                    }
+                                }
+                                
                             }
+                            </div>
                         </td>
 
                         <td>@item.EstimatedCompletionSummary <br /> @item.ActualCompletionSummary  </td>
