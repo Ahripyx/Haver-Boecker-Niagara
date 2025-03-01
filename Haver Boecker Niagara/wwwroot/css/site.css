@@ -81,8 +81,32 @@ footer {
     justify-content: space-between;
     display: flex;
 }
+/*For the index in sales order little debug */
+.ed-det-del-btn {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+td {
+    height: 3.125rem;
+    vertical-align: middle !important;
+}
 
-
+.btn-success {
+    color: #fff;
+    background-color: #198754;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: auto;
+    text-align: center;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-right: 4px;
+}
 /* menu styling */
 .nav-bottom {
     width: 100%;
@@ -271,12 +295,32 @@ h4 {
     cursor: pointer;
     text-transform: uppercase;
     transition: all 0.3s ease-in-out;
-    width: 10%;
+    display: inline-flex;
+    justify-content:center;
+    padding: 8px 20px;
+    min-width: 50px;
 }
+
 .btn-edit {
     background-color: #002F5F;
 }
-
+/*This one is for the edit buttons in the edit pages*/
+.btn-edit-specific {
+    background-color: #002F5F;
+    color: white;
+    border: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: fit-content;
+    text-align: center;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-right: 4px;
+}
 .btn-primary-close:hover {
     background-color: #CC0000;
     color: white;
@@ -307,9 +351,8 @@ body {
 }
 
 h1 {
-    font-weight: bold;
     font-size: 35px;
-    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 
@@ -345,7 +388,7 @@ h1 {
     font-weight: normal;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    width: auto;
+    width: fit-content;
     text-align: center;
     padding-left: 12px;
     padding-right: 12px;

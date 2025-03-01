@@ -4,56 +4,61 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Engineering Package</h4>
+<h1>Edit Engineering Package</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="form-group">
-                <label class="control-label">Select # of Engineers to Assign</label>
-                <select id="setCountEng" name="setCountEng" onchange="location.href=`../Edit/@Model.EngineeringPackageID?setCountEng=${this.value}`" class="form-control" asp-items=ViewBag.engCountDD></select>
-            </div>
-            @for(int i=0; i<int.Parse(ViewData["setCountEng"].ToString()); i++)
-            {
+<div class="p-4 shadow-sm card-container">
+    <form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label class="control-label">Engineer #@(i+1)</label>
-                    <select id="engineer@(i)" name="engineer@(i)" class="form-control" asp-items=@((SelectList)ViewData["engineer"+i])></select>
+                    <label class="control-label">Select # of Engineers to Assign</label>
+                    <select id="setCountEng" name="setCountEng" onchange="location.href=`../Edit/@Model.EngineeringPackageID?setCountEng=${this.value}`" class="form-control" asp-items=ViewBag.engCountDD></select>
                 </div>
-            }
-            <input type="hidden" asp-for="EngineeringPackageID" />
-            <div class="form-group">
-                <label asp-for="PackageReleaseDate" class="control-label"></label>
-                <input asp-for="PackageReleaseDate" type="date" class="form-control" />
-                <span asp-validation-for="PackageReleaseDate" class="text-danger"></span>
+                @for(int i=0; i<int.Parse(ViewData["setCountEng"].ToString()); i++)
+                {
+                    <div class="form-group">
+                        <label class="control-label">Engineer #@(i+1)</label>
+                        <select id="engineer@(i)" name="engineer@(i)" class="form-control" asp-items=@((SelectList)ViewData["engineer"+i])></select>
+                    </div>
+                }
             </div>
-            <div class="form-group">
-                <label asp-for="ApprovalDrawingDate" class="control-label"></label>
-                <input asp-for="ApprovalDrawingDate" type="date" class="form-control" />
-                <span asp-validation-for="ApprovalDrawingDate" class="text-danger"></span>
+            <div class="col-md-6">
+                <input type="hidden" asp-for="EngineeringPackageID" />
+                <div class="form-group">
+                    <label asp-for="PackageReleaseDate" class="control-label"></label>
+                    <input asp-for="PackageReleaseDate" type="date" class="form-control" />
+                    <span asp-validation-for="PackageReleaseDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ApprovalDrawingDate" class="control-label"></label>
+                    <input asp-for="ApprovalDrawingDate" type="date" class="form-control" />
+                    <span asp-validation-for="ApprovalDrawingDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ActualPackageReleaseDate" class="control-label"></label>
+                    <input asp-for="ActualPackageReleaseDate" type="date" class="form-control" />
+                    <span asp-validation-for="ActualPackageReleaseDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ActualPackageReleaseDate" class="control-label"></label>
-                <input asp-for="ActualPackageReleaseDate" type="date" class="form-control" />
-                <span asp-validation-for="ActualPackageReleaseDate" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ActualApprovalDrawingDate" class="control-label"></label>
+                    <input asp-for="ActualApprovalDrawingDate" type="date" class="form-control" />
+                    <span asp-validation-for="ActualApprovalDrawingDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ActualApprovalDrawingDate" class="control-label"></label>
-                <input asp-for="ActualApprovalDrawingDate" type="date" class="form-control" />
-                <span asp-validation-for="ActualApprovalDrawingDate" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-2">
-                <input type="submit" value="Save" class="btn btn-primary" id="btnEdit" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+        </div>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <a asp-action="Index" class="btn btn-primary-close">Close</a>
+            <button type="reset" class="btn btn-primary-close">Reset</button>
+            <button type="submit" value="Edit" class="btn btn-primary btn-edit" id="btnEdit">Edit</button>
+        </div>
+        
+    </form>
+    
 </div>
 
 @section Scripts {

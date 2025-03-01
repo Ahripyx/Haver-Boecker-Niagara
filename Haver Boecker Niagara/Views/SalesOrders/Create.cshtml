@@ -67,16 +67,14 @@
                     </button>
                 </div>
             </div>
-            <div class="mt-2 form-group">
-                <input type="submit" value="Create" class="btn btn-primary" id="btnCreate" />
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <a asp-action="Index" class="btn btn-primary-close">Close</a>
+                <input type="submit" value="Create" class="btn btn-primary btn-primary-close" id="btnCreate"/>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{

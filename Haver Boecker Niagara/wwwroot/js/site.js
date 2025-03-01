@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     //The ones that are not in using are for later on the project please dont remove
     const page = document.body.dataset.page;
     const btnCreate = document.getElementById('btnCreate');
-    const btnDelete = document.getElementById('btnDelete');
+    const btnDelete = document.getElementById('btnClose');
     const btnEdit = document.getElementById('btnEdit');
     const notification = document.querySelector('.notifications')
     const toastSucess = document.querySelector('.toast.success');
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const toastWarning = document.querySelector('.toast.warning');
     const toastInfo = document.querySelector('.toast.info');
     const logoutIcon = document.querySelector('#logout-icon');
-    const btnClose = document.querySelector('#btnClose');
+    const btnClose = document.querySelector('#btnDelete');
     const btnContinue = document.querySelector('#btnContinue');
     const btnFitler = document.querySelector('#btnFilter');
 
@@ -165,10 +165,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
         }
         if (btnContinue) {
             btnContinue.addEventListener('click', () => {
-                window.location.href = btnClose.href;
+                // window.location.href = btnClose.href;
                 if (toastWarning) {
                     sessionStorage.setItem("showToast", "true");
                 }
+                document.getElementsByTagName('form')[0].submit();
+                
             })
         }
     }
