@@ -7,8 +7,9 @@ namespace Haver_Boecker_Niagara.Models
         public int GanttID { get; set; }
         public int SalesOrderID { get; set; }
         public SalesOrder? SalesOrder { get; set; }
-
         public bool EngineeringOnly { get; set; }
+
+        public int? MachineID { get; set; }
 
         [DisplayName("Pre-Orders Expected")]
         public DateTime? PreOrdersExpected { get; set; }

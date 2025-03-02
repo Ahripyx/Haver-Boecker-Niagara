@@ -143,6 +143,9 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<bool>("EngineeringOnly")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MachineID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("NCR")
                         .HasColumnType("TEXT");
 
@@ -178,9 +181,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("OrderStatus")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<bool>("Milestone")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("MeetingID");
 

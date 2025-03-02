@@ -8,7 +8,7 @@ namespace Haver_Boecker_Niagara.Models
         public int GanttID { get; set; }
         public GanttSchedule? GanttSchedule { get; set; }
 
-        public string OrderStatus { get; set; } //dropdown for our future showing it in the workflow of sales order 
+        public bool Milestone { get; set; } //dropdown for our future showing it in the workflow of sales order 
 
         public string MeetingSummary { get; set; }
 
