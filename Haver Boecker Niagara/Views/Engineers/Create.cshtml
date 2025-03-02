@@ -36,6 +36,7 @@
                     </div>
             </div>
             <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-secondary" id="btnAutofill">Autofill</button>
                 <a asp-action="Index" class="btn btn-danger btn-primary-close">Close</a>
                 <button type="submit" class="btn btn-primary btn-primary-close" id="btnCreate">Create</button>
             </div>
@@ -46,4 +47,11 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.getElementById('btnAutofill').addEventListener('click', function() {
+            document.getElementById('FirstName').value = 'John';
+            document.getElementById('LastName').value = 'Doe';
+            document.getElementById('Email').value = 'john.doe@example.com';
+        });
+    </script>
 }
