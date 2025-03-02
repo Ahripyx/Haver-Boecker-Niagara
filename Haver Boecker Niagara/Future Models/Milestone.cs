@@ -9,7 +9,7 @@ namespace Haver_Boecker_Niagara.Models
         public int MilestoneID { get; set; }
 
         [DisplayName("Task Name")]
-        public string Name { get; set; } //dropdown with all possible values as Approwed drwngr recieved and etc for everything 
+        public Task Name { get; set; } //dropdown with all possible values as Approwed drwngr recieved and etc for everything 
 
         //in its little view for new milestone need based on name fill this info either in Eng Package 
         public int KickOfMeetingID { get; set; }
