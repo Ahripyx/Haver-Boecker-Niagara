@@ -63,8 +63,8 @@
             <tr>
                 <th>PO Number</th>
                 <th>Vendor</th>
-                <th>Due Date</th>
-                <th>Actual Due Date</th>
+                <th class="text-nowrap">Due Date</th>
+                <th class="text-nowrap">Actual Due Date</th>
             </tr>
         </thead>
         <tbody>
@@ -93,14 +93,7 @@
                     <th>Machine Size</th>
                     <th>Machine Class</th>
                     <th>Machine Desc</th>
-                    <th>Budgeted Assembly Hours</th>
-                    <th>Actual Assembly Hours</th>
-                    <th>Actual Rework Hours</th>
-                    <th>Media</th>
-                    <th>Spare Parts</th>
-                    <th>Coating or Lining</th>
-                    <th>Base</th>
-                    <th>Air Seal</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -112,14 +105,14 @@
                         <td>@machine.MachineSize</td>
                         <td>@machine.MachineClass</td>
                         <td>@machine.MachineSizeDesc</td>
-                        <td>@machine.BudgetedAssemblyHours Hours</td>
-                        <td>@machine.ActualAssemblyHours Hours</td>
-                        <td>@machine.ActualReworkHours Hours</td>
-                        <td>@(@machine.Media ? "❌" : "✅")</td>
-                        <td>@(@machine.SparePartsMedia ? "❌" : "✅")</td>
-                        <td>@(@machine.CoatingOrLining ? "❌" : "✅")</td>
-                        <td>@(@machine.Base ? "❌" : "✅")</td>
-                        <td>@(@machine.AirSeal ? "❌" : "✅")</td>
+                        <td>
+                            <a asp-action="Details" asp-controller="Machine" asp-route-id="@machine.MachineID" class="ed-det-del-btn ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                </svg>
+                            </a>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -163,9 +156,9 @@
     </div>
 </div>
 <div class="d-flex justify-content-end gap-2 mt-4">
+    <a asp-action="Index" class="btn-primary-close" id="">Close</a>
     <a asp-action="Edit" asp-route-id="@Model?.SalesOrderID" class="btn-edit">Edit</a>
-    <a asp-action="Index" class="btn-primary-close" id="btnClose">Close</a>
+    
 </div>
-<a asp-action="Index">Back to List</a>
 
 

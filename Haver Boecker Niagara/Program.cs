@@ -13,7 +13,18 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddControllersWithViews();
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services
+        .AddControllersWithViews()
+        .AddRazorRuntimeCompilation();
+
+}
+else
+{
+    builder.Services
+        .AddControllersWithViews();
+}
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

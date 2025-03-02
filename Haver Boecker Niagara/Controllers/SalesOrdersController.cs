@@ -255,18 +255,27 @@ namespace Haver_Boecker_Niagara.Controllers
             }
         }
 
-        public async Task<IActionResult> EditMachine(int id, [Bind("MachineID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,BudgetedAssemblyHours,ActualAssemblyHours,ActualReworkHours")] Machine machine)
+        public async Task<IActionResult> EditMachine(int id, [Bind("MachineID,SerialNumber,NamePlateStatus,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,BudgetedAssemblyHours,ActualAssemblyHours,ActualReworkHours")] Machine machine)
         {
             if (ModelState.IsValid)
             {
-                var oldMachine = await _context.Machines
+                Machine? oldMachine = await _context.Machines
                     .Include(p => p.SalesOrders)
                     .Where(p => p.MachineID == machine.MachineID)
                     .FirstOrDefaultAsync();
 
-                var salesOrder = await _context.SalesOrders.FindAsync(id);
+                if (oldMachine == null)
+                {
+                    return NotFound();
+                }
+                SalesOrder? salesOrder = await _context.SalesOrders.FindAsync(id);
+                if (salesOrder == null)
+                {
+                    return NotFound();
+                }
 
                 oldMachine.SerialNumber = machine.SerialNumber;
+                oldMachine.NamePlateStatus = machine.NamePlateStatus;
                 oldMachine.InternalPONumber = machine.InternalPONumber;
                 oldMachine.MachineSize = machine.MachineSize;
                 oldMachine.MachineClass = machine.MachineClass;
@@ -304,7 +313,7 @@ namespace Haver_Boecker_Niagara.Controllers
             string[] selectedOptions2 = selectedOptions.Split(',');
             if (selectedOptions2.Count() == 1)
             {
-                var machine = _context.Machines.Where(p => p.MachineID == int.Parse(selectedOptions2[0])).FirstOrDefault();
+                Machine? machine = _context.Machines.Where(p => p.MachineID == int.Parse(selectedOptions2[0])).FirstOrDefault();
                 ViewData["id"] = id;
                 return PartialView("_machineModalEdit", machine);
 
@@ -315,13 +324,14 @@ namespace Haver_Boecker_Niagara.Controllers
             }
         }
 
-        public async Task<IActionResult> CreateMachine([Bind("SalesOrderID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,BudgetedAssemblyHours,ActualAssemblyHours,ActualReworkHours")] MachineVM machine)
+        public async Task<IActionResult> CreateMachine([Bind("SalesOrderID,NamePlateStatus,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,BudgetedAssemblyHours,ActualAssemblyHours,ActualReworkHours")] MachineVM machine)
         {
             if (ModelState.IsValid)
             {
                 var realMachine = new Machine
                 {
                     SerialNumber = machine.SerialNumber,
+                    NamePlateStatus = machine.NamePlateStatus,
                     InternalPONumber = machine.InternalPONumber,
                     MachineSize = machine.MachineSize,
                     MachineClass = machine.MachineClass,

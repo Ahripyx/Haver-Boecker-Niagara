@@ -136,7 +136,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MachineID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,SalesOrderID")] Machine machine)
+        public async Task<IActionResult> Create([Bind("SerialNumber,InternalPONumber,NamePlateStatus,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours")] Machine machine)
         {
             if (ModelState.IsValid)
             {
@@ -144,7 +144,6 @@ namespace Haver_Boecker_Niagara.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", machine.SalesOrders);
             return View(machine);
         }
 
@@ -161,7 +160,6 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 return NotFound();
             }
-            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", machine.SalesOrders);
             return View(machine);
         }
 
@@ -170,17 +168,17 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MachineID,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,SalesOrderID")] Machine machine)
+        public async Task<IActionResult> Edit(int id, [Bind("MachineID,SerialNumber,InternalPONumber,NamePlateStatus,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours")] Machine machine)
         {
             if (id != machine.MachineID)
             {
                 return NotFound();
             }
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    
                     _context.Update(machine);
                     await _context.SaveChangesAsync();
                 }
@@ -196,11 +194,7 @@ namespace Haver_Boecker_Niagara.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            } else
-            {
-                ModelState.AddModelError("", "Your changes are invalid. Please double check them and try again.");
             }
-            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", machine.SalesOrders);
             return View(machine);
         }
 
@@ -213,7 +207,6 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var machine = await _context.Machines
-                .Include(m => m.SalesOrders)
                 .FirstOrDefaultAsync(m => m.MachineID == id);
             if (machine == null)
             {

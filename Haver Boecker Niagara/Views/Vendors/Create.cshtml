@@ -85,7 +85,9 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end gap-2 mt-4">
-                <input type="submit" value="Create" class="btn btn-primary" id="btnCreate" />
+                <button type="button" class="btn btn-secondary" id="btnAutofill">Autofill</button>
+                <a asp-action="Index" class="btn btn-primary-close">Close</a>
+                <input type="submit" value="Create" class="btn btn-primary btn-primary-close" id="btnCreate"/>
             </div>
         </form>
     </div>
@@ -97,4 +99,17 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.getElementById('btnAutofill').addEventListener('click', function() {
+            document.getElementById('Name').value = 'Default Vendor';
+            document.getElementById('PhoneNumber').value = '123-456-7890';
+            document.getElementById('Email').value = 'vendor@example.com';
+            document.getElementById('ContactFirstName').value = 'John';
+            document.getElementById('ContactLastName').value = 'Doe';
+            document.getElementById('Address').value = '123 Main St';
+            document.getElementById('City').value = 'Anytown';
+            document.getElementById('Country').value = 'USA';
+            document.getElementById('PostalCode').value = '12345';
+        });
+    </script>
 }

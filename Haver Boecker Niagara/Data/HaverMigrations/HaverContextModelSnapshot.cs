@@ -131,6 +131,64 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.ToTable("EngineeringPackageEngineers");
                 });
 
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.GanttSchedule", b =>
+                {
+                    b.Property<int>("GanttID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("DeadlineDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("EngineeringOnly")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NCR")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("PreOrdersExpected")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("PromiseDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ReadinessToShipExpected")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SalesOrderID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("GanttID");
+
+                    b.HasIndex("SalesOrderID");
+
+                    b.ToTable("GanttSchedules");
+                });
+
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.KickoffMeeting", b =>
+                {
+                    b.Property<int>("MeetingID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("GanttID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MeetingSummary")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MeetingID");
+
+                    b.HasIndex("GanttID");
+
+                    b.ToTable("KickoffMeetings");
+                });
+
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.Machine", b =>
                 {
                     b.Property<int>("MachineID")
@@ -219,6 +277,39 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.HasIndex("SalesOrderID");
 
                     b.ToTable("MachineSalesOrders");
+                });
+
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.Milestone", b =>
+                {
+                    b.Property<int>("MilestoneID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ActualCompletionDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("KickOfMeetingID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MilestoneID");
+
+                    b.HasIndex("KickOfMeetingID");
+
+                    b.ToTable("Milestones");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.PurchaseOrder", b =>
@@ -360,6 +451,28 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Navigation("EngineeringPackage");
                 });
 
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.GanttSchedule", b =>
+                {
+                    b.HasOne("Haver_Boecker_Niagara.Models.SalesOrder", "SalesOrder")
+                        .WithMany("GanttSchedules")
+                        .HasForeignKey("SalesOrderID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SalesOrder");
+                });
+
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.KickoffMeeting", b =>
+                {
+                    b.HasOne("Haver_Boecker_Niagara.Models.GanttSchedule", "GanttSchedule")
+                        .WithMany("KickoffMeetings")
+                        .HasForeignKey("GanttID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GanttSchedule");
+                });
+
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.MachineSalesOrder", b =>
                 {
                     b.HasOne("Haver_Boecker_Niagara.Models.Machine", "Machine")
@@ -377,6 +490,17 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Navigation("Machine");
 
                     b.Navigation("SalesOrder");
+                });
+
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.Milestone", b =>
+                {
+                    b.HasOne("Haver_Boecker_Niagara.Models.KickoffMeeting", "KickoffMeeting")
+                        .WithMany("Milestones")
+                        .HasForeignKey("KickOfMeetingID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KickoffMeeting");
                 });
 
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.PurchaseOrder", b =>
@@ -424,8 +548,20 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Navigation("SalesOrder");
                 });
 
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.GanttSchedule", b =>
+                {
+                    b.Navigation("KickoffMeetings");
+                });
+
+            modelBuilder.Entity("Haver_Boecker_Niagara.Models.KickoffMeeting", b =>
+                {
+                    b.Navigation("Milestones");
+                });
+
             modelBuilder.Entity("Haver_Boecker_Niagara.Models.SalesOrder", b =>
                 {
+                    b.Navigation("GanttSchedules");
+
                     b.Navigation("PurchaseOrders");
                 });
 
