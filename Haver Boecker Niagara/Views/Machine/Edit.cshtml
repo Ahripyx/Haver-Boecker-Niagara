@@ -128,6 +128,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="button" class="btn btn-secondary" id="btnAutofill">Autofill</button>
             <a asp-action="Index" class="btn btn-primary-close">Close</a>
             <button type="reset" class="btn btn-primary-close">Reset</button>
             <button type="submit" value="Edit" class="btn btn-primary btn-edit" id="btnEdit">Edit</button>
@@ -141,5 +142,26 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        document.getElementById('btnAutofill').addEventListener('click', function() {
+            document.getElementById('SerialNumber').value = 'SN-4321';
+            document.getElementById('InternalPONumber').value = 'PO-9876';
+            document.getElementById('MachineSize').value = 1;
+            document.getElementById('MachineClass').value = 'T';
+            document.getElementById('MachineSizeDesc').value = 'Size 1';
+            document.getElementById('PreOrderNotes').value = 'Updated pre-order notes here';
+            document.getElementById('ScopeNotes').value = 'Updated scope notes here';
+            document.getElementById('BudgetedAssemblyHours').value = '120';
+            document.getElementById('ActualAssemblyHours').value = '110';
+            document.getElementById('ActualReworkHours').value = '15';
+            document.getElementById('Media').checked = true;
+            document.getElementById('SparePartsMedia').checked = true;
+            document.getElementById('Base').checked = true;
+            document.getElementById('AirSeal').checked = true;
+            document.getElementById('CoatingOrLining').checked = true;
+            document.getElementById('Disassembly').checked = true;
+            document.getElementById('NamePlateStatus').checked = true;
+        });
+    </script>
 }
 
