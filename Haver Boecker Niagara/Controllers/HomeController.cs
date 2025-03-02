@@ -20,6 +20,7 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             var TotalCustomers = _context.Customers.Count();
             var confirmedSalesOrders = _context.SalesOrders.Where(g => g.Status == Status.Closed).Count();
+            var totalSalesOrders = _context.SalesOrders.Count();
             var pendingSalesOrders = _context.SalesOrders.Where(g => g.Status == Status.Open).Count();
 
 
@@ -68,6 +69,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 PendingSalesOrders = pendingSalesOrders,
                 TotalVendors = totalVendors,
                 TotalMachines = totalMachines,
+                TotalSalesOrders = totalSalesOrders,
                 CustomerData = customerData,
                 CustomerCountry = customerCountry
             };

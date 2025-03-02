@@ -9,6 +9,8 @@
         public int TotalVendors {  get; set; }
 
         public int TotalPurcharseOrders { get; set; }
+
+        public int TotalSalesOrders { get; set; }
         public int TotalMachines { get; set; }
         
         public Dictionary<string, int> CustomerCountry {  get; set; } = new Dictionary<string, int>();
