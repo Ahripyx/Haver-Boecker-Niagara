@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.Migrations
+namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -262,7 +262,8 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                     MeetingID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     GanttID = table.Column<int>(type: "INTEGER", nullable: false),
-                    OrderStatus = table.Column<string>(type: "TEXT", nullable: false)
+                    OrderStatus = table.Column<string>(type: "TEXT", nullable: false),
+                    MeetingSummary = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
