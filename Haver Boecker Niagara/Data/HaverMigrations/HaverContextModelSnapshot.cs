@@ -174,6 +174,10 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<int>("GanttID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("MeetingSummary")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasColumnType("TEXT");

@@ -17,7 +17,7 @@ namespace Haver_Boecker_Niagara.Models {
         [StringLength(50, ErrorMessage = "Internal PO number cannot exceed 50 characters.")]
         public string InternalPONumber { get; set; }
 
-        [DisplayName("Status")]
+        [DisplayName("Name Plate Received?")]
         public bool NamePlateStatus { get; set; } = false;
 
         [DisplayName("Size")]

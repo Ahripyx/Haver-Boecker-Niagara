@@ -42,18 +42,25 @@
         </div>
     </div>
         <div class="d-flex justify-content-end gap-2 mt-4">
-            <input type="submit" value="Update" class="btn-edit" id="btnEdit" />
+            <button type="button" class="btn btn-secondary" id="btnAutofill">Autofill</button>
+            <a asp-action="Index" class="btn btn-primary-close">Close</a>
+            <button type="reset" class="btn btn-primary-close">Reset</button>
+            <button type="submit" value="Edit" class="btn btn-primary btn-edit" id="btnEdit">Edit</button>
         </div>
         </form>
 
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        document.getElementById('btnAutofill').addEventListener('click', function() {
+            document.getElementById('PurchaseOrderNumber').value = 'PO-54321';
+            document.getElementById('PODueDate').value = '2025-05-01T12:00';
+            document.getElementById('VendorID').value = '2';
+            document.getElementById('SalesOrderID').value = '2'; 
+        });
+    </script>
 }
