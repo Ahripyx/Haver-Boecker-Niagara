@@ -1,0 +1,74 @@
+﻿@model Haver_Boecker_Niagara.Models.GanttSchedule
+
+@{
+    ViewData["Title"] = "Edit Gantt Schedule";
+}
+
+<h1>Edit Gantt Schedule</h1>
+<hr />
+<div class="p-4 shadow-sm card-container">
+    <div>
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="GanttID" />
+            <input type="hidden" asp-for="SalesOrderID" />
+
+            <div class="form-group">
+                <label asp-for="SalesOrder.OrderNumber" class="control-label"></label>
+                <span>: <strong>@Model.SalesOrder.OrderNumber</strong></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="PreOrdersExpected" class="control-label"></label>
+                        <input asp-for="PreOrdersExpected" type="date" class="form-control" />
+                        <span asp-validation-for="PreOrdersExpected" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ReadinessToShipExpected" class="control-label"></label>
+                        <input asp-for="ReadinessToShipExpected" type="date" class="form-control" />
+                        <span asp-validation-for="ReadinessToShipExpected" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="PromiseDate" class="control-label"></label>
+                        <input asp-for="PromiseDate" type="date" class="form-control" />
+                        <span asp-validation-for="PromiseDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DeadlineDate" class="control-label"></label>
+                        <input asp-for="DeadlineDate" type="date" class="form-control" />
+                        <span asp-validation-for="DeadlineDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NCR" class="control-label"></label>
+                <input asp-for="NCR" class="form-control" />
+                <span asp-validation-for="NCR" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <a asp-action="Index" class="btn btn-primary-close">Close</a>
+                <button type="reset" class="btn btn-primary-close">Reset</button>
+                <button type="submit" value="Edit" class="btn btn-primary btn-edit">Edit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

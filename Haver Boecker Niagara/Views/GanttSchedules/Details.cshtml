@@ -1,0 +1,107 @@
+﻿@model Haver_Boecker_Niagara.Models.GanttSchedule
+
+@{
+    ViewData["Title"] = "Gantt Schedule Details";
+}
+
+<h1>Gantt Schedule Details</h1>
+<hr />
+<div class="p-4 shadow-sm card-container mb-3">
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="column">
+                <dt>Order Number</dt>
+                <dd>@Model.SalesOrder.OrderNumber</dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl class="column">
+                <dt>Customer</dt>
+                <dd>@(Model.SalesOrder.Customer?.Name ?? "N/A")</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="column">
+                <dt>Engineer Initials</dt>
+                <dd>@string.Join(", ", Model.SalesOrder.EngineeringPackage.Engineers.Select(e => e.Initials))</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="p-4 shadow-sm card-container mb-3">
+    <h4>Schedule Details</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="column">
+                <dt>Pre-Orders Expected</dt>
+                <dd>@Model.PreOrdersExpected?.ToShortDateString()</dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl class="column">
+                <dt>Readiness to Ship Expected</dt>
+                <dd>@Model.ReadinessToShipExpected?.ToShortDateString()</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="column">
+                <dt>Promise Date</dt>
+                <dd>@Model.PromiseDate.ToShortDateString()</dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl class="column">
+                <dt>Deadline Date</dt>
+                <dd>@Model.DeadlineDate?.ToShortDateString()</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+@if (!Model.EngineeringOnly)
+{
+    <div class="p-4 shadow-sm card-container mb-3">
+        <h4>Machine Details</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="column">
+                    <dt>Machine Description</dt>
+                    <dd>@Model.SalesOrder.Machines.FirstOrDefault(m => m.MachineID == Model.MachineID)?.MachineDescription</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="column">
+                    <dt>Media</dt>
+                    <dd>@Model.SalesOrder.Machines.FirstOrDefault(m => m.MachineID == Model.MachineID)?.Media</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="column">
+                    <dt>Spare Parts</dt>
+                    <dd>@Model.SalesOrder.Machines.FirstOrDefault(m => m.MachineID == Model.MachineID)?.SparePartsMedia</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="p-4 shadow-sm card-container mb-3">
+        <h4>Engineering Only</h4>
+        <p>This schedule is for engineering purposes only and is not linked to a specific machine.</p>
+    </div>
+}
+
+<div class="d-flex justify-content-end gap-2 mt-4">
+    <a asp-action="Index" class="btn-primary-close">Close</a>
+    <a asp-action="Edit" asp-route-id="@Model?.GanttID" class="btn-edit">Edit</a>
+</div>
