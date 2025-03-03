@@ -1,4 +1,4 @@
-﻿@model Haver_Boecker_Niagara.Models.GanttSchedule
+﻿@model Haver_Boecker_Niagara.ViewModels.GanttTimeLineViewModel
 
 @{
     ViewData["Title"] = "Gantt Schedule Details";
@@ -11,13 +11,13 @@
         <div class="col-md-6">
             <dl class="column">
                 <dt>Order Number</dt>
-                <dd>@Model.SalesOrder.OrderNumber</dd>
+                <dd>@Model.OrderNumber</dd>
             </dl>
         </div>
         <div class="col-md-6">
             <dl class="column">
                 <dt>Customer</dt>
-                <dd>@(Model.SalesOrder.Customer?.Name ?? "N/A")</dd>
+                <dd>@Model.CustomerName</dd>
             </dl>
         </div>
     </div>
@@ -25,7 +25,7 @@
         <div class="col-md-6">
             <dl class="column">
                 <dt>Engineer Initials</dt>
-                <dd>@string.Join(", ", Model.SalesOrder.EngineeringPackage.Engineers.Select(e => e.Initials))</dd>
+                <dd>@string.Join(", ", Model.EngineerInitials)</dd>
             </dl>
         </div>
     </div>
@@ -33,35 +33,38 @@
 
 <div class="p-4 shadow-sm card-container mb-3">
     <h4>Schedule Details</h4>
-    <div class="row">
-        <div class="col-md-6">
-            <dl class="column">
-                <dt>Pre-Orders Expected</dt>
-                <dd>@Model.PreOrdersExpected?.ToShortDateString()</dd>
-            </dl>
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <strong>Pre-Orders Expected:</strong> @Model.PreOrdersExpected?.ToString("dddd, MMM dd yyyy") ?? "N/A"
+            </div>
         </div>
-        <div class="col-md-6">
-            <dl class="column">
-                <dt>Readiness to Ship Expected</dt>
-                <dd>@Model.ReadinessToShipExpected?.ToShortDateString()</dd>
-            </dl>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <strong>Readiness to Ship Expected:</strong> @Model.ReadinessToShipExpected?.ToString("dddd, MMM dd yyyy") ?? "N/A"
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <dl class="column">
-                <dt>Promise Date</dt>
-                <dd>@Model.PromiseDate.ToShortDateString()</dd>
-            </dl>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <strong>Promise Date:</strong> @Model.PromiseDate.ToString("dddd, MMM dd yyyy")
+            </div>
         </div>
-        <div class="col-md-6">
-            <dl class="column">
-                <dt>Deadline Date</dt>
-                <dd>@Model.DeadlineDate?.ToShortDateString()</dd>
-            </dl>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <strong>Deadline Date:</strong> @Model.DeadlineDate?.ToString("dddd, MMM dd yyyy") ?? "N/A"
+            </div>
         </div>
-    </div>
-</div>
+        <div class="timeline-item">
+            <div class="timeline-dot milestone-dot"></div>
+            <div class="timeline-content">
+                <strong>Latest Milestone:</strong> @Model.LatestMilestone
+            </div>
+        </div>
+ </div>
 
 @if (!Model.EngineeringOnly)
 {
@@ -71,13 +74,13 @@
             <div class="col-md-6">
                 <dl class="column">
                     <dt>Machine Description</dt>
-                    <dd>@Model.SalesOrder.Machines.FirstOrDefault(m => m.MachineID == Model.MachineID)?.MachineDescription</dd>
+                    <dd>@Model.MachineDescription</dd>
                 </dl>
             </div>
             <div class="col-md-6">
                 <dl class="column">
                     <dt>Media</dt>
-                    <dd>@Model.SalesOrder.Machines.FirstOrDefault(m => m.MachineID == Model.MachineID)?.Media</dd>
+                    <dd>@Model.Media</dd>
                 </dl>
             </div>
         </div>
@@ -85,7 +88,7 @@
             <div class="col-md-6">
                 <dl class="column">
                     <dt>Spare Parts</dt>
-                    <dd>@Model.SalesOrder.Machines.FirstOrDefault(m => m.MachineID == Model.MachineID)?.SparePartsMedia</dd>
+                    <dd>@Model.SparePartsMedia</dd>
                 </dl>
             </div>
         </div>
@@ -99,7 +102,21 @@ else
     </div>
 }
 
+<h3>Time Line</h3>
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot milestone-dot"></div>
+            <div class="timeline-content">
+                <strong>Latest Milestone:</strong> @Model.LatestMilestone
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <div class="d-flex justify-content-end gap-2 mt-4">
     <a asp-action="Index" class="btn-primary-close">Close</a>
-    <a asp-action="Edit" asp-route-id="@Model?.GanttID" class="btn-edit">Edit</a>
+    <a asp-action="Edit" asp-route-id="@Model.GanttID" class="btn-edit">Edit</a>
 </div>

@@ -79,7 +79,34 @@ namespace Haver_Boecker_Niagara.Controllers
             if (ganttSchedule == null)
                 return NotFound();
 
-            return View(ganttSchedule);
+            var latestMilestone = ganttSchedule.KickoffMeetings?
+            .SelectMany(k => k.Milestones)
+            .OrderByDescending(m => m.MilestoneID) 
+            .FirstOrDefault();
+
+            var milestoneDate = latestMilestone?.ActualCompletionDate ?? latestMilestone?.EndDate ?? latestMilestone?.StartDate;
+
+            var viewModel = new GanttTimeLineViewModel
+            {
+                GanttID = ganttSchedule.GanttID,
+                LatestMilestone = latestMilestone != null
+                    ? $"{milestoneDate?.ToString("dddd, MMM dd yyyy") ?? "No Date"} - \"{latestMilestone.Name}\" ({latestMilestone.Status})" +
+                      (latestMilestone.Status == "Open" ? $" - Ends: {latestMilestone.EndDate?.ToString("dddd, MMM dd yyyy") ?? "No End Date"}" : "")
+                    : "No Milestones",
+                OrderNumber = ganttSchedule.SalesOrder.OrderNumber,
+                CustomerName = ganttSchedule.SalesOrder.Customer?.Name ?? "N/A",
+                EngineerInitials = ganttSchedule.SalesOrder.EngineeringPackage.Engineers.Select(e => e.Initials).ToList(),
+                PreOrdersExpected = ganttSchedule.PreOrdersExpected,
+                ReadinessToShipExpected = ganttSchedule.ReadinessToShipExpected,
+                PromiseDate = ganttSchedule.PromiseDate,
+                DeadlineDate = ganttSchedule.DeadlineDate,
+                EngineeringOnly = ganttSchedule.EngineeringOnly
+            };
+
+            
+
+
+            return View(viewModel);
         }
         public async Task<IActionResult> Edit(int? id)
         {
