@@ -64,6 +64,27 @@
     </div>
 </div>
 
+<div class="p-4 shadow-sm card-container mb-3">
+    <h4>Milestone Progress</h4>
+    <hr />
+    <div class="d-flex align-items-center">
+        @{
+            var milestones = Model.KickoffMeetings?.SelectMany(k => k.Milestones).OrderBy(m => m.StartDate).ToList();
+            var completedMilestones = milestones?.Where(m => m.StartDate != null).Count() ?? 0;
+            var totalMilestones = milestones?.Count() ?? 1;
+            var progressPercentage = totalMilestones > 0 ? (completedMilestones * 100) / totalMilestones : 0;
+        }
+        <div class="progress-line" style="width: 100%; display: flex; align-items: center; position: relative;">
+            @for (int i = 0; i < totalMilestones; i++)
+            {
+                var isCompleted = i < completedMilestones;
+                var position = (i * 100) / (totalMilestones );
+                <div class="milestone-dot @(isCompleted ? "completed" : "pending")" style="left: @position%;"></div>
+            }
+        </div>
+    </div>
+</div>
+
 @if (!Model.EngineeringOnly)
 {
     <div class="p-4 shadow-sm card-container mb-3">
