@@ -59,8 +59,14 @@ namespace Haver_Boecker_Niagara.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MilestoneID,Name,KickOfMeetingID,StartDate,EndDate,ActualCompletionDate,Status")] Milestone milestone)
         {
+
             if (ModelState.IsValid)
             {
+                milestone.StartDate = DateTime.Now;
+                if (milestone.Status == Status.Closed.ToString())
+                {
+                    milestone.ActualCompletionDate = DateTime.Now;
+                }
                 _context.Add(milestone);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
