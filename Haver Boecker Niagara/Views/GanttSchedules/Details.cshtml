@@ -101,12 +101,13 @@ else
     </div>
 }
 
+
 <div class="d-flex justify-content-end gap-2 mt-4">
     <a asp-action="Index" class="btn-primary-close">Close</a>
     <a asp-action="Edit" asp-route-id="@Model?.GanttID" class="btn-edit">Edit</a>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#milestoneModal">
-        Add Milestone
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#komModal">
+        + Create Kickoff Meeting
     </button>
 </div>
+@await Html.PartialAsync("_komModal", new Haver_Boecker_Niagara.Models.KickoffMeeting { GanttID = Model.GanttID })
 
-<partial name="_milestoneModal" model=@(new Haver_Boecker_Niagara.Models.MilestoneVM {}) />

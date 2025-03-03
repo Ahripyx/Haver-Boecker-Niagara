@@ -25,7 +25,7 @@ namespace Haver_Boecker_Niagara.Models
         public DateTime? ActualCompletionDate { get; set; }
 
         [DisplayName("Task Status")]
-        public string Status { get; set; } //need to be dropdown list for choice
+        public Status Status { get; set; } //need to be dropdown list for choice
 
 
     }
