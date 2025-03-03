@@ -89,6 +89,9 @@
             var isCompleted = milestone.Status == Haver_Boecker_Niagara.Models.Status.Closed;
             <div class="milestone-dot @(isCompleted ? "completed" : "pending")" title="@milestone.Name"></div>
         }
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#komModal">
+            + Create Kickoff Meeting
+        </button>
         <div class="timeline">
 
                 <div class="timeline-item">
@@ -145,3 +148,4 @@ else
     <a asp-action="Index" class="btn-primary-close">Close</a>
     <a asp-action="Edit" asp-route-id="@Model?.GanttID" class="btn-edit">Edit</a>
 </div>
+@await Html.PartialAsync("_komModal", new Haver_Boecker_Niagara.Models.KickoffMeeting { GanttID = Model.GanttID })

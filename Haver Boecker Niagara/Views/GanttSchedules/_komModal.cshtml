@@ -1,0 +1,60 @@
+﻿@model Haver_Boecker_Niagara.Models.KickoffMeeting
+
+@{
+    var ganttId = ViewBag.GanttID ?? 0;
+}
+
+<div class="modal fade" id="komModal" tabindex="-1" role="dialog" aria-labelledby="komModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="komModalLabel">Create Kickoff Meeting</h4>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="komForm">
+                    <input type="hidden" id="GanttID" name="GanttID" value="@ganttId" />
+
+                    <div class="form-group">
+                        <label asp-for="MeetingSummary" class="control-label"></label>
+                        <textarea asp-for="MeetingSummary" class="form-control"></textarea>
+                        <span asp-validation-for="MeetingSummary" class="text-danger"></span>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#milestoneModal">
+                            + Add Milestone
+                        </button>
+                    </div>
+
+                    <div class="modal-footer mt-3">
+                        <button type="submit" class="btn btn-success">Save Kickoff Meeting</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#komForm").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: '@Url.Action("Create", "KickoffMeetingsController")',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.success) {
+                    $("#komModal").modal("hide");
+                    location.reload();
+                } else {
+                    alert("Error: " + response.errors.join("\n"));
+                }
+            }
+        });
+    });
+</script>
+
+@await Html.PartialAsync("_milestoneModal", new Haver_Boecker_Niagara.Models.Milestone { KickOfMeetingID = Model.MeetingID })
