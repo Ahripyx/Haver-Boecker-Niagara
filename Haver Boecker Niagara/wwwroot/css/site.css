@@ -913,29 +913,37 @@ table-layout: fixed;
     justify-content:center;
     height:150px;
 }
-/*Time line*/
+/*Time Line*/
 .timeline {
     position: relative;
-    padding-left: 2.5rem;
-    border-left: 4px solid var(--lightBlue);
-    margin-top: 1.25rem;
+    padding-left: 40px;
+    border-left: 4px solid #007bff;
+    margin-top: 20px;
 }
 
 .timeline-item {
     position: relative;
-    margin-bottom: 1.25rem;
+    margin-bottom: 20px;
 }
 
-.timeline-dot {
+.timeline-dot.status-open {
+    background-color: var(--green); 
+}
+
+.timeline-dot.status-closed {
+    background-color: var(--blue); 
+}
+
+.timeline-dot, .milestone-dot {
     position: absolute;
     left: -10px;
     top: 5px;
-    width: 1.25rem;
-    height: 1.25rem;
-    background-color: var(--lightBlue);
-    border-radius: 50%;
+    width: 20px; 
+    height: 20px; 
+    border-radius: 50%; 
     border: 3px solid #fff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    background-color: var(--green);
 }
 
 .timeline-content {
@@ -944,6 +952,31 @@ table-layout: fixed;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+/*Progress line*/
+/*.progress-line {
+    height: 6px;
+    background-color: #ccc;
+    position: relative;
+    margin-top: 15px;
+}
+
+.milestone-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    background-color: gray;
+    border: 2px solid white;
+}
+
+.completed {
+    background-color: green;
+}
+
+.pending {
+    background-color: lightgray;
+}*/
 @media (min-width: 768px) {
     html {
         font-size: 1rem;

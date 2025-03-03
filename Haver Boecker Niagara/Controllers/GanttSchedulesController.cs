@@ -74,39 +74,29 @@ namespace Haver_Boecker_Niagara.Controllers
                 .Include(g => g.SalesOrder.EngineeringPackage)
                 .ThenInclude(ep => ep.Engineers)
                 .Include(g => g.SalesOrder.Machines)
+                .Include(g => g.KickoffMeetings) 
+                .ThenInclude(k => k.Milestones)
                 .FirstOrDefaultAsync(m => m.GanttID == id);
 
             if (ganttSchedule == null)
                 return NotFound();
 
             var latestMilestone = ganttSchedule.KickoffMeetings?
-            .SelectMany(k => k.Milestones)
-            .OrderByDescending(m => m.MilestoneID) 
-            .FirstOrDefault();
+             .SelectMany(k => k.Milestones)
+             .OrderByDescending(m => m.MilestoneID)
+             .FirstOrDefault();
 
-            var milestoneDate = latestMilestone?.ActualCompletionDate ?? latestMilestone?.EndDate ?? latestMilestone?.StartDate;
+            var milestoneStatus = latestMilestone?.Status;
 
-            var viewModel = new GanttTimeLineViewModel
-            {
-                GanttID = ganttSchedule.GanttID,
-                LatestMilestone = latestMilestone != null
-                    ? $"{milestoneDate?.ToString("dddd, MMM dd yyyy") ?? "No Date"} - \"{latestMilestone.Name}\" ({latestMilestone.Status})" +
-                      (latestMilestone.Status == "Open" ? $" - Ends: {latestMilestone.EndDate?.ToString("dddd, MMM dd yyyy") ?? "No End Date"}" : "")
-                    : "No Milestones",
-                OrderNumber = ganttSchedule.SalesOrder.OrderNumber,
-                CustomerName = ganttSchedule.SalesOrder.Customer?.Name ?? "N/A",
-                EngineerInitials = ganttSchedule.SalesOrder.EngineeringPackage.Engineers.Select(e => e.Initials).ToList(),
-                PreOrdersExpected = ganttSchedule.PreOrdersExpected,
-                ReadinessToShipExpected = ganttSchedule.ReadinessToShipExpected,
-                PromiseDate = ganttSchedule.PromiseDate,
-                DeadlineDate = ganttSchedule.DeadlineDate,
-                EngineeringOnly = ganttSchedule.EngineeringOnly
-            };
+            ganttSchedule.LatestMilestone = latestMilestone != null
+            ? $"{latestMilestone.Name} ({latestMilestone.Status})"
+            : "No Milestones";
 
-            
+            ViewData["MilestoneStatus"] = latestMilestone?.Status;
+ 
 
 
-            return View(viewModel);
+            return View(ganttSchedule);
         }
         public async Task<IActionResult> Edit(int? id)
         {
