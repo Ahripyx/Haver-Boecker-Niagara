@@ -143,6 +143,9 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<bool>("EngineeringOnly")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("LatestMilestone")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("MachineID")
                         .HasColumnType("INTEGER");
 
@@ -296,16 +299,14 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     b.Property<int>("KickOfMeetingID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Name")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("MilestoneID");
 

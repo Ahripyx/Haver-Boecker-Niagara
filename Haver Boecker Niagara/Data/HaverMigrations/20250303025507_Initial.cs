@@ -183,6 +183,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .Annotation("Sqlite:Autoincrement", true),
                     SalesOrderID = table.Column<int>(type: "INTEGER", nullable: false),
                     EngineeringOnly = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LatestMilestone = table.Column<string>(type: "TEXT", nullable: true),
                     MachineID = table.Column<int>(type: "INTEGER", nullable: true),
                     PreOrdersExpected = table.Column<DateTime>(type: "TEXT", nullable: true),
                     ReadinessToShipExpected = table.Column<DateTime>(type: "TEXT", nullable: true),
@@ -283,12 +284,12 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                 {
                     MilestoneID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<int>(type: "INTEGER", nullable: false),
                     KickOfMeetingID = table.Column<int>(type: "INTEGER", nullable: false),
                     StartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     ActualCompletionDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Status = table.Column<string>(type: "TEXT", nullable: false)
+                    Status = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

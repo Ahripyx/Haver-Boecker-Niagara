@@ -926,20 +926,24 @@ table-layout: fixed;
     margin-bottom: 20px;
 }
 
-.timeline-dot {
+.timeline-dot.status-open {
+    background-color: var(--green); 
+}
+
+.timeline-dot.status-closed {
+    background-color: var(--blue); 
+}
+
+.timeline-dot, .milestone-dot {
     position: absolute;
     left: -10px;
     top: 5px;
-    width: 20px;
-    height: 20px;
-    background-color: #007bff;
-    border-radius: 50%;
+    width: 20px; 
+    height: 20px; 
+    border-radius: 50%; 
     border: 3px solid #fff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-}
-
-.milestone-dot {
-    background-color: #28a745 !important; 
+    background-color: var(--blue);
 }
 
 .timeline-content {
@@ -948,6 +952,31 @@ table-layout: fixed;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+/*Progress line*/
+/*.progress-line {
+    height: 6px;
+    background-color: #ccc;
+    position: relative;
+    margin-top: 15px;
+}
+
+.milestone-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    background-color: gray;
+    border: 2px solid white;
+}
+
+.completed {
+    background-color: green;
+}
+
+.pending {
+    background-color: lightgray;
+}*/
 @media (min-width: 768px) {
     html {
         font-size: 1rem;

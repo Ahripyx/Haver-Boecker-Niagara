@@ -34,53 +34,72 @@
 <div class="p-4 shadow-sm card-container mb-3">
     <h4>Schedule Details</h4>
     <hr />
-    <div class="row">
-        <div class="col-md-6">
-            <dl class="column">
-                <dt>Pre-Orders Expected</dt>
-                <dd>@Model.PreOrdersExpected?.ToShortDateString()</dd>
-            </dl>
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="milestone-dot"></div>
+            <div class="timeline-content">
+                <strong>Pre-Orders Expected:</strong> @Model.PreOrdersExpected?.ToString("dddd, MMM dd yyyy")"
+            </div>
         </div>
-        <div class="col-md-6">
-            <dl class="column">
-                <dt>Readiness to Ship Expected</dt>
-                <dd>@Model.ReadinessToShipExpected?.ToShortDateString()</dd>
-            </dl>
+        <div class="timeline-item">
+            <div class="milestone-dot"></div>
+            <div class="timeline-content">
+                <strong>Readiness to Ship Expected:</strong> @Model.ReadinessToShipExpected?.ToString("dddd, MMM dd yyyy")"
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <dl class="column">
-                <dt>Promise Date</dt>
-                <dd>@Model.PromiseDate.ToShortDateString()</dd>
-            </dl>
+        <div class="timeline-item">
+            <div class="milestone-dot"></div>
+            <div class="timeline-content">
+                <strong>Promise Date:</strong> @Model.PromiseDate.ToString("dddd, MMM dd yyyy")
+            </div>
         </div>
-        <div class="col-md-6">
-            <dl class="column">
-                <dt>Deadline Date</dt>
-                <dd>@Model.DeadlineDate?.ToShortDateString()</dd>
-            </dl>
+        <div class="timeline-item">
+            <div class="milestone-dot"></div>
+            <div class="timeline-content">
+                <strong>Deadline Date:</strong> @Model.DeadlineDate?.ToString("dddd, MMM dd yyyy")"
+            </div>
         </div>
-    </div>
 </div>
 
 <div class="p-4 shadow-sm card-container mb-3">
     <h4>Milestone Progress</h4>
     <hr />
-    <div class="d-flex align-items-center">
-        @{
-            var milestones = Model.KickoffMeetings?.SelectMany(k => k.Milestones).OrderBy(m => m.StartDate).ToList();
-            var completedMilestones = milestones?.Where(m => m.StartDate != null).Count() ?? 0;
-            var totalMilestones = milestones?.Count() ?? 1;
-            var progressPercentage = totalMilestones > 0 ? (completedMilestones * 100) / totalMilestones : 0;
-        }
-        <div class="progress-line" style="width: 100%; display: flex; align-items: center; position: relative;">
-            @for (int i = 0; i < totalMilestones; i++)
+    @{
+        var validMilestones = Model.EngineeringOnly
+        ? Model.KickoffMeetings?.SelectMany(k => k.Milestones).Where(m => m.Name == Haver_Boecker_Niagara.Models.Task.EngineeringReleased).ToList()
+        : Model.KickoffMeetings?.SelectMany(k => k.Milestones).Where(m =>
+        new List<Haver_Boecker_Niagara.Models.Task>
             {
-                var isCompleted = i < completedMilestones;
-                var position = (i * 100) / (totalMilestones );
-                <div class="milestone-dot @(isCompleted ? "completed" : "pending")" style="left: @position%;"></div>
-            }
+        Haver_Boecker_Niagara.Models.Task.PurchaseOrdersIssued,
+        Haver_Boecker_Niagara.Models.Task.ApprovalDrawing,
+        Haver_Boecker_Niagara.Models.Task.PackageReleased,
+        Haver_Boecker_Niagara.Models.Task.MachineAssembly,
+        Haver_Boecker_Niagara.Models.Task.MachineTesting,
+        Haver_Boecker_Niagara.Models.Task.EngineeringReleased
+            }.Contains(m.Name)).ToList();
+
+        var milestoneStatuses = validMilestones?.ToDictionary(m => m.Name, m => m.Status) ?? new Dictionary<Haver_Boecker_Niagara.Models.Task, Haver_Boecker_Niagara.Models.Status>();
+        var totalMilestones = validMilestones?.Count ?? 0;
+        var completedMilestones = validMilestones?.Count(m => m.Status == Haver_Boecker_Niagara.Models.Status.Closed) ?? 0;
+        var progressPercentage = totalMilestones > 0 ? (completedMilestones * 100) / totalMilestones : 0;
+    }
+    <div class="progress-line">
+        @foreach (var milestone in validMilestones ?? new List<Haver_Boecker_Niagara.Models.Milestone>())
+        {
+            var isCompleted = milestone.Status == Haver_Boecker_Niagara.Models.Status.Closed;
+            <div class="milestone-dot @(isCompleted ? "completed" : "pending")" title="@milestone.Name"></div>
+        }
+        <div class="timeline">
+
+                <div class="timeline-item">
+                    <div class="timeline-dot milestone-dot @(ViewData["MilestoneStatus"] != null && (Status)ViewData["MilestoneStatus"] == Status.Open ? "status-open" : "status-closed")">
+                    </div>
+                    <div class="timeline-content">
+                        <strong>Latest Milestone:</strong> @Model.LatestMilestone
+                    </div>
+                </div>
+        </div>
+    </div>
         </div>
     </div>
 </div>

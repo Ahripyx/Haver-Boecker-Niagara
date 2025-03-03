@@ -9,6 +9,7 @@ namespace Haver_Boecker_Niagara.Models
         public SalesOrder? SalesOrder { get; set; }
         public bool EngineeringOnly { get; set; }
 
+        public string? LatestMilestone { get; set; }
         public int? MachineID { get; set; }
 
         [DisplayName("Pre-Orders Expected")]
