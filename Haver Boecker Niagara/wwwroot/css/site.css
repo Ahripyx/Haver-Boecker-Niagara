@@ -952,6 +952,38 @@ table-layout: fixed;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+/*milestone*/
+.btn-secondary-close {
+    background-color: #FF0000;
+    color: white;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 5px 13px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: normal;
+
+    display: inline-flex;
+    justify-content: center;
+    min-width: 20px;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+}
+.milestone-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: .3rem;
+    outline: 0;
+}
 /*Progress line*/
 /*.progress-line {
     height: 6px;
