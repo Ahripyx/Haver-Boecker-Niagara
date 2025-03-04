@@ -1,0 +1,85 @@
+﻿@model Haver_Boecker_Niagara.Models.Milestone
+
+<div class="modal fade" id="milestoneModal" tabindex="-1" role="dialog" aria-labelledby="milestoneModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="milestoneModalLabel">Add Milestone</h4>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="milestoneForm">
+                    <input type="hidden" id="KickOfMeetingID" name="KickOfMeetingID" value="@Model.KickOfMeetingID" />
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label">Task Name</label>
+                        <select asp-for="Name" class="form-control" id="taskDropdown">
+                            @foreach (var task in Enum.GetValues(typeof(Haver_Boecker_Niagara.Models.Task)))
+                            {
+                                <option value="@task">@task</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label asp-for="Status" class="control-label">Task Status</label>
+                        <select asp-for="Status" class="form-control" id="statusDropdown">
+                            @foreach (var status in Enum.GetValues(typeof(Haver_Boecker_Niagara.Models.Status)))
+                            {
+                                <option value="@status">@status</option>
+                            }
+
+                        </select>
+                    </div>
+                    <div class="form-group mt-2" id="endDateContainer">
+                        <label asp-for="EndDate" class="control-label">End Date</label>
+                        <input type="date" asp-for="EndDate" class="form-control" id="endDate" />
+                    </div>
+                    <div class="modal-footer mt-3">
+                        <button type="submit" class="btn btn-success">Save Milestone</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        function updateFields() {
+            let status = $("#statusDropdown").val();
+            let today = new Date().toISOString().split("T")[0];
+
+            console.log("Selected status:", status);
+
+            if (status === "Open" || status === "0") { 
+                $("#startDate").val(today);
+                $("#endDateContainer").show();
+            } else if (status === "Closed" || status === "1") { 
+                $("#completionDate").val(today);
+            }
+        }
+
+        $("#statusDropdown").change(updateFields);
+
+        updateFields();
+    })
+        $("#milestoneForm").submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("CreateMilestone", "KickoffMeetingsController")',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        $("#milestoneModal").modal("hide");
+                    } else {
+                        alert("Error: " + response.errors.join("\n"));
+                    }
+                }
+            });
+        });
+    });
+</script>
