@@ -38,13 +38,13 @@
         <div class="timeline-item">
             <div class="milestone-dot"></div>
             <div class="timeline-content">
-                <strong>Pre-Orders Expected:</strong> @Model.PreOrdersExpected?.ToString("dddd, MMM dd yyyy")"
+                <strong>Pre-Orders Expected:</strong> @Model.PreOrdersExpected?.ToString("dddd, MMM dd yyyy")
             </div>
         </div>
         <div class="timeline-item">
             <div class="milestone-dot"></div>
             <div class="timeline-content">
-                <strong>Readiness to Ship Expected:</strong> @Model.ReadinessToShipExpected?.ToString("dddd, MMM dd yyyy")"
+                <strong>Readiness to Ship Expected:</strong> @Model.ReadinessToShipExpected?.ToString("dddd, MMM dd yyyy")
             </div>
         </div>
         <div class="timeline-item">
@@ -56,7 +56,7 @@
         <div class="timeline-item">
             <div class="milestone-dot"></div>
             <div class="timeline-content">
-                <strong>Deadline Date:</strong> @Model.DeadlineDate?.ToString("dddd, MMM dd yyyy")"
+                <strong>Deadline Date:</strong> @Model.DeadlineDate?.ToString("dddd, MMM dd yyyy")
             </div>
         </div>
 </div>
@@ -66,36 +66,67 @@
     <hr />
     
     @{
+
         var validMilestones = Model.EngineeringOnly
             ? Model.KickoffMeetings?.SelectMany(k => k.Milestones)
                 .Where(m => m.Name == Haver_Boecker_Niagara.Models.Task.EngineeringReleased).ToList()
-            : Model.KickoffMeetings?.SelectMany(k => k.Milestones)
-                .Where(m => new List<Haver_Boecker_Niagara.Models.Task>
-                {
-                    Haver_Boecker_Niagara.Models.Task.PurchaseOrdersIssued,
-                    Haver_Boecker_Niagara.Models.Task.ApprovalDrawing,
-                    Haver_Boecker_Niagara.Models.Task.PackageReleased,
-                    Haver_Boecker_Niagara.Models.Task.MachineAssembly,
-                    Haver_Boecker_Niagara.Models.Task.MachineTesting,
-                    Haver_Boecker_Niagara.Models.Task.EngineeringReleased
-                }.Contains(m.Name)).ToList();
+            : Model.KickoffMeetings?.SelectMany(k => k.Milestones).ToList();
 
+                // redundant code?
+                // .Where(m => new List<Haver_Boecker_Niagara.Models.Task>
+                // {
+                //     Haver_Boecker_Niagara.Models.Task.PurchaseOrdersIssued,
+                //     Haver_Boecker_Niagara.Models.Task.ApprovalDrawing,
+                //     Haver_Boecker_Niagara.Models.Task.PackageReleased,
+                //     Haver_Boecker_Niagara.Models.Task.MachineAssembly,
+                //     Haver_Boecker_Niagara.Models.Task.MachineTesting,
+                //     Haver_Boecker_Niagara.Models.Task.EngineeringReleased
+                // }.Contains(m.Name)).ToList();
         var totalMilestones = validMilestones?.Count ?? 0;
         var completedMilestones = validMilestones?.Count(m => m.Status == Haver_Boecker_Niagara.Models.Status.Closed) ?? 0;
         var progressPercentage = totalMilestones > 0 ? (completedMilestones * 100) / totalMilestones : 0;
+        if (totalMilestones > 0)
+        {
+            <span>Overall Milestone Progress</span>
+            <div class="progress mb-3">
+                <div class="progress-bar bg-success" role="progressbar"
+                     style="width: @progressPercentage%;" aria-valuenow="@progressPercentage"
+                     aria-valuemin="0" aria-valuemax="100">
+                    @progressPercentage%
+                </div>
+            </div>
+        }
     }
+    
+    
+    @if (Model.KickoffMeetings.Count == 0)
+    {
+        <button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#komModal">
+            + Create Kickoff Meeting
+        </button>
+    }
+    else
+    {
+        int i = 0;
+        <div class="timeline">
+            @foreach (var kickoffMeeting in Model.KickoffMeetings)
+            {
+                i++;
+                <div class="timeline-item">
+                    <div class="timeline-content justify-content-between d-flex">
+                        <span class="my-auto"><strong>Kickoff Meeting @i:</strong> @(kickoffMeeting.Milestones?.Count ?? 0) Milestones</span>
+                        <button type="button" value="@kickoffMeeting.MeetingID" class="addMilestoneBtn btn btn-success mt-3">
+                            + Add Milestone
+                        </button>
+                    </div>
+                </div>
 
-    <div class="progress mb-3">
-        <div class="progress-bar bg-success" role="progressbar"
-            style="width: @progressPercentage%;" aria-valuenow="@progressPercentage"
-            aria-valuemin="0" aria-valuemax="100">
-            @progressPercentage%
+            }
+            
         </div>
-    </div>
-
-    <button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#komModal">
-        + Create Kickoff Meeting
-    </button>
+        
+    }
+    
     <div class="d-flex justify-content-between">
         @foreach (var milestone in validMilestones ?? new List<Haver_Boecker_Niagara.Models.Milestone>())
         {
@@ -103,17 +134,17 @@
             <div class="milestone-dot @(isCompleted ? "completed" : "pending")" title="@milestone.Name"></div>
         }
     </div>
-        <div class="timeline">
+    <div class="timeline">
 
-                <div class="timeline-item">
-                    <div class="timeline-dot milestone-dot @(ViewData["MilestoneStatus"] != null && (Status)ViewData["MilestoneStatus"] == Status.Open ? "status-open" : "status-closed")">
-                    </div>
-                    <div class="timeline-content">
-                        <strong>Latest Milestone:</strong> @Model.LatestMilestone
-                    </div>
-                </div>
+        <div class="timeline-item">
+            <div class="timeline-dot milestone-dot @(ViewData["MilestoneStatus"] != null && (Status)ViewData["MilestoneStatus"] == Status.Open ? "status-open" : "status-closed")">
+            </div>
+            <div class="timeline-content">
+                <strong>Latest Milestone:</strong> @Model.LatestMilestone
+            </div>
         </div>
     </div>
+</div>
 
 @if (!Model.EngineeringOnly)
 {
@@ -156,4 +187,41 @@ else
     <a asp-action="Index" class="btn-primary-close">Close</a>
     <a asp-action="Edit" asp-route-id="@Model?.GanttID" class="btn-edit">Edit</a>
 </div>
-@await Html.PartialAsync("_komModal", new Haver_Boecker_Niagara.Models.KickoffMeeting { GanttID = Model.GanttID })
+<partial name="_komModal" model="@new KickoffMeeting {GanttID = Model.GanttID}"/>
+<div id="milestoneModalContainer"></div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+
+        $(document).ready(function () {
+            document.querySelectorAll("button[class*='addMilestoneBtn']").forEach((e) => {e.onclick = 
+                function () {
+                    let ID = this.value;
+                    $.ajax({
+                        url: '@Url.Action("GetMilestoneModal", "GanttSchedules")',
+                        type: 'GET',
+                        data: {id: ID},
+                        traditional: true,
+                        success: function (data) {
+                            $("#milestoneModalContainer").html(data);
+                            var modalElement = document.getElementById('milestoneModal');
+                            if (modalElement) {
+                                var myModal = new bootstrap.Modal(modalElement, {backdrop: 'static'});
+                                myModal.show();
+                            } else {
+                                console.error("Modal element not found!");
+                            }
+                        },
+                        error: function () {
+                            alert("Error loading partial view.");
+                        }
+                    });
+                }
+            })
+        })
+
+    </script>
+}
+

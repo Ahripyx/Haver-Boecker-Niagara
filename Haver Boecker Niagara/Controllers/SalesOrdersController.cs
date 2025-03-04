@@ -124,6 +124,7 @@ namespace Haver_Boecker_Niagara.Controllers
             var salesOrder = await _context.SalesOrders
                 .Include(s => s.Customer)
                 .Include(s => s.EngineeringPackage)
+                .ThenInclude(p => p.Engineers)
                 .Include(s => s.Machines)
                 .Include(s => s.PurchaseOrders!).ThenInclude(p => p.Vendor)
                 .FirstOrDefaultAsync(m => m.SalesOrderID == id);

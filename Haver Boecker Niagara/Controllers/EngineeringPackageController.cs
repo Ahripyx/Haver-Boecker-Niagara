@@ -252,6 +252,7 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 return NotFound();
             }
+            ViewData["SalesOrderID"] = _context.SalesOrders.Where(p => p.EngineeringPackageID == engineeringPackage.EngineeringPackageID).FirstOrDefault().SalesOrderID;
             return View(engineeringPackage);
         }
 
@@ -314,7 +315,8 @@ namespace Haver_Boecker_Niagara.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                var salesOrderID = _context.SalesOrders.Where(p => p.EngineeringPackageID == engineeringPackage.EngineeringPackageID).FirstOrDefault().SalesOrderID;
+                return RedirectToAction(nameof(Details), controllerName: "SalesOrders", new {ID = salesOrderID});
             }
             return View(engineeringPackage);
         }

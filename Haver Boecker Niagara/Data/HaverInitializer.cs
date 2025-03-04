@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Task = Haver_Boecker_Niagara.Models.Task;
 
 namespace Haver_Boecker_Niagara.Data
 {
@@ -220,6 +221,75 @@ namespace Haver_Boecker_Niagara.Data
                             context.MachineSalesOrders.AddRange(machineSOs);
                             context.SaveChanges();
                         }
+                        if (!context.GanttSchedules.Any())
+                        {
+                            var salesOrders = context.SalesOrders.ToList();
+                            List<GanttSchedule> gantts = new();
+                            
+                            for (int i = 0; i < 10; i++)
+                            {
+                                gantts.Add(new GanttSchedule
+                                {
+                                    SalesOrderID = salesOrders[i % salesOrders.Count].SalesOrderID,
+                                    EngineeringOnly = i % 2 == 0,
+                                    LatestMilestone = $"Milestone {i + 1}",
+                                    MachineID = null,
+                                    PreOrdersExpected = DateTime.UtcNow.AddDays(10 + i),
+                                    ReadinessToShipExpected = DateTime.UtcNow.AddDays(30 + i),
+                                    PromiseDate = DateTime.UtcNow.AddDays(45 + i),
+                                    DeadlineDate = DateTime.UtcNow.AddDays(60 + i),
+                                    NCR = i % 2 == 0 ? "NCR-001" : "NCR-002"
+                                });
+                            }
+                            context.GanttSchedules.AddRange(gantts);
+                            context.SaveChanges();
+                        }
+
+                        if (!context.KickoffMeetings.Any())
+                        {
+                            var gantts = context.GanttSchedules.ToList();
+                            List<KickoffMeeting> kickoffMeetings = new();
+                            
+                            foreach (var gantt in gantts)
+                            {
+                                for (int i = 0; i < 1; i++)
+                                {
+                                    kickoffMeetings.Add(new KickoffMeeting
+                                    {
+                                        GanttID = gantt.GanttID,
+                                        Milestone = i % 2 == 0,
+                                        MeetingSummary = $"Kickoff Meeting {i + 1} for Gantt {gantt.GanttID}"
+                                    });
+                                }
+                            }
+                            context.KickoffMeetings.AddRange(kickoffMeetings);
+                            context.SaveChanges();
+                        }
+
+                        if (!context.Milestones.Any())
+                        {
+                            var kickoffMeetings = context.KickoffMeetings.ToList();
+                            List<Milestone> milestones = new();
+                            
+                            foreach (var kom in kickoffMeetings)
+                            {
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    milestones.Add(new Milestone
+                                    {
+                                        KickOfMeetingID = kom.MeetingID,
+                                        Name = (Task)(i % Enum.GetValues(typeof(Task)).Length), // Assigning an enum task
+                                        StartDate = DateTime.UtcNow.AddDays(i),
+                                        EndDate = DateTime.UtcNow.AddDays(i + 5),
+                                        ActualCompletionDate = DateTime.UtcNow.AddDays(i + 7),
+                                        Status = (Status)(i % Enum.GetValues(typeof(Status)).Length)
+                                    });
+                                }
+                            }
+                            context.Milestones.AddRange(milestones);
+                            context.SaveChanges();
+                        }
+
                     }
                     catch (Exception ex)
                     {

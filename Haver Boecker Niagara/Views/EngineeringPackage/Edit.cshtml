@@ -40,10 +40,6 @@
                     <input asp-for="ActualPackageReleaseDate" type="date" class="form-control" />
                     <span asp-validation-for="ActualPackageReleaseDate" class="text-danger"></span>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="ActualApprovalDrawingDate" class="control-label"></label>
                     <input asp-for="ActualApprovalDrawingDate" type="date" class="form-control" />
@@ -52,7 +48,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-end gap-2 mt-4">
-            <a asp-action="Index" class="btn btn-primary-close">Close</a>
+            <a asp-action="Details" asp-controller="SalesOrders" asp-route-id="@ViewBag.SalesOrderID" class="btn btn-primary-close">Close</a>
             <button type="reset" class="btn btn-primary-close">Reset</button>
             <button type="submit" value="Edit" class="btn btn-primary btn-edit" id="btnEdit">Edit</button>
         </div>

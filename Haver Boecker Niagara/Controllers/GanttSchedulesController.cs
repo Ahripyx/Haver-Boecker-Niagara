@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.Utilities;
-using Haver_Boecker_Niagara.ViewModels;
 using Haver_Boecker_Niagara.CustomControllers;
 
 namespace Haver_Boecker_Niagara.Controllers
@@ -41,12 +36,12 @@ namespace Haver_Boecker_Niagara.Controllers
 
             if (!string.IsNullOrEmpty(searchOrderNo))
             {
-                ganttSchedules = ganttSchedules.Where(g => g.SalesOrder.OrderNumber.Contains(searchOrderNo));
+                ganttSchedules = ganttSchedules.Where(g => g.SalesOrder.OrderNumber.ToLower().Contains(searchOrderNo.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(searchCustomer))
             {
-                ganttSchedules = ganttSchedules.Where(g => g.SalesOrder.Customer.Name.Contains(searchCustomer));
+                ganttSchedules = ganttSchedules.Where(g => g.SalesOrder.Customer.Name.ToLower().Contains(searchCustomer.ToLower()));
             }
 
             ganttSchedules = sortField switch
@@ -93,9 +88,7 @@ namespace Haver_Boecker_Niagara.Controllers
             : "No Milestones";
 
             ViewData["MilestoneStatus"] = latestMilestone?.Status;
- 
-
-
+            
             return View(ganttSchedule);
         }
         public async Task<IActionResult> Edit(int? id)
@@ -143,6 +136,35 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber");
             return View();
+        }
+        
+        public async Task<IActionResult> CreateKickoffMeeting([Bind("GanttID,MeetingSummary")] KickoffMeeting kickoffMeeting)
+        {
+            kickoffMeeting.Milestone = false;
+            if (ModelState.IsValid)
+            {
+                _context.Add(kickoffMeeting);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Details", new {ID = kickoffMeeting.GanttID});
+        }
+        
+        public async Task<IActionResult> CreateMilestone([Bind("Name,KickOfMeetingID,EndDate")] Milestone milestone)
+        {
+            milestone.StartDate = DateTime.Today;
+            milestone.Status = Status.Open;
+            if (ModelState.IsValid)
+            {
+                _context.Add(milestone);
+                await _context.SaveChangesAsync();
+            }
+            var redirectID = _context.KickoffMeetings.Find(milestone.KickOfMeetingID).GanttID;
+            return RedirectToAction("Details", new {ID = redirectID});
+        }
+        
+        public async Task<IActionResult> GetMilestoneModal(int id)
+        {
+            return PartialView("_milestoneModal", new Milestone {KickOfMeetingID = id});
         }
 
         [HttpPost]

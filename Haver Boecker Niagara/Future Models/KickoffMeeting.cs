@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Haver_Boecker_Niagara.Models
 {
@@ -10,6 +11,10 @@ namespace Haver_Boecker_Niagara.Models
 
         public bool Milestone { get; set; } //dropdown for our future showing it in the workflow of sales order 
 
+        [Required]
+        [DisplayName("Meeting Summary")]
+        [MinLength(10, ErrorMessage = "Meeting Summary must be at least 10 characters long.")]
+        [MaxLength(250, ErrorMessage = "Meeting Summary cannot be longer than 250 characters.")]
         public string MeetingSummary { get; set; }
 
         public ICollection<Milestone>? Milestones { get; set; }

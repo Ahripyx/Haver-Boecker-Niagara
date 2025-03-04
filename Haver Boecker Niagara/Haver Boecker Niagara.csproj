@@ -41,4 +41,12 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Milestones\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Milestones\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Milestones\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Milestones\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Milestones\Index.cshtml" />
+  </ItemGroup>
+
 </Project>
