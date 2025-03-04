@@ -46,18 +46,19 @@
     </div>
 </div>
 
+<!-- Must include this for script to work below -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
+    $(function () {
         function updateFields() {
             let status = $("#statusDropdown").val();
             let today = new Date().toISOString().split("T")[0];
 
-            console.log("Selected status:", status);
-
-            if (status === "Open" || status === "0") { 
+            if (status === "Open" || status === "0") {
                 $("#startDate").val(today);
                 $("#endDateContainer").show();
-            } else if (status === "Closed" || status === "1") { 
+            } else if (status === "Closed" || status === "1") {
+                $("#endDateContainer").hide();
                 $("#completionDate").val(today);
             }
         }
@@ -65,11 +66,11 @@
         $("#statusDropdown").change(updateFields);
 
         updateFields();
-    })
+
         $("#milestoneForm").submit(function (e) {
             e.preventDefault();
             $.ajax({
-                url: '@Url.Action("CreateMilestone", "KickoffMeetingsController")',
+                url: '@Url.Action("CreateMilestone", "KickoffMeetings")',
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function (response) {
