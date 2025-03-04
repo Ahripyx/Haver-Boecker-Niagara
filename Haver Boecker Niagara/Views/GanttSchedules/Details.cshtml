@@ -59,12 +59,12 @@
                 <strong>Deadline Date:</strong> @Model.DeadlineDate?.ToString("dddd, MMM dd yyyy")
             </div>
         </div>
-</div>
+    </div>
 </div>
 <div class="p-4 shadow-sm card-container mb-3">
     <h4>Milestone Progress</h4>
     <hr />
-    
+
     @{
 
         var validMilestones = Model.EngineeringOnly
@@ -72,25 +72,29 @@
                 .Where(m => m.Name == Haver_Boecker_Niagara.Models.Task.EngineeringReleased).ToList()
             : Model.KickoffMeetings?.SelectMany(k => k.Milestones).ToList();
 
-                // redundant code?
-                // .Where(m => new List<Haver_Boecker_Niagara.Models.Task>
-                // {
-                //     Haver_Boecker_Niagara.Models.Task.PurchaseOrdersIssued,
-                //     Haver_Boecker_Niagara.Models.Task.ApprovalDrawing,
-                //     Haver_Boecker_Niagara.Models.Task.PackageReleased,
-                //     Haver_Boecker_Niagara.Models.Task.MachineAssembly,
-                //     Haver_Boecker_Niagara.Models.Task.MachineTesting,
-                //     Haver_Boecker_Niagara.Models.Task.EngineeringReleased
-                // }.Contains(m.Name)).ToList();
+        // redundant code?
+        // .Where(m => new List<Haver_Boecker_Niagara.Models.Task>
+        // {
+        //     Haver_Boecker_Niagara.Models.Task.PurchaseOrdersIssued,
+        //     Haver_Boecker_Niagara.Models.Task.ApprovalDrawing,
+        //     Haver_Boecker_Niagara.Models.Task.PackageReleased,
+        //     Haver_Boecker_Niagara.Models.Task.MachineAssembly,
+        //     Haver_Boecker_Niagara.Models.Task.MachineTesting,
+        //     Haver_Boecker_Niagara.Models.Task.EngineeringReleased
+        // }.Contains(m.Name)).ToList();
         var totalMilestones = validMilestones?.Count ?? 0;
         var completedMilestones = validMilestones?.Count(m => m.Status == Haver_Boecker_Niagara.Models.Status.Closed) ?? 0;
         var progressPercentage = totalMilestones > 0 ? (completedMilestones * 100) / totalMilestones : 0;
-        if (totalMilestones > 0)
+        //Color change depending on the porcentage.
+        var progressColorBar = progressPercentage >= 70 ? "bg-success" :
+                               progressPercentage >= 30 ? "bg-warning" : "bg-danger";
+
+        @if (totalMilestones > 0)
         {
             <span>Overall Milestone Progress</span>
             <div class="progress mb-3">
-                <div class="progress-bar bg-success" role="progressbar"
-                     style="width: @progressPercentage%;" aria-valuenow="@progressPercentage"
+                <div class="progress-bar @progressColorBar" role="progressbar"
+                     style="width: @progressPercentage%; background-color: yellow;" aria-valuenow="@progressPercentage"
                      aria-valuemin="0" aria-valuemax="100">
                     @progressPercentage%
                 </div>
