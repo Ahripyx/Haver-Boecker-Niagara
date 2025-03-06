@@ -60,7 +60,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 .ToList();
 
             var customerCountry = _context.Customers
-                .GroupBy(g => g.Country)
+                .GroupBy(g => g.Country ?? "No country")
                 .ToDictionary(g => g.Key, g => g.Count());
 
             var model = new DashboardViewModel
