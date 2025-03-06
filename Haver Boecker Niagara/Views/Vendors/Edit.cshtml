@@ -14,7 +14,7 @@
          <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Vendor <span class="required-fields">*</span></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
          </div>
@@ -37,7 +37,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label">Phone Number <span class="required-fields">*</span></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+                <input asp-for="PhoneNumber" class="form-control" required />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
         </div>
@@ -46,7 +46,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="Email" class="control-label">Email Address <span class="required-fields">*</span></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control" required />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>

@@ -14,14 +14,14 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="FirstName" class="control-label">First Name <span class="required-fields">*</span></label>
-                            <input asp-for="FirstName" class="form-control" />
+                            <input asp-for="FirstName" class="form-control" required />
                             <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="LastName" class="control-label">Last Name <span class="required-fields">*</span></label>
-                            <input asp-for="LastName" class="form-control" />
+                            <input asp-for="LastName" class="form-control" required />
                             <span asp-validation-for="LastName" class="text-danger"></span>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label asp-for="Email" class="control-label">Email <span class="required-fields">*</span></label>
-                            <input asp-for="Email" class="form-control" />
+                            <input asp-for="Email" class="form-control" required />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                     </div>

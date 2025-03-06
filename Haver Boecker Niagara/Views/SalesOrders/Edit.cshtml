@@ -19,8 +19,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="Price" class="control-label"></label>
-                        <input asp-for="Price" class="form-control" />
+                        <label asp-for="Price" class="control-label">Price <span class="required-fields">*</span></label>
+                        <input asp-for="Price" class="form-control" required />
                         <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
                 </div>

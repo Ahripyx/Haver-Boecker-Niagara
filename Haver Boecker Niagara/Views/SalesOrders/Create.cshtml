@@ -13,14 +13,14 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="OrderNumber" class="control-label">Order Number <span class="required-fields">*</span></label>
-                    <input asp-for="OrderNumber" class="form-control" />
+                    <input asp-for="OrderNumber" class="form-control" required />
                     <span asp-validation-for="OrderNumber" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="Price" class="control-label">Price <span class="required-fields">*</span></label>
-                    <input asp-for="Price" class="form-control" />
+                    <input asp-for="Price" class="form-control" required />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
             </div>

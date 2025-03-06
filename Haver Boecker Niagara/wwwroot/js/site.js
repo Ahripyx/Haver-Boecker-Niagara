@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
         console.log('Create button exists')
         btnCreate.addEventListener("click", () => {
             sessionStorage.setItem("showToast", "true");
-            const inputs = document.querySelectorAll('input');
+            const inputs = document.querySelectorAll('input[required]');
             let error = false;
             inputs.forEach(i => {
                 if (!i.value.trim()) {
@@ -59,13 +59,16 @@ document.addEventListener("DOMContentLoaded", (e) => {
                     }, 5000);
                 }
             }
+            else {
+                sessionStorage.setItem("showToast, true")
+            }
         });
     }
     if (btnEdit) {
         console.log('Edit button exists')
         btnEdit.addEventListener("click", () => {
             sessionStorage.setItem("showToast", "true");
-            const inputs = document.querySelectorAll('input');
+            const inputs = document.querySelectorAll('input[required]');
             let error = false;
             inputs.forEach(i => {
                 if (!i.value.trim()) {
@@ -79,6 +82,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
                         toastError.style.display = "none";
                     }, 5000);
                 }
+            } else {
+                sessionStorage.setItem("showToast, true")
             }
         });
     }
