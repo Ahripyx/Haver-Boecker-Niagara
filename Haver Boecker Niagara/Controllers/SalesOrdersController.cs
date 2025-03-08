@@ -148,8 +148,9 @@ namespace Haver_Boecker_Niagara.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes")] SalesOrder salesOrder, string? chkAddPO = "off", string? chkAddMachine = "off")
-
+            [Bind("Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes")] SalesOrder salesOrder,
+            string? chkAddPO = "off",
+            string? chkAddMachine = "off")
         {
             if (ModelState.IsValid)
             {
@@ -168,8 +169,47 @@ namespace Haver_Boecker_Niagara.Controllers
                 await _context.SaveChangesAsync();
 
                 salesOrder.EngineeringPackageID = newEngineeringPackage.EngineeringPackageID;
-
                 _context.SalesOrders.Add(salesOrder);
+                await _context.SaveChangesAsync();
+
+                var machines = await _context.MachineSalesOrders
+                    .Where(mso => mso.SalesOrderID == salesOrder.SalesOrderID)
+                    .Select(mso => mso.Machine)
+                    .ToListAsync();
+
+                if (machines.Any())
+                {
+                    foreach (var machine in machines)
+                    {
+                        var newSchedule = new GanttSchedule
+                        {
+                            SalesOrderID = salesOrder.SalesOrderID,
+                            MachineID = machine.MachineID,
+                            EngineeringOnly = false,
+                            PreOrdersExpected = null,
+                            ReadinessToShipExpected = null,
+                            PromiseDate = DateTime.Today,
+                            DeadlineDate = null,
+                            NCR = ""
+                        };
+                        _context.GanttSchedules.Add(newSchedule);
+                    }
+                }
+                else
+                {
+                    var newSchedule = new GanttSchedule
+                    {
+                        SalesOrderID = salesOrder.SalesOrderID,
+                        EngineeringOnly = true,
+                        PreOrdersExpected = null,
+                        ReadinessToShipExpected = null,
+                        PromiseDate = DateTime.Today,
+                        DeadlineDate = null,
+                        NCR = ""
+                    };
+                    _context.GanttSchedules.Add(newSchedule);
+                }
+
                 await _context.SaveChangesAsync();
 
                 if (chkAddPO == "on" || chkAddMachine == "on")
@@ -182,6 +222,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name", salesOrder.CustomerID);
             return View(salesOrder);
         }
+
         // GET: SalesOrders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
