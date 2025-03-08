@@ -257,7 +257,6 @@ namespace Haver_Boecker_Niagara.Data
                                     kickoffMeetings.Add(new KickoffMeeting
                                     {
                                         GanttID = gantt.GanttID,
-                                        Milestone = i % 2 == 0,
                                         MeetingSummary = $"Kickoff Meeting {i + 1} for Gantt {gantt.GanttID}"
                                     });
                                 }

@@ -3,6 +3,7 @@
     public enum Status
     {
         Open,
-        Closed
+        Closed,
+        DNR
     }
 }
