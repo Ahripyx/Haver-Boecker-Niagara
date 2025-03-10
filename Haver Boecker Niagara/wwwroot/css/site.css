@@ -916,8 +916,6 @@ table-layout: fixed;
 /*Time Line*/
 .timeline {
     position: relative;
-    padding-left: 40px;
-    border-left: 4px solid #007bff;
     margin-top: 20px;
 }
 
