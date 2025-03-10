@@ -69,7 +69,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 .Include(g => g.SalesOrder.EngineeringPackage)
                 .ThenInclude(ep => ep.Engineers)
                 .Include(g => g.SalesOrder.Machines)
-                .Include(g => g.KickoffMeetings) 
+                .Include(g => g.KickoffMeetings)
                 .ThenInclude(k => k.Milestones)
                 .FirstOrDefaultAsync(m => m.GanttID == id);
 
@@ -81,6 +81,11 @@ namespace Haver_Boecker_Niagara.Controllers
              .OrderByDescending(m => m.MilestoneID)
              .FirstOrDefault();
 
+       
+            ganttSchedule.KickoffMeetings = ganttSchedule.KickoffMeetings?
+            .OrderByDescending(k => k.MeetingDate)
+            .Take(3)
+            .ToList();
             var milestoneStatus = latestMilestone?.Status;
 
             ganttSchedule.LatestMilestone = latestMilestone != null
@@ -88,7 +93,7 @@ namespace Haver_Boecker_Niagara.Controllers
             : "No Milestones";
 
             ViewData["MilestoneStatus"] = latestMilestone?.Status;
-            
+
             return View(ganttSchedule);
         }
         public async Task<IActionResult> Edit(int? id)

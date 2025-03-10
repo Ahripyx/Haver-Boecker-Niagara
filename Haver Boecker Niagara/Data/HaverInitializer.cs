@@ -266,21 +266,38 @@ namespace Haver_Boecker_Niagara.Data
                         if (!context.KickoffMeetings.Any())
                         {
                             var gantts = context.GanttSchedules.ToList();
+
+                            if (!gantts.Any())
+                            {
+                                Console.WriteLine(" There is any gantt schedules on the database");
+                                return;
+                            }
+
                             List<KickoffMeeting> kickoffMeetings = new();
-                            
+                            Random rnd = new();
+
                             foreach (var gantt in gantts)
                             {
-                                for (int i = 0; i < 1; i++)
+                              
+
+                                for (int i = 1; i <= 3; i++)
                                 {
                                     kickoffMeetings.Add(new KickoffMeeting
                                     {
                                         GanttID = gantt.GanttID,
-                                        MeetingSummary = $"Kickoff Meeting {i + 1} for Gantt {gantt.GanttID}"
+                                        MeetingSummary = $"Kickoff Meeting {i} for Gantt {gantt.GanttID}",
+                                        MeetingDate = new DateOnly(2024, rnd.Next(1, 12), rnd.Next(1, 28))
                                     });
                                 }
                             }
+
                             context.KickoffMeetings.AddRange(kickoffMeetings);
                             context.SaveChanges();
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("There are already kom on the database");
                         }
 
                         if (!context.Milestones.Any())

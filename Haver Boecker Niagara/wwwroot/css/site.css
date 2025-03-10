@@ -982,6 +982,14 @@ table-layout: fixed;
     border-radius: .3rem;
     outline: 0;
 }
+/*KOM*/
+#komMainCard{
+    transform: none !important;
+}
+
+.primary-text-container{
+    background-color: var(--blue);
+}
 /*Progress line*/
 /*.progress-line {
     height: 6px;
@@ -1007,7 +1015,6 @@ table-layout: fixed;
 .pending {
     background-color: lightgray;
 }*/
-
 /*Percentiles*/
 .one-percentil {
     left: 1%;
