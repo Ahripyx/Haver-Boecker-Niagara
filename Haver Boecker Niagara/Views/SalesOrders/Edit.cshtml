@@ -132,6 +132,7 @@
         </form>
 
         <partial name="_purchaseOrderModal" model="@(new PurchaseOrder { SalesOrderID = Model.SalesOrderID })"/>
+        <partial name="_vendorModal" model="@(new Vendor())" />
         <partial name="_machineModal" model="@(new MachineVM { SalesOrderID = Model.SalesOrderID })" />
         <div id="partialPOContainer"></div>
         <div id="partialMachineContainer"></div>

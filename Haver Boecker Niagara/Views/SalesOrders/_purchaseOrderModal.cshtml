@@ -32,6 +32,9 @@
                                 <select asp-for="VendorID" class="form-control" asp-items="ViewBag.VendorID"></select>
                                 <span asp-validation-for="Vendor.Name" class="text-danger"></span>
                             </div>
+                            <div class="form-group mt-2">
+                                <button type="button" class="btn btn-secondary" id="btnCreateVendor">Create Vendor</button>
+                            </div>
                             <div class="mt-2 form-group">
                                 <button asp-action="CreatePurchaseOrder" class="btn btn-primary" id="btnCreatePurchaseOrder">Save</button>
                                 <button type="reset" class="btn btn-danger">Reset</button>
@@ -44,3 +47,13 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#btnCreateVendor').on('click', function () {
+            $('#purchaseOrderModal').modal('hide');
+            $('#vendorModal').modal('show');
+        });
+    });
+</script>
