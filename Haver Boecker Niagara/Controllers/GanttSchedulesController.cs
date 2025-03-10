@@ -108,7 +108,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GanttID,SalesOrderID,PreOrdersExpected,ReadinessToShipExpected,PromiseDate,DeadlineDate,NCR,EngineeringOnly")] GanttSchedule ganttSchedule)
+        public async Task<IActionResult> Edit(int id, [Bind("GanttID,SalesOrderID,MachineID, PreOrdersExpected,ReadinessToShipExpected,PromiseDate,DeadlineDate,NCR,EngineeringOnly")] GanttSchedule ganttSchedule)
         {
             if (id != ganttSchedule.GanttID)
                 return NotFound();
@@ -140,7 +140,6 @@ namespace Haver_Boecker_Niagara.Controllers
         
         public async Task<IActionResult> CreateKickoffMeeting([Bind("GanttID,MeetingSummary")] KickoffMeeting kickoffMeeting)
         {
-            kickoffMeeting.Milestone = false;
             if (ModelState.IsValid)
             {
                 _context.Add(kickoffMeeting);
@@ -223,5 +222,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", ganttSchedule.SalesOrderID);
             return View(ganttSchedule);
         }
+
+        
     }
 }

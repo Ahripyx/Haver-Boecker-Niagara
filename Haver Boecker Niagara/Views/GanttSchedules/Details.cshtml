@@ -59,7 +59,6 @@
                 <strong>Deadline Date:</strong> @Model.DeadlineDate?.ToString("dddd, MMM dd yyyy")
             </div>
         </div>
-    </div>
 </div>
 <div class="p-4 shadow-sm card-container mb-3">
     <h4>Milestone Progress</h4>
@@ -69,7 +68,7 @@
 
         var validMilestones = Model.EngineeringOnly
             ? Model.KickoffMeetings?.SelectMany(k => k.Milestones)
-                .Where(m => m.Name == Haver_Boecker_Niagara.Models.Task.EngineeringReleased).ToList()
+        .Where(m => m.Name == Haver_Boecker_Niagara.Models.Task.EngineeringPackage).ToList()
             : Model.KickoffMeetings?.SelectMany(k => k.Milestones).ToList();
 
         // redundant code?
@@ -89,19 +88,56 @@
         var progressColorBar = progressPercentage >= 70 ? "bg-success" :
                                progressPercentage >= 30 ? "bg-warning" : "bg-danger";
 
+    //     @if (totalMilestones > 0)
+    //     {
+    //         <span>Overall Milestone Progress</span>
+    //         <div class="progress mb-3">
+    //             <div class="progress-bar @progressColorBar" role="progressbar"
+    //                  style="width: @progressPercentage%; background-color: yellow;" aria-valuenow="@progressPercentage"
+    //                  aria-valuemin="0" aria-valuemax="100">
+    //                 @progressPercentage%
+    //             </div>
+    //         </div>
+    //     }
+    }
+
+
+        @{
+            var CalidMilestones = Model.KickoffMeetings?
+                .SelectMany(k => k.Milestones)
+                .ToList() ?? new List<Haver_Boecker_Niagara.Models.Milestone>();
+
+            var TotalMilestones = validMilestones.Count;
+            var CompletedMilestones = validMilestones.Count(m => m.Status == Haver_Boecker_Niagara.Models.Status.Closed);
+            var ProgressPercentage = totalMilestones > 0 ? (completedMilestones * 100) / totalMilestones : 0;
+
+            var ProgressColorBar = progressPercentage >= 70 ? "bg-success" :
+                                   progressPercentage >= 30 ? "bg-warning" : "bg-danger";
+        }
         @if (totalMilestones > 0)
         {
-            <span>Overall Milestone Progress</span>
-            <div class="progress mb-3">
+
+            //Percentiles 
+            <div class="d-flex position-relative" style="margin-bottom: 10px;">
+                <span class="position-absolute small text-dark one-percentil">0%</span>
+                <span class="position-absolute small text-dark thirty-percentil">30%</span>
+                <span class="position-absolute small text-dark seventy-percentil ">70%</span>
+                <span class="position-absolute small text-dark hundred-percentil">100%</span>
+            </div>
+            //Progress bar
+            <div class="progress mb-3 mt-3" style=" position: relative;">
                 <div class="progress-bar @progressColorBar" role="progressbar"
-                     style="width: @progressPercentage%; background-color: yellow;" aria-valuenow="@progressPercentage"
+                     style="width: @progressPercentage%;"
+                     aria-valuenow="@progressPercentage"
                      aria-valuemin="0" aria-valuemax="100">
                     @progressPercentage%
                 </div>
             </div>
         }
-    }
-    
+        else
+        {
+            <p>No milestones available.</p>
+        }
     
     @if (Model.KickoffMeetings.Count == 0)
     {
@@ -225,6 +261,15 @@ else
                 }
             })
         })
+        document.addEventListener("DOMContentLoaded", function () {
+            let progressBar = document.querySelector(".progress-bar");
+
+            if (progressBar) {
+                let progress = progressBar.getAttribute("aria-valuenow");
+                progressBar.style.width = progress + "%";
+            }
+        });
+        
 
     </script>
 }

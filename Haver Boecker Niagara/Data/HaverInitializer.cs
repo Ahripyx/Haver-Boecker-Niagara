@@ -221,29 +221,47 @@ namespace Haver_Boecker_Niagara.Data
                             context.MachineSalesOrders.AddRange(machineSOs);
                             context.SaveChanges();
                         }
-                        if (!context.GanttSchedules.Any())
+                        foreach (var salesOrder in context.SalesOrders)
                         {
-                            var salesOrders = context.SalesOrders.ToList();
-                            List<GanttSchedule> gantts = new();
-                            
-                            for (int i = 0; i < 10; i++)
+                            var linkedMachines = context.MachineSalesOrders
+                                .Where(mso => mso.SalesOrderID == salesOrder.SalesOrderID)
+                                .Select(mso => mso.Machine)
+                                .ToList();
+
+                            if (linkedMachines.Any())
                             {
-                                gantts.Add(new GanttSchedule
+                                foreach (var machine in linkedMachines)
                                 {
-                                    SalesOrderID = salesOrders[i % salesOrders.Count].SalesOrderID,
-                                    EngineeringOnly = i % 2 == 0,
-                                    LatestMilestone = $"Milestone {i + 1}",
-                                    MachineID = null,
-                                    PreOrdersExpected = DateTime.UtcNow.AddDays(10 + i),
-                                    ReadinessToShipExpected = DateTime.UtcNow.AddDays(30 + i),
-                                    PromiseDate = DateTime.UtcNow.AddDays(45 + i),
-                                    DeadlineDate = DateTime.UtcNow.AddDays(60 + i),
-                                    NCR = i % 2 == 0 ? "NCR-001" : "NCR-002"
-                                });
+                                    var ganttSchedule = new GanttSchedule
+                                    {
+                                        SalesOrderID = salesOrder.SalesOrderID,
+                                        MachineID = machine.MachineID,
+                                        EngineeringOnly = false,
+                                        PreOrdersExpected = null,
+                                        ReadinessToShipExpected = null,
+                                        PromiseDate = DateTime.Today,
+                                        DeadlineDate = null,
+                                        NCR = ""
+                                    };
+                                    context.GanttSchedules.Add(ganttSchedule);
+                                }
                             }
-                            context.GanttSchedules.AddRange(gantts);
-                            context.SaveChanges();
+                            else
+                            {
+                                var ganttSchedule = new GanttSchedule
+                                {
+                                    SalesOrderID = salesOrder.SalesOrderID,
+                                    EngineeringOnly = true,
+                                    PreOrdersExpected = null,
+                                    ReadinessToShipExpected = null,
+                                    PromiseDate = DateTime.Today,
+                                    DeadlineDate = null,
+                                    NCR = ""
+                                };
+                                context.GanttSchedules.Add(ganttSchedule);
+                            }
                         }
+
 
                         if (!context.KickoffMeetings.Any())
                         {
@@ -257,7 +275,6 @@ namespace Haver_Boecker_Niagara.Data
                                     kickoffMeetings.Add(new KickoffMeeting
                                     {
                                         GanttID = gantt.GanttID,
-                                        Milestone = i % 2 == 0,
                                         MeetingSummary = $"Kickoff Meeting {i + 1} for Gantt {gantt.GanttID}"
                                     });
                                 }

@@ -13,7 +13,7 @@ namespace Haver_Boecker_Niagara.Models
         public string PurchaseOrderNumber { get; set; }
 
 
-        [DisplayName("Purchase Order Due Date")]
+        [DisplayName("Purchase Order Expected Due Date")]
         public DateTime? PODueDate { get; set; }
 
         [NotMapped]

@@ -3,19 +3,16 @@ using System;
 using Haver_Boecker_Niagara.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.HaverMigration
+namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250304163349_Inital")]
-    partial class Inital
+    partial class HaverContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
@@ -183,13 +180,13 @@ namespace Haver_Boecker_Niagara.Data.HaverMigration
                     b.Property<int>("GanttID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateOnly>("MeetingDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("MeetingSummary")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("Milestone")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("MeetingID");
 

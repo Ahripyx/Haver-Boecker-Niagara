@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.HaverMigration
+namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     /// <inheritdoc />
-    public partial class Inital : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -264,8 +264,8 @@ namespace Haver_Boecker_Niagara.Data.HaverMigration
                     MeetingID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     GanttID = table.Column<int>(type: "INTEGER", nullable: false),
-                    Milestone = table.Column<bool>(type: "INTEGER", nullable: false),
-                    MeetingSummary = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false)
+                    MeetingSummary = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
+                    MeetingDate = table.Column<DateOnly>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

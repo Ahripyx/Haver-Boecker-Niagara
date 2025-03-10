@@ -1009,6 +1009,41 @@ table-layout: fixed;
 .pending {
     background-color: lightgray;
 }*/
+
+/*Percentiles*/
+.one-percentil {
+    left: 1%;
+    top: -10px;
+    transform: translateX(-50%);
+    color: var(--red);
+    font-size: 14px;
+    font-weight: bold;
+}
+.thirty-percentil {
+    left: 30%;
+    top: -10px;
+    transform: translateX(-50%);
+    color: var(--red);
+    font-size: 14px;
+    font-weight: bold;
+}
+.seventy-percentil {
+    left: 70%;
+    top: -10px;
+    transform: translateX(-50%);
+    color: var(--yellow);
+    font-size: 14px;
+    font-weight: bold;
+}
+.hundred-percentil {
+    left: 100%;
+    top: -10px;
+    transform: translateX(-100%);
+    color: var(--green);
+
+    font-size: 14px;
+    font-weight: bold;
+}
 @media (min-width: 768px) {
     html {
         font-size: 1rem;
