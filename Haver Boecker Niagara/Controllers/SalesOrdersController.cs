@@ -574,6 +574,19 @@ namespace Haver_Boecker_Niagara.Controllers
             return File(fileData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "MachineSchedules.xlsx");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateVendor([Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode")] Vendor vendor)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(vendor);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return PartialView("_vendorModal", vendor);
+        }
+
         private bool SalesOrderExists(int id)
         {
             return _context.SalesOrders.Any(e => e.SalesOrderID == id);
