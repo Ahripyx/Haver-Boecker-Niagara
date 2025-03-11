@@ -35,7 +35,7 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label asp-for="ReadinessToShipExpected" class="control-label">Readiness to Ship Expected</label>
+                <label asp-for="ReadinessToShipExpected" class="control-label">Readiness to Deliver Expected</label>
                 <input asp-for="ReadinessToShipExpected" type="date" class="form-control" />
                 <span asp-validation-for="ReadinessToShipExpected" class="text-danger"></span>
             </div>
@@ -44,14 +44,14 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label asp-for="PromiseDate" class="control-label">Promise Date <span class="required-fields">*</span></label>
-                <input asp-for="PromiseDate" type="date" class="form-control" required />
+                <label asp-for="PromiseDate" class="control-label">Promised Date <span class="required-fields">*</span></label>
+                <input asp-for="PromiseDate" type="date" class="form-control" />
                 <span asp-validation-for="PromiseDate" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label asp-for="DeadlineDate" class="control-label">Deadline Date</label>
+                <label asp-for="DeadlineDate" class="control-label">Need-by Date</label>
                 <input asp-for="DeadlineDate" type="date" class="form-control" />
                 <span asp-validation-for="DeadlineDate" class="text-danger"></span>
             </div>
