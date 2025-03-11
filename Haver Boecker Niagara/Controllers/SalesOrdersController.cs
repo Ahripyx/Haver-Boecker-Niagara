@@ -580,7 +580,7 @@ namespace Haver_Boecker_Niagara.Controllers
             {
                 _context.Add(vendor);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Edit), new { id = vendor.VendorID });
+                return RedirectToAction(nameof(Index));
             }
             return PartialView("_vendorModal", vendor);
         }
