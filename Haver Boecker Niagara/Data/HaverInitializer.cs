@@ -160,6 +160,20 @@ namespace Haver_Boecker_Niagara.Data
                         {
                             for (int i = 1; i <= 30; i++)
                             {
+                                string[] preOrderNotes = {
+                                    "Ensure all components are available before assembly. Check for any missing parts and report immediately.",
+                                    "Verify the availability of all required tools and materials before starting the assembly process.",
+                                    "Confirm that all pre-order checks are completed and documented before proceeding with assembly."
+                                };
+
+                                string[] scopeNotes = {
+                                    "This machine requires special handling during assembly due to its size. Ensure all safety protocols are followed.",
+                                    "Pay extra attention to the alignment of components during assembly to avoid any operational issues.",
+                                    "Ensure that all assembly steps are followed as per the provided guidelines to maintain quality standards."
+                                };
+
+                                Random rnd = new Random();
+
                                 context.Machines.Add(new Machine
                                 {
                                     SerialNumber = $"SN-{1000 + i}",
@@ -173,8 +187,8 @@ namespace Haver_Boecker_Niagara.Data
                                     Disassembly = true,
                                     Media = false,
                                     SparePartsMedia = true,
-                                    PreOrderNotes = $"Pre-order notes {i}",
-                                    ScopeNotes = $"Scope notes {i}",
+                                    PreOrderNotes = preOrderNotes[rnd.Next(preOrderNotes.Length)],
+                                    ScopeNotes = scopeNotes[rnd.Next(scopeNotes.Length)],
                                     ActualAssemblyHours = (i * 2),
                                     ActualReworkHours = (i),
                                     BudgetedAssemblyHours = (i * 3)
