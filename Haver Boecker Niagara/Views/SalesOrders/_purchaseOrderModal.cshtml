@@ -55,5 +55,10 @@
             $('#purchaseOrderModal').modal('hide');
             $('#vendorModal').modal('show');
         });
+
+        $('#vendorModal').on('hidden.bs.modal', function () {
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+        });
     });
 </script>
