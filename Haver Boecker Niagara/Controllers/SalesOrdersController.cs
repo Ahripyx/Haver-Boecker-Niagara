@@ -353,9 +353,11 @@ namespace Haver_Boecker_Niagara.Controllers
                 return BadRequest();
             }
             string[] selectedOptions2 = selectedOptions.Split(',');
-            if (selectedOptions2.Count() == 1)
+            if (selectedOptions2.Length == 1)
             {
-                Machine? machine = _context.Machines.Where(p => p.MachineID == int.Parse(selectedOptions2[0])).FirstOrDefault();
+                var machine = _context.Machines
+                    .Include(p => p.SalesOrders)
+                    .FirstOrDefault(p => p.MachineID == int.Parse(selectedOptions2[0]));
                 ViewData["id"] = id;
                 return PartialView("_machineModalEdit", machine);
 

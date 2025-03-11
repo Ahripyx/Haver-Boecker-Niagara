@@ -8,6 +8,14 @@
                 <h4 class="modal-title" id="machineModalEditLabel">Edit Machine</h4>
                 <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close" />
             </div>
+            @if (Model.SalesOrders.Count > 1) {
+                <span class="text-danger ms-3">Note: This machine is connected to other Sales Orders.</span>
+                <span class="text-danger ms-3 mt-1">Take caution in editing, as changes made here will affect other orders.</span>
+            }
+            else
+            {
+                <span class="text-success ms-3">This machine is not connected to any other Sales Orders.</span>
+            }
             <div class="modal-body d-flex w-auto">
                 <form class="d-flex flex-column w-auto">
                     <div class="d-flex flex-row">

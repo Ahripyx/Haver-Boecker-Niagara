@@ -4,7 +4,7 @@
     ViewData["Title"] = "Gantt Schedules";
 }
 
-<form asp-action="Index" method="get">
+<form asp-action="Index" method="get" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
     <div class="main-container">
         <h1 class="mt-2">Gantt Schedules</h1>
 
@@ -45,11 +45,11 @@
                     <th>Order #</th>
                     <th>Customer</th>
                     <th>Engineer</th>
-                    <th>Machines</th>
-                    <th>Pre-Orders</th>
-                    <th>Readiness to Ship</th>
-                    <th>Promise Date</th>
-                    <th>Deadline</th>
+                    <th>Machine</th>
+                    <th>Pre-Orders <br/> Expected</th>
+                    <th>Ready to <br/> Deliver By</th>
+                    <th>Promised Date</th>
+                    <th class="text-nowrap">Need-by Date</th>
                     <th></th>
                 </tr>
             </thead>
@@ -71,8 +71,8 @@
                                 <span>@(machine?.MachineDescription ?? "N/A")</span>
                             }
                         </td>
-                        <td>@item.PreOrdersExpected</td>
-                        <td>@item.ReadinessToShipExpected</td>
+                        <td>@item.PreOrdersExpected?.ToShortDateString()</td>
+                        <td>@item.ReadinessToShipExpected?.ToShortDateString()</td>
                         <td>@item.PromiseDate.ToShortDateString()</td>
                         <td>@item.DeadlineDate?.ToShortDateString()</td>
                         <td class="text-nowrap text-center">
