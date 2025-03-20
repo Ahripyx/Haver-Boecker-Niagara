@@ -12,7 +12,7 @@
         public int TotalPurcharseOrders { get; set; }
 
         public int TotalMachines { get; set; }
-        
+        public string ? UserRole { get; set; }
         public Dictionary<string, int> CustomerCountry {  get; set; } = new Dictionary<string, int>();
         public List<int> CustomerData { get; set; } = new List<int>();
 

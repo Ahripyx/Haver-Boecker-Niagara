@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const btnContinue = document.querySelector('#btnContinue');
     const btnFitler = document.querySelector('#btnFilter');
 
+    
     /*//////////////////////////////////////
     Toast Notifications 
     *///////////////////////////////////////

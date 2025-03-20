@@ -1,6 +1,7 @@
 using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -24,6 +25,7 @@ namespace Haver_Boecker_Niagara.Controllers
             var totalSalesOrders = _context.SalesOrders.Count();
             var pendingSalesOrders = _context.SalesOrders.Where(g => g.Status == Status.Open).Count();
 
+            string userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "User";
 
             //Vendors, Machine by months. The logic still the same but we change some little things in the JS => Views/Home/Index
             var vendorsByMonth = _context.Vendors
@@ -73,7 +75,8 @@ namespace Haver_Boecker_Niagara.Controllers
                 TotalMachines = totalMachines,
                 TotalSalesOrders = TotalSalesOrders,
                 CustomerData = customerData,
-                CustomerCountry = customerCountry
+                CustomerCountry = customerCountry,
+                UserRole = userRole
             };
             return View(model);
 
