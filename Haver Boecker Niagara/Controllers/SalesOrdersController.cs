@@ -16,10 +16,12 @@ using OfficeOpenXml.Style;
 using OfficeOpenXml;
 using System.Drawing;
 using SQLitePCL;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Haver_Boecker_Niagara.Controllers
 {
+    [Authorize]
     public class SalesOrdersController : ElephantController
     {
         private readonly HaverContext _context;
@@ -28,6 +30,7 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             _context = context;
         }
+        [Authorize(Roles = "Admin,Sales,Engineering,Procurement ,Production ,PIC  ,Read Only")]
         public async Task<IActionResult> Index(
             string? searchOrderNo,
             string? searchCustomer,
@@ -113,6 +116,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
 
+        [Authorize(Roles = "Admin,Sales,Engineering,Procurement ,Production ,PIC  ,Read Only")]
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -135,6 +139,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(salesOrder);
         }
+        [Authorize(Roles = "Admin,Sales")]
 
         public IActionResult Create()
         {
@@ -147,6 +152,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Sales")]
+
         public async Task<IActionResult> Create(
             [Bind("Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes")] SalesOrder salesOrder,
             string? chkAddPO = "off",
@@ -224,6 +231,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: SalesOrders/Edit/5
+        [Authorize(Roles = "Admin,Sales")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -242,6 +251,7 @@ namespace Haver_Boecker_Niagara.Controllers
             PopulateMachines(salesOrder);
             return View(salesOrder);
         }
+        [Authorize(Roles = "Admin,Sales")]
 
         public async Task<IActionResult> CreatePurchaseOrder([Bind("PurchaseOrderNumber,PODueDate,VendorID")] PurchaseOrder purchaseOrder,
             [Bind("SalesOrderID")] SalesOrderVM salesOrderVM)
@@ -255,6 +265,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return RedirectToAction(nameof(Edit), new { ID = salesOrderVM.SalesOrderID });
         }
 
+        [Authorize(Roles = "Admin,Sales")]
 
         public async Task<IActionResult> EditPurchaseOrder([Bind("PurchaseOrderID,PurchaseOrderNumber,PODueDate,POActualDueDate,VendorID")] PurchaseOrder purchaseOrderToUpdate,
             [Bind("SalesOrderID")] SalesOrderVM salesOrderVM)
@@ -277,6 +288,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             return RedirectToAction(nameof(Edit), new { ID = salesOrderVM.SalesOrderID });
         }
+        [Authorize(Roles = "Admin,Sales")]
 
         public ActionResult SetPOViewBag(string selectedOptions)
         {
@@ -296,6 +308,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 return BadRequest();
             }
         }
+        [Authorize(Roles = "Admin,Sales")]
 
         public async Task<IActionResult> EditMachine(int id, [Bind("MachineID,SerialNumber,NamePlateStatus,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,BudgetedAssemblyHours,ActualAssemblyHours,ActualReworkHours")] Machine machine)
         {
@@ -345,6 +358,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             return RedirectToAction(nameof(Edit), new { ID = id });
         }
+        [Authorize(Roles = "Admin,Sales")]
 
         public ActionResult SetMachineViewBag(string selectedOptions, string id)
         {
@@ -367,6 +381,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 return BadRequest();
             }
         }
+        [Authorize(Roles = "Admin,Sales")]
 
         public async Task<IActionResult> CreateMachine([Bind("SalesOrderID,NamePlateStatus,SerialNumber,InternalPONumber,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,BudgetedAssemblyHours,ActualAssemblyHours,ActualReworkHours")] MachineVM machine)
         {
@@ -404,6 +419,8 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Sales")]
+
         public async Task<IActionResult> Edit(int id, string[] selectedPOOptions, string[] selectedMachineOptions, [Bind("SalesOrderID,Price,Status,CustomerID,OrderNumber,CompletionDate,ActualCompletionDate,ExtraNotes,EngineeringPackageID")] SalesOrder salesOrder)
         {
             if (id != salesOrder.SalesOrderID)
@@ -460,55 +477,7 @@ namespace Haver_Boecker_Niagara.Controllers
             PopulateMachines(salesOrder);
             return View(salesOrder);
         }
-
-
-        // GET: SalesOrders/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var salesOrder = await _context.SalesOrders
-                .Include(s => s.Customer)
-                .Include(s => s.EngineeringPackage)
-                .FirstOrDefaultAsync(m => m.SalesOrderID == id);
-            if (salesOrder == null)
-            {
-                return NotFound();
-            }
-
-            return View(salesOrder);
-        }
-
-        // POST: SalesOrders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var salesOrder = await _context.SalesOrders
-                .Include(s => s.EngineeringPackage)
-                .FirstOrDefaultAsync(s => s.SalesOrderID == id);
-
-            if (salesOrder != null)
-            {
-                if (salesOrder.EngineeringPackage != null)
-                {
-                    int packageId = salesOrder.EngineeringPackage.EngineeringPackageID;
-
-                    var relatedSpecialities = _context.EngineeringPackageEngineers
-                        .Where(es => es.EngineeringPackageID == packageId);
-                    _context.EngineeringPackageEngineers.RemoveRange(relatedSpecialities);
-                    _context.EngineeringPackages.Remove(salesOrder.EngineeringPackage);
-                }
-                _context.SalesOrders.Remove(salesOrder);
-
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
+        [Authorize(Roles = "Admin,Sales")]
 
         public async Task<IActionResult> DownloadMachineSchedule()
         {
@@ -576,6 +545,8 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Sales")]
+
         public async Task<IActionResult> CreateVendor([Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode")] Vendor vendor)
         {
             if (ModelState.IsValid)

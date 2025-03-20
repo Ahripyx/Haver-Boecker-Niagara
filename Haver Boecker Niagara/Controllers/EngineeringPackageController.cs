@@ -11,9 +11,12 @@ using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.Utilities;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System.Reflection.PortableExecutable;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
+    [Authorize]
+
     public class EngineeringPackageController : ElephantController
     {
         private readonly HaverContext _context;
@@ -24,6 +27,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: EngineeringPackage
+        [Authorize(Roles = "Admin, Engineering, Read Only")]
+
         public async Task<IActionResult> Index
         (
             DateTime? startDate,
@@ -170,6 +175,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(pagedData);
         }
 
+        [Authorize(Roles = "Admin, Engineering, Read Only")]
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -193,6 +199,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(engineeringPackage);
         }
 
+        [Authorize(Roles = "Admin, Engineering")]
 
         // GET: EngineeringPackage/Create
         public IActionResult Create()
@@ -217,6 +224,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["Engineers"] = new SelectList(_context.Engineers.Where(p => !engineeringPackage.Engineers.Contains(p)), "EngineerID", "Name");
             return View(engineeringPackage);
         }
+        [Authorize(Roles = "Admin, Engineering")]
 
         // GET: EngineeringPackage/Edit/5
         public async Task<IActionResult> Edit(int? id, int? setCountEng)
@@ -255,6 +263,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["SalesOrderID"] = _context.SalesOrders.Where(p => p.EngineeringPackageID == engineeringPackage.EngineeringPackageID).FirstOrDefault().SalesOrderID;
             return View(engineeringPackage);
         }
+        [Authorize(Roles = "Admin, Engineering")]
 
         // POST: EngineeringPackage/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -322,6 +331,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: EngineeringPackage/Delete/5
+        [Authorize(Roles = "Admin, Engineering")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -342,6 +353,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: EngineeringPackage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Engineering")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var engineeringPackage = await _context.EngineeringPackages.FindAsync(id);
