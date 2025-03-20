@@ -9,6 +9,7 @@ using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -125,6 +126,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine/Create
+        [Authorize(Roles = "Admin, Production, PIC")]
+
         public IActionResult Create()
         {
             ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber");
@@ -136,6 +139,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Production, PIC")]
+
         public async Task<IActionResult> Create([Bind("SerialNumber,InternalPONumber,NamePlateStatus,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours")] Machine machine)
         {
             if (ModelState.IsValid)
@@ -148,6 +153,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine/Edit/5
+        [Authorize(Roles = "Admin, Production, PIC, Read Only")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -168,6 +175,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Production, PIC")]
+
         public async Task<IActionResult> Edit(int id, [Bind("MachineID,SerialNumber,InternalPONumber,NamePlateStatus,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours")] Machine machine)
         {
             if (id != machine.MachineID)
@@ -199,6 +208,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine/Delete/5
+        [Authorize(Roles = "Admin, Production")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -219,6 +230,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Machine/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Production")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var machine = await _context.Machines.FindAsync(id);

@@ -7,9 +7,12 @@ using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.Utilities;
 using Haver_Boecker_Niagara.CustomControllers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
+    [Authorize]
+
     public class CustomersController : ElephantController
     {
         private readonly HaverContext _context;
@@ -18,6 +21,7 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             _context = context;
         }
+        [Authorize(Roles = "Admin,Sales,Read Only")]
 
         public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
@@ -90,6 +94,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(pagedData);
         }
+        [Authorize(Roles = "Admin,Sales,Read Only")]
 
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -99,12 +104,15 @@ namespace Haver_Boecker_Niagara.Controllers
             var customer = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(m => m.CustomerID == id);
             return customer == null ? NotFound() : View(customer);
         }
+        [Authorize(Roles = "Admin,Sales")]
 
         // GET: Customers/Create
         public IActionResult Create() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Sales")]
+
         public async Task<IActionResult> Create([Bind("CustomerID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Customer customer)
         {
             if (ModelState.IsValid)
@@ -118,6 +126,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(customer);
         }
 
+        [Authorize(Roles = "Admin,Sales")]
 
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -130,6 +139,8 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Sales")]
+
         public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Customer customer)
         {
             if (id != customer.CustomerID)
@@ -155,6 +166,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(customer);
         }
 
+        [Authorize(Roles = "Admin,Sales")]
 
         // GET: Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -168,6 +180,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Sales")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var customer = await _context.Customers.FindAsync(id);

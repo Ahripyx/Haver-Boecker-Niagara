@@ -7,6 +7,7 @@ using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.Utilities;
 using Haver_Boecker_Niagara.CustomControllers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -20,6 +21,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Vendors
+        [Authorize(Roles = "Admin,Sales,Production")]
+
         public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchPhone, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
             string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode" };
@@ -92,6 +95,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Vendors/Details/5
+        [Authorize(Roles = "Admin,Sales,Production")]
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -106,6 +111,8 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Sales,Production")]
+
         public async Task<IActionResult> Create([Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Vendor vendor)
         {
             if (ModelState.IsValid)
@@ -121,6 +128,8 @@ namespace Haver_Boecker_Niagara.Controllers
 
 
         // GET: Vendors/Edit/5
+        [Authorize(Roles = "Admin,Sales,Production")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -131,6 +140,8 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Sales,Production")]
+
         public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Vendor vendor)
         {
             if (id != vendor.VendorID)
@@ -157,6 +168,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Vendors/Delete/5
+        [Authorize(Roles = "Admin,Sales,Production")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -170,6 +183,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Vendors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Sales,Production")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vendor = await _context.Vendors.FindAsync(id);

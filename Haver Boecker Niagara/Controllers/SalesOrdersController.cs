@@ -21,7 +21,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    [Authorize]
     public class SalesOrdersController : ElephantController
     {
         private readonly HaverContext _context;

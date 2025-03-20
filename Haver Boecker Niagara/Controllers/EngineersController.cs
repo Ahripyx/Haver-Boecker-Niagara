@@ -9,6 +9,7 @@ using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -20,6 +21,7 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             _context = context;
         }
+        [Authorize(Roles = "Admin, Engineering,Read Only")]
 
         // GET: Engineers
         public async Task<IActionResult> Index(string? searchName, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
@@ -87,6 +89,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Engineers/Details/5
+        [Authorize(Roles = "Admin, Engineering,Read Only")]
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -103,6 +107,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(engineer);
         }
+        [Authorize(Roles = "Admin, Engineering")]
 
         // GET: Engineers/Create
         public IActionResult Create()
@@ -115,6 +120,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Engineering")]
+
         public async Task<IActionResult> Create([Bind("EngineerID,FirstName,LastName,Email")] Engineer engineer)
         {
             if (ModelState.IsValid)
@@ -126,6 +133,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             return View(engineer);
         }
+        [Authorize(Roles = "Admin, Engineering")]
 
         // GET: Engineers/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -148,6 +156,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Engineering")]
+
         public async Task<IActionResult> Edit(int id, [Bind("EngineerID,FirstName,LastName,Email")] Engineer engineer)
         {
             if (id != engineer.EngineerID)
@@ -179,6 +189,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Engineers/Delete/5
+        [Authorize(Roles = "Admin, Engineering")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -199,6 +211,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Engineers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Engineering")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var engineer = await _context.Engineers.FindAsync(id);

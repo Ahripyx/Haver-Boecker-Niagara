@@ -5,6 +5,7 @@ using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.Utilities;
 using Haver_Boecker_Niagara.CustomControllers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -81,7 +82,7 @@ namespace Haver_Boecker_Niagara.Controllers
              .OrderByDescending(m => m.MilestoneID)
              .FirstOrDefault();
 
-       
+
             ganttSchedule.KickoffMeetings = ganttSchedule.KickoffMeetings?
             .OrderByDescending(k => k.MeetingDate)
             .Take(3)
@@ -96,6 +97,8 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(ganttSchedule);
         }
+        [Authorize(Roles = "Admin,Production")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -113,6 +116,8 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Production")]
+
         public async Task<IActionResult> Edit(int id, [Bind("GanttID,SalesOrderID,MachineID, PreOrdersExpected,ReadinessToShipExpected,PromiseDate,DeadlineDate,NCR,EngineeringOnly")] GanttSchedule ganttSchedule)
         {
             if (id != ganttSchedule.GanttID)
@@ -136,13 +141,15 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             return View(ganttSchedule);
         }
+        [Authorize(Roles = "Admin,Production")]
 
         public IActionResult Create()
         {
             ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber");
             return View();
         }
-        
+        [Authorize(Roles = "Admin,Production")]
+
         public async Task<IActionResult> CreateKickoffMeeting([Bind("GanttID,MeetingSummary")] KickoffMeeting kickoffMeeting)
         {
             if (ModelState.IsValid)
@@ -152,7 +159,8 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             return RedirectToAction("Details", new {ID = kickoffMeeting.GanttID});
         }
-        
+        [Authorize(Roles = "Admin,Production")]
+
         public async Task<IActionResult> CreateMilestone([Bind("Name,KickOfMeetingID,EndDate")] Milestone milestone)
         {
             milestone.StartDate = DateTime.Today;
@@ -165,69 +173,12 @@ namespace Haver_Boecker_Niagara.Controllers
             var redirectID = _context.KickoffMeetings.Find(milestone.KickOfMeetingID).GanttID;
             return RedirectToAction("Details", new {ID = redirectID});
         }
-        
+        [Authorize(Roles = "Admin,Sales")]
+
         public async Task<IActionResult> GetMilestoneModal(int id)
         {
             return PartialView("_milestoneModal", new Milestone {KickOfMeetingID = id});
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("SalesOrderID,EngineeringOnly,PreOrdersExpected,ReadinessToShipExpected,PromiseDate,DeadlineDate,NCR")] GanttSchedule ganttSchedule)
-        {
-            if (ModelState.IsValid)
-            {
-                var salesOrder = await _context.SalesOrders
-                    .Include(s => s.Machines)
-                    .FirstOrDefaultAsync(s => s.SalesOrderID == ganttSchedule.SalesOrderID);
-
-                if (salesOrder == null)
-                    return NotFound();
-
-                if (ganttSchedule.EngineeringOnly)
-                {
-                    var newSchedule = new GanttSchedule
-                    {
-                        SalesOrderID = salesOrder.SalesOrderID,
-                        EngineeringOnly = true,
-                        PreOrdersExpected = ganttSchedule.PreOrdersExpected,
-                        ReadinessToShipExpected = ganttSchedule.ReadinessToShipExpected,
-                        PromiseDate = ganttSchedule.PromiseDate,
-                        DeadlineDate = ganttSchedule.DeadlineDate,
-                        NCR = ganttSchedule.NCR
-                    };
-                    _context.GanttSchedules.Add(newSchedule);
-                }
-                else
-                {
-                    var groupedMachines = salesOrder.Machines.GroupBy(m => m.MachineDescription);
-
-                    foreach (var group in groupedMachines)
-                    {
-                        var newSchedule = new GanttSchedule
-                        {
-                            SalesOrderID = salesOrder.SalesOrderID,
-                            MachineID = group.First().MachineID,
-                            EngineeringOnly = false,
-                            PreOrdersExpected = ganttSchedule.PreOrdersExpected,
-                            ReadinessToShipExpected = ganttSchedule.ReadinessToShipExpected,
-                            PromiseDate = ganttSchedule.PromiseDate,
-                            DeadlineDate = ganttSchedule.DeadlineDate,
-                            NCR = ganttSchedule.NCR
-                        };
-                        _context.GanttSchedules.Add(newSchedule);
-                    }
-                }
-
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber", ganttSchedule.SalesOrderID);
-            return View(ganttSchedule);
-        }
-
-        
     }
 }

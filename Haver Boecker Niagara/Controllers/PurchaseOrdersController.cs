@@ -8,6 +8,7 @@ using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.Utilities;
 using Haver_Boecker_Niagara.CustomControllers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -21,6 +22,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: PurchaseOrders
+        [Authorize(Roles = "Admin, Procurement, PIC, Read Only")]
+
         public async Task<IActionResult> Index(
      string? searchPONumber,
      string? searchVendor,
@@ -142,6 +145,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(purchaseOrder);
         }
+        [Authorize(Roles = "Admin, Procurement, PIC, Read Only")]
 
         // GET: PurchaseOrders/Create
         public IActionResult Create()
@@ -157,6 +161,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: PurchaseOrders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Procurement, PIC, Read Only")]
+
         public async Task<IActionResult> Create([Bind("PurchaseOrderID,PurchaseOrderNumber,PODueDate,VendorID,SalesOrderID")] PurchaseOrder purchaseOrder)
         {
             if (ModelState.IsValid)
@@ -175,6 +181,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: PurchaseOrders/Edit/5
+        [Authorize(Roles = "Admin, Procurement, PIC, Read Only")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -204,6 +212,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: PurchaseOrders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Procurement, PIC, Read Only")]
+
         public async Task<IActionResult> Edit(int id, [Bind("PurchaseOrderID,PurchaseOrderNumber,PODueDate,VendorID,SalesOrderID")] PurchaseOrder purchaseOrder)
         {
             if (id != purchaseOrder.PurchaseOrderID) return NotFound();
@@ -232,6 +242,8 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: PurchaseOrders/Delete/5
+        [Authorize(Roles = "Admin, Procurement, PIC, Read Only")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -254,6 +266,8 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: PurchaseOrders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Procurement, PIC, Read Only")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
