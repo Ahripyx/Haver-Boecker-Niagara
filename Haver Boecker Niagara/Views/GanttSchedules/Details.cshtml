@@ -281,6 +281,20 @@
                     <dd>@Model.SalesOrder.Machines.FirstOrDefault(m => m.MachineID == Model.MachineID)?.SparePartsMedia</dd>
                 </dl>
             </div>
+            <div class="col-md-6">
+                <dl class="column">
+                    <dt>Pre-Order Notes</dt>
+                    <dd>@Model.SalesOrder.Machines.FirstOrDefault(m => m.MachineID == Model.MachineID)?.PreOrderNotes</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="column">
+                    <dt>Production Notes</dt>
+                    <dd>@Model.SalesOrder.Machines.FirstOrDefault(m => m.MachineID == Model.MachineID)?.ScopeNotes</dd>
+                </dl>
+            </div>
         </div>
     </div>
 }
