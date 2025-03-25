@@ -1,5 +1,4 @@
-﻿@using System.Security.Claims
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,25 +20,12 @@
                         <img src="~/Logo.png" alt="Haver_Boecker_Niagara" />
                     </a>
 
-                    <div class="d-flex align-items-center text-white logout-container" style="margin-right: 2rem;" id="logoutContainer">
-                        <div class="me-3">
-                            <i class="bi bi-bell" style="color: white;"></i>
-                        </div>
-                        <div class="text-end me-3">
-                            <span class="small fw-bolder">BitBusters</span><br />
-                            <div class="text-start me-3">
-                                @{
-                                    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? "Guest";
-                                }
-                                <small class="text-start">@role</small>
-                            </div>
-                        </div>
-                        <a class="btn">
-                            <i class="bi bi-box-arrow-right" style="color: white; padding-left:0;" id="logout-icon"></i>
-                        </a>
+                    <div class="d-flex align-items-center text-white" style="margin-right: 2rem;">
+                        <partial name="_LoginPartial" />
                     </div>
-                    
+
                 </div>
+
                 <div class="navbar col dropdown">
                     @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
                     {
@@ -77,7 +63,7 @@
                             </ul>
                         </div>
                     }
-                    
+
                     <ul class="nav text-nowrap">
                         <li class="nav-item ms-2">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
@@ -99,11 +85,13 @@
                 <div class="popup-conteiner">
                     <div class="popup-content">
                         <i class="fa-solid fa-circle-info close-toast" id="infoIcon"></i>
-                        <p>You are about to log out <br />
-                            Are you sure you want to do it?</p>
+                        <p>
+                            You are about to log out <br />
+                            Are you sure you want to do it?
+                        </p>
                         <div class="popup-btns">
                             <button id="btnCancel" class="btn-cancel">Cancel</button>
-                            <button id="btnLogOut" data-logut-url="@Url.Action("_Login", "Home")" >Log Out</button>
+                            <button id="btnLogOut" data-logut-url="@Url.Action("_Login", "Home")">Log Out</button>
                         </div>
                     </div>
                 </div>
@@ -111,11 +99,13 @@
                 <div class="popup-close-conteiner">
                     <div class="popup-content">
                         <i class="fa-solid fa-triangle-exclamation close-toast" id="warningIcon"></i>
-                        <p>Once you close the form this action cannot be changed <br />
-                            Are you sure you want to continue?</p>
+                        <p>
+                            Once you close the form this action cannot be changed <br />
+                            Are you sure you want to continue?
+                        </p>
                         <div class="popup-btns">
                             <button id="btnCloseCancel" class="btn-cancel">Cancel</button>
-                            <button id="btnLogOut" data-logout-url="/Identity/Account/Logout" class="btn-continue">Continue</button>
+                            <button id="btnContinue">Continue</button>
                         </div>
                     </div>
                 </div>
@@ -159,8 +149,8 @@
         </main>
     </div>
 
-    <footer id="footerContainer">
-        <div >
+    <footer>
+        <div>
             &copy; 2025 - Haver Boecker Niagara
         </div>
     </footer>
