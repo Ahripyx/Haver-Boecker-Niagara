@@ -3,8 +3,7 @@
 @{
     ViewData["Title"] = "Log in";
 }
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,45 +17,44 @@
 <body id="body">
     <div class="main-container">
         <h1 class="main-title">Log In</h1>
-        <form id="account" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+        <form method="post">
             <div class="user-name-input">
                 <h2>Username</h2>
-                <input asp-for="Input.Email" class="usernameinpt" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <input class="usernameinpt" asp-for="Input.Email" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
+
             <div class="password-input">
                 <h2>Password</h2>
-                <input asp-for="Input.Password" class="passwordinpt" type="password" autocomplete="current-password" aria-required="true" placeholder="password" />
+                <input class="passwordinpt" asp-for="Input.Password" type="password" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="checkbox">
-                <label asp-for="Input.RememberMe" class="form-label">
-                    <input class="form-check-input" asp-for="Input.RememberMe" />
-                    @Html.DisplayNameFor(m => m.Input.RememberMe)
-                </label>
-            </div>
+
             <div class="login-btn-container">
-                <button id="login-submit" type="submit" class="btn-login">Log In</button>
+                <button type="submit" class="btn-login">Log In</button>
             </div>
+
+            <div class="forgot-password">
+                <a asp-page="./ForgotPassword">Forgot your password?</a>
+                <a asp-page="./CreateNewAccount">Create new account?</a>
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
         </form>
-        @if ((Model.ExternalLogins?.Count ?? 0) > 0)
-        {
-            <div class="external-login">
-                <h3>Use another service to log in</h3>
-                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                    @foreach (var provider in Model.ExternalLogins!)
-                    {
-                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using @provider.DisplayName">
-                            @provider.DisplayName
-                        </button>
-                    }
-                </form>
-            </div>
-        }
     </div>
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const logoutIcon = document.querySelector('#logoutContainer');
+            if (logoutIcon) {
+                console.log('Icon exist');
+                logoutIcon.classList.add('hide');
+            } else {
+                console.log(null)
+            }
+        });
+    </script>
 </body>
 </html>

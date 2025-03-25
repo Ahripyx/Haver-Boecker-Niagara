@@ -58,7 +58,6 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(pagedData);
         }
-        [Authorize(Roles = "Admin,Production")]
 
         public async Task<IActionResult> Details(int? id)
         {
