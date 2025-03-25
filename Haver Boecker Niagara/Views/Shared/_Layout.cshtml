@@ -25,40 +25,45 @@
                     </div>
                     
                 </div>
+                
                 <div class="navbar col dropdown">
-                    <button style="box-shadow: none !important" type="button" 
-                            class="btn text-white dropdown-toggle" data-bs-toggle="dropdown" 
-                            aria-haspopup="true" aria-expanded="false" 
-                            aria-label="Toggle navigation"
-                            id="dropdownMenuButton"
-                            title="View more navigation options">
-                        Admin Panel
-                    </button>
-                    <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
-                        
-                        <ul class="d-flex flex-column text-nowrap ps-0 mb-0 pb-0">
-                            <li class="dropdown-item">
-                                <a class="nav-link text-black" asp-area="" asp-controller="PurchaseOrders" asp-action="Index">Purchase Orders</a>
-                            </li>
-                            <li class="dropdown-item">
-                                <a class="nav-link text-black" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
-                            </li>
-                            <li class="dropdown-item">
-                                <a class="nav-link text-black" asp-area="" asp-controller="Engineers" asp-action="Index">Engineers</a>
-                            </li>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                        <button style="box-shadow: none !important" type="button"
+                                class="btn text-white dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-label="Toggle navigation"
+                                id="dropdownMenuButton"
+                                title="View more navigation options">
+                            Admin Panel
+                        </button>
+                        <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
 
-                            <li class="dropdown-item">
-                                <a class="nav-link text-black" asp-area="" asp-controller="Vendors" asp-action="Index">Vendors</a>
-                            </li>
+                            <ul class="d-flex flex-column text-nowrap ps-0 mb-0 pb-0">
+                                <li class="dropdown-item">
+                                    <a class="nav-link text-black" asp-area="" asp-controller="PurchaseOrders" asp-action="Index">Purchase Orders</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="nav-link text-black" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="nav-link text-black" asp-area="" asp-controller="Engineers" asp-action="Index">Engineers</a>
+                                </li>
 
-                            <li class="dropdown-item">
-                                <a class="nav-link text-black" asp-area="" asp-controller="Machine" asp-action="Index">Machine</a>
-                            </li>
+                                <li class="dropdown-item">
+                                    <a class="nav-link text-black" asp-area="" asp-controller="Vendors" asp-action="Index">Vendors</a>
+                                </li>
 
-                            
+                                <li class="dropdown-item">
+                                    <a class="nav-link text-black" asp-area="" asp-controller="Machine" asp-action="Index">Machine</a>
+                                </li>
 
-                        </ul>
-                    </div>
+
+
+                            </ul>
+                        </div>
+                    }
+                    
                     <ul class="nav text-nowrap">
                         <li class="nav-item ms-2">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>

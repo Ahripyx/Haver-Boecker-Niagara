@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
+    [Authorize(Roles = "admin")]
+
     public class MachineController : ElephantController
     {
         private readonly HaverContext _context;
@@ -126,7 +128,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine/Create
-        [Authorize(Roles = "Admin, Production, PIC")]
+        [Authorize(Roles = "admin, production, pic")]
 
         public IActionResult Create()
         {
@@ -139,7 +141,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Production, PIC")]
+        [Authorize(Roles = "admin, production, pic")]
 
         public async Task<IActionResult> Create([Bind("SerialNumber,InternalPONumber,NamePlateStatus,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours")] Machine machine)
         {
@@ -153,7 +155,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine/Edit/5
-        [Authorize(Roles = "Admin, Production, PIC, Read Only")]
+        [Authorize(Roles = "admin, production, pic, Read Only")]
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -175,7 +177,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Production, PIC")]
+        [Authorize(Roles = "admin, production, pic")]
 
         public async Task<IActionResult> Edit(int id, [Bind("MachineID,SerialNumber,InternalPONumber,NamePlateStatus,MachineSize,MachineClass,MachineSizeDesc,Media,SparePartsMedia,Base,AirSeal,CoatingOrLining,Disassembly,PreOrderNotes,ScopeNotes,ActualAssemblyHours,ActualReworkHours,BudgetedAssemblyHours")] Machine machine)
         {

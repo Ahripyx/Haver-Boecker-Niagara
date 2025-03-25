@@ -15,15 +15,8 @@ namespace Haver_Boecker_Niagara.Data
             if (UseMigrations)
             {
                 {
-                    try
-                    {
-                        context.Database.EnsureDeleted();
-                        context.Database.Migrate();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.GetBaseException().Message);
-                    }
+                    await context.Database.EnsureDeletedAsync();
+                    await context.Database.MigrateAsync();
                 }
             }
             #endregion
@@ -66,8 +59,10 @@ namespace Haver_Boecker_Niagara.Data
                 {
                     var user = new IdentityUser
                     {
+                        UserName = email,
                         Email = email,
                         NormalizedEmail = email.ToUpper(),
+                        NormalizedUserName = email.ToUpper(),
                         EmailConfirmed = true,
                         ConcurrencyStamp = Guid.NewGuid().ToString("D")
                     };

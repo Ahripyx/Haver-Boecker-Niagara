@@ -27,7 +27,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: EngineeringPackage
-        [Authorize(Roles = "Admin, Engineering, Read Only")]
+        [Authorize(Roles = "admin, engineering, Read Only")]
 
         public async Task<IActionResult> Index
         (
@@ -175,7 +175,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(pagedData);
         }
 
-        [Authorize(Roles = "Admin, Engineering, Read Only")]
+        [Authorize(Roles = "admin, engineering, Read Only")]
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -199,7 +199,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(engineeringPackage);
         }
 
-        [Authorize(Roles = "Admin, Engineering")]
+        [Authorize(Roles = "admin, engineering")]
 
         // GET: EngineeringPackage/Create
         public IActionResult Create()
@@ -224,7 +224,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["Engineers"] = new SelectList(_context.Engineers.Where(p => !engineeringPackage.Engineers.Contains(p)), "EngineerID", "Name");
             return View(engineeringPackage);
         }
-        [Authorize(Roles = "Admin, Engineering")]
+        [Authorize(Roles = "admin, engineering")]
 
         // GET: EngineeringPackage/Edit/5
         public async Task<IActionResult> Edit(int? id, int? setCountEng)
@@ -263,7 +263,7 @@ namespace Haver_Boecker_Niagara.Controllers
             ViewData["SalesOrderID"] = _context.SalesOrders.Where(p => p.EngineeringPackageID == engineeringPackage.EngineeringPackageID).FirstOrDefault().SalesOrderID;
             return View(engineeringPackage);
         }
-        [Authorize(Roles = "Admin, Engineering")]
+        [Authorize(Roles = "admin, engineering")]
 
         // POST: EngineeringPackage/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -331,7 +331,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: EngineeringPackage/Delete/5
-        [Authorize(Roles = "Admin, Engineering")]
+        [Authorize(Roles = "admin, engineering")]
 
         public async Task<IActionResult> Delete(int? id)
         {
@@ -353,7 +353,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: EngineeringPackage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Engineering")]
+        [Authorize(Roles = "admin, engineering")]
 
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

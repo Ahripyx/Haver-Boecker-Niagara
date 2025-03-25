@@ -238,6 +238,7 @@ namespace Haver_Boecker_Niagara.Data
                         foreach (var salesOrder in context.SalesOrders)
                         {
                             var linkedMachines = context.MachineSalesOrders
+                                .Include(p => p.Machine)
                                 .Where(mso => mso.SalesOrderID == salesOrder.SalesOrderID)
                                 .Select(mso => mso.Machine)
                                 .ToList();
@@ -255,7 +256,7 @@ namespace Haver_Boecker_Niagara.Data
                                         ReadinessToShipExpected = null,
                                         PromiseDate = DateTime.Today,
                                         DeadlineDate = null,
-                                        NCR = ""
+                                        NCR = "",
                                     };
                                     context.GanttSchedules.Add(ganttSchedule);
                                 }
@@ -274,8 +275,10 @@ namespace Haver_Boecker_Niagara.Data
                                 };
                                 context.GanttSchedules.Add(ganttSchedule);
                             }
-                        }
 
+                            
+                        }
+                        context.SaveChanges();
 
                         if (!context.KickoffMeetings.Any())
                         {
