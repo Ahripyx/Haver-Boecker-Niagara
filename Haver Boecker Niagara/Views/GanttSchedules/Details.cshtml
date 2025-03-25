@@ -70,35 +70,11 @@
             ? Model.KickoffMeetings?.SelectMany(k => k.Milestones)
         .Where(m => m.Name == Haver_Boecker_Niagara.Models.Task.EngineeringPackage).ToList()
             : Model.KickoffMeetings?.SelectMany(k => k.Milestones).ToList();
-
-        // redundant code?
-        // .Where(m => new List<Haver_Boecker_Niagara.Models.Task>
-        // {
-        //     Haver_Boecker_Niagara.Models.Task.PurchaseOrdersIssued,
-        //     Haver_Boecker_Niagara.Models.Task.ApprovalDrawing,
-        //     Haver_Boecker_Niagara.Models.Task.PackageReleased,
-        //     Haver_Boecker_Niagara.Models.Task.MachineAssembly,
-        //     Haver_Boecker_Niagara.Models.Task.MachineTesting,
-        //     Haver_Boecker_Niagara.Models.Task.EngineeringReleased
-        // }.Contains(m.Name)).ToList();
         var totalMilestones = validMilestones?.Count ?? 0;
         var completedMilestones = validMilestones?.Count(m => m.Status == Haver_Boecker_Niagara.Models.Status.Closed) ?? 0;
         var progressPercentage = totalMilestones > 0 ? (completedMilestones * 100) / totalMilestones : 0;
-        //Color change depending on the porcentage.
         var progressColorBar = progressPercentage >= 70 ? "bg-success" :
                                progressPercentage >= 30 ? "bg-warning" : "bg-danger";
-
-    //     @if (totalMilestones > 0)
-    //     {
-    //         <span>Overall Milestone Progress</span>
-    //         <div class="progress mb-3">
-    //             <div class="progress-bar @progressColorBar" role="progressbar"
-    //                  style="width: @progressPercentage%; background-color: yellow;" aria-valuenow="@progressPercentage"
-    //                  aria-valuemin="0" aria-valuemax="100">
-    //                 @progressPercentage%
-    //             </div>
-    //         </div>
-    //     }
     }
 
 
@@ -117,14 +93,12 @@
         @if (totalMilestones > 0)
         {
 
-            //Percentiles 
             <div class="d-flex position-relative" style="margin-bottom: 10px;">
                 <span class="position-absolute small text-dark one-percentil">0%</span>
                 <span class="position-absolute small text-dark thirty-percentil">30%</span>
                 <span class="position-absolute small text-dark seventy-percentil ">70%</span>
                 <span class="position-absolute small text-dark hundred-percentil">100%</span>
             </div>
-            //Progress bar
             <div class="progress mb-3 mt-3" style=" position: relative;">
                 <div class="progress-bar @progressColorBar" role="progressbar"
                      style="width: @progressPercentage%;"
@@ -141,7 +115,6 @@
     @{
         var kickoffMeeting = Model.KickoffMeetings?.FirstOrDefault();
     }
-    <!--Lastest kom -->
 
     
 
@@ -153,6 +126,9 @@
     }
     else
     {
+        <button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#komModal">
+            + Create Kickoff Meeting
+        </button>
         int i = 0;
         <div class="timeline">
             @foreach (var Kom in Model.KickoffMeetings)
@@ -191,7 +167,6 @@
         </div>
     </div>
 </div>
-<!--Lastest Kom-->
 <div class="p-4 shadow-sm card-container mb-3">
     <hr />
     @if (Model.KickoffMeetings != null && Model.KickoffMeetings.Any())
@@ -206,14 +181,11 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Summary:</strong> @Kom.MeetingSummary</p>
-                    <p><strong>Milestones:</strong> @Kom.Milestones?.Count()</p>
-
                     <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#komDetailsModal-@Kom.MeetingID">
                         View Details
                     </button>
                 </div>
             </div>
-
             <div class="modal fade" id="komDetailsModal-@Kom.MeetingID" tabindex="-1" aria-labelledby="komDetailsLabel-@Kom.MeetingID" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -254,7 +226,6 @@
         <p>No kickoff meetings available.</p>
     }
 </div>
-
 @if (!Model.EngineeringOnly)
 {
     <div class="p-4 shadow-sm card-container mb-3">
@@ -305,7 +276,6 @@ else
         <p>This schedule is for engineering purposes only and is not linked to a specific machine.</p>
     </div>
 }
-
 <div class="d-flex justify-content-end gap-2 mt-4">
     <a asp-action="Index" class="btn-primary-close">Close</a>
     <a asp-action="Edit" asp-route-id="@Model?.GanttID" class="btn-edit">Edit</a>

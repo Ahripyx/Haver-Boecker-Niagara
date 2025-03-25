@@ -1,6 +1,8 @@
 ﻿using Haver_Boecker_Niagara.Utilities;
 using Haver_Boecker_Niagara.CustomControllers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Haver_Boecker_Niagara.CustomControllers
 {
@@ -12,6 +14,7 @@ namespace Haver_Boecker_Niagara.CustomControllers
     ///  - CookieHelper
     ///  - MaintainURL
     /// </summary>
+    /// 
     public class ElephantController : CognizantController
     {
         //This is the list of Actions that will add the ReturnURL to ViewData
@@ -30,7 +33,6 @@ namespace Haver_Boecker_Niagara.CustomControllers
             }
             base.OnActionExecuting(context);
         }
-
         public override Task OnActionExecutionAsync(
             ActionExecutingContext context,
             ActionExecutionDelegate next)
@@ -46,6 +48,7 @@ namespace Haver_Boecker_Niagara.CustomControllers
             }
             return base.OnActionExecutionAsync(context, next);
         }
+
     }
 
 }
