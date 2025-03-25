@@ -15,7 +15,6 @@ namespace Haver_Boecker_Niagara.Controllers
             _logger = logger;
             _context = context;
         }
-        //Step 2 you need to add the values into the variables in dashBoardViewModel
         public IActionResult Index()
         {
             var TotalCustomers = _context.Customers.Count();
@@ -23,16 +22,13 @@ namespace Haver_Boecker_Niagara.Controllers
             var confirmedSalesOrders = _context.SalesOrders.Where(g => g.Status == Status.Closed).Count();
             var totalSalesOrders = _context.SalesOrders.Count();
             var pendingSalesOrders = _context.SalesOrders.Where(g => g.Status == Status.Open).Count();
-
-
-            //Vendors, Machine by months. The logic still the same but we change some little things in the JS => Views/Home/Index
             var vendorsByMonth = _context.Vendors
                 .GroupBy(g => g.CreatedAt.Month)
                 .Select(g => new { Month = g.Key, Count = g.Count() })
                 .OrderBy(g => g.Month)
                 .ToList();
             var totalVendors = _context.Vendors.Count();
-            var vendorMonths = new int[12]; //This is a new array for each month
+            var vendorMonths = new int[12];
             foreach (var i in vendorsByMonth)
             {
                 vendorMonths[i.Month - 1] = i.Count;
