@@ -33,7 +33,6 @@ namespace Haver_Boecker_Niagara.CustomControllers
             }
             base.OnActionExecuting(context);
         }
-
         public override Task OnActionExecutionAsync(
             ActionExecutingContext context,
             ActionExecutionDelegate next)
@@ -49,7 +48,7 @@ namespace Haver_Boecker_Niagara.CustomControllers
             }
             return base.OnActionExecutionAsync(context, next);
         }
-       
+
     }
 
 }

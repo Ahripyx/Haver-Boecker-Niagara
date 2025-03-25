@@ -1,197 +1,94 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Haver_Boecker_Niagara.Data
 {
     public static class ApplicationDbInitializer
     {
-        public static async void Initialize(IServiceProvider serviceProvider,
+        public static async Task Initialize(IServiceProvider serviceProvider,
             bool UseMigrations = true, bool SeedSampleData = true)
         {
+            var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
             #region Prepare the Database
             if (UseMigrations)
             {
-                using (var context = new ApplicationDbContext(
-                serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
                 {
-                    try
-                    {
-                        context.Database.Migrate();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.GetBaseException().Message);
-                    }
+                    await context.Database.EnsureDeletedAsync();
+                    await context.Database.MigrateAsync();
                 }
             }
             #endregion
 
+            string[] roleNames = { "Admin", "Sales", "Engineering", "Procurement", "Production", "PIC", "Read Only" };
+
+            
             #region Seed Roles
             if (SeedSampleData)
             {
-                using (var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>())
+                var roleManager = new RoleStore<IdentityRole>(context);
+                
+                foreach (var roleName in roleNames)
                 {
-                    try
+                    var roleExist = roleManager.Roles.Any(p => p.Name == roleName.ToLower());
+                    if (!roleExist)
                     {
-                        string[] roleNames = { "Admin", "Sales", "Engineering", "Procurement", "Production", "PIC", "Read Only" };
-
-                        foreach (var roleName in roleNames)
+                        await roleManager.CreateAsync(new IdentityRole
                         {
-                            var roleExist = await roleManager.RoleExistsAsync(roleName);
-                            if (!roleExist)
-                            {
-                                await roleManager.CreateAsync(new IdentityRole(roleName));
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.GetBaseException().Message);
+                            Name = roleName.ToLower(),
+                            NormalizedName = roleName.ToUpper(),
+                            ConcurrencyStamp = Guid.NewGuid().ToString()
+                        });
                     }
                 }
+                
             }
+
+            await context.SaveChangesAsync();
             #endregion
-
+            
             #region Seed Users
-            using (var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>())
+            var userManager = new UserStore<IdentityUser>(context);
+
+            const string defaultPassword = "Pa55w@rd";
+            foreach (var roleName in roleNames)
             {
-                try
+                var email = $"{roleName.Replace(" ", "").ToLower()}@outlook.com";
+                if (!context.Users.Any(p => p.Email == email))
                 {
-                    string defaultPassword = "Pa55w@rd";
-
-                    if (userManager.FindByEmailAsync("admin@outlook.com").Result == null)
+                    var user = new IdentityUser
                     {
-                        IdentityUser user = new IdentityUser
-                        {
-                            UserName = "admin@outlook.com",
-                            Email = "admin@outlook.com",
-                            EmailConfirmed = true
-                        };
+                        UserName = email,
+                        Email = email,
+                        NormalizedEmail = email.ToUpper(),
+                        NormalizedUserName = email.ToUpper(),
+                        EmailConfirmed = true,
+                        ConcurrencyStamp = Guid.NewGuid().ToString("D")
+                    };
+                
+                    var password = new PasswordHasher<IdentityUser>();
+                    var hashed = password.HashPassword(user, defaultPassword);
+                    user.PasswordHash = hashed;
+                
+                    await userManager.CreateAsync(user);
 
-                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
-
-                        if (result.Succeeded)
-                        {
-                            userManager.AddToRoleAsync(user, "Admin").Wait();
-                        }
-                    }
-                    if (userManager.FindByEmailAsync("sales@outlook.com").Result == null)
-                    {
-                        IdentityUser user = new IdentityUser
-                        {
-                            UserName = "sales@outlook.com",
-                            Email = "sales@outlook.com",
-                            EmailConfirmed = true
-                        };
-
-                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
-
-                        if (result.Succeeded)
-                        {
-                            userManager.AddToRoleAsync(user, "sales").Wait();
-                        }
-                    }
-                    if (userManager.FindByEmailAsync("Engineering@outlook.com").Result == null)
-                    {
-                        IdentityUser user = new IdentityUser
-                        {
-                            UserName = "Engineering@outlook.com",
-                            Email = "Engineering@outlook.com",
-                            EmailConfirmed = true
-                        };
-
-                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
-
-                        if (result.Succeeded)
-                        {
-                            userManager.AddToRoleAsync(user, "Engineering").Wait();
-                        }
-                    }
-                    if (userManager.FindByEmailAsync("Procurement@outlook.com").Result == null)
-                    {
-                        IdentityUser user = new IdentityUser
-                        {
-                            UserName = "Procurement@outlook.com",
-                            Email = "Procurement@outlook.com",
-                            EmailConfirmed = true
-                        };
-
-                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
-
-                        if (result.Succeeded)
-                        {
-                            userManager.AddToRoleAsync(user, "Procurement").Wait();
-                        }
-                    }
-                    if (userManager.FindByEmailAsync("Production@outlook.com").Result == null)
-                    {
-                        IdentityUser user = new IdentityUser
-                        {
-                            UserName = "Production@outlook.com",
-                            Email = "Production@outlook.com",
-                            EmailConfirmed = true
-                        };
-
-                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
-
-                        if (result.Succeeded)
-                        {
-                            userManager.AddToRoleAsync(user, "PIC").Wait();
-                        }
-                    }
-                    if (userManager.FindByEmailAsync("PIC@outlook.com").Result == null)
-                    {
-                        IdentityUser user = new IdentityUser
-                        {
-                            UserName = "PIC@outlook.com",
-                            Email = "PIC@outlook.com",
-                            EmailConfirmed = true
-                        };
-
-                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
-
-                        if (result.Succeeded)
-                        {
-                            userManager.AddToRoleAsync(user, "").Wait();
-                        }
-                    }
-                    if (userManager.FindByEmailAsync("super@outlook.com").Result == null)
-                    {
-                        IdentityUser user = new IdentityUser
-                        {
-                            UserName = "super@outlook.com",
-                            Email = "super@outlook.com",
-                            EmailConfirmed = true
-                        };
-
-                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
-
-                        if (result.Succeeded)
-                        {
-                            userManager.AddToRoleAsync(user, "Supervisor").Wait();
-                        }
-                    }
-                    if (userManager.FindByEmailAsync("user@outlook.com").Result == null)
-                    {
-                        IdentityUser user = new IdentityUser
-                        {
-                            UserName = "user@outlook.com",
-                            Email = "user@outlook.com",
-                            EmailConfirmed = true
-                        };
-
-                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.GetBaseException().Message);
                 }
             }
+            await context.SaveChangesAsync();
+            
+            // add users to roles AFTER they are created
+            foreach (var role in roleNames)
+            {
+                var email = $"{role.Replace(" ", "").ToLower()}@outlook.com";
+                var user = await userManager.FindByEmailAsync(email.ToUpper());
+                await userManager.AddToRoleAsync(user, role.ToUpper());
+            }
+
+            await context.SaveChangesAsync();
         }
         #endregion
     }
+    
 }
 

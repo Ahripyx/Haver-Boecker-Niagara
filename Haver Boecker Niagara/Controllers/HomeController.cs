@@ -16,7 +16,6 @@ namespace Haver_Boecker_Niagara.Controllers
             _logger = logger;
             _context = context;
         }
-        //Step 2 you need to add the values into the variables in dashBoardViewModel
         public IActionResult Index()
         {
             var TotalCustomers = _context.Customers.Count();
@@ -27,24 +26,22 @@ namespace Haver_Boecker_Niagara.Controllers
 
             string userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "User";
 
-            //Vendors, Machine by months. The logic still the same but we change some little things in the JS => Views/Home/Index
             var vendorsByMonth = _context.Vendors
                 .GroupBy(g => g.CreatedAt.Month)
                 .Select(g => new { Month = g.Key, Count = g.Count() })
                 .OrderBy(g => g.Month)
                 .ToList();
             var totalVendors = _context.Vendors.Count();
-            var vendorMonths = new int[12]; //This is a new array for each month
+            var vendorMonths = new int[12]; 
             foreach (var i in vendorsByMonth)
             {
                 vendorMonths[i.Month - 1] = i.Count;
             }
-
             ViewBag.vendorsByMonth = vendorMonths;
-            
+
             var machineBySize = _context.Machines
                 .GroupBy(g => g.MachineSize)
-                .Select(g => new {Size = g.Key, Count = g.Count()})
+                .Select(g => new { Size = g.Key, Count = g.Count() })
                 .OrderBy(g => g.Size)
                 .ToList();
             var totalMachines = _context.Machines.Count();
@@ -54,21 +51,17 @@ namespace Haver_Boecker_Niagara.Controllers
                 machineSizes[i.Size] = i.Count;
             }
             ViewBag.MachineBySizes = machineSizes;
-
-
             var customerData = _context.Customers
                 .GroupBy(g => g.CreatedAt.Month)
                 .Select(g => g.Count())
                 .ToList();
-
             var customerCountry = _context.Customers
                 .GroupBy(g => g.Country ?? "No country")
                 .ToDictionary(g => g.Key, g => g.Count());
-
             var model = new DashboardViewModel
             {
                 TotalCustomers = TotalCustomers,
-                
+
                 ConfirmedSalesOrders = confirmedSalesOrders,
                 PendingSalesOrders = pendingSalesOrders,
                 TotalVendors = totalVendors,
@@ -81,12 +74,10 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(model);
 
         }
-
         public IActionResult Privacy()
         {
             return View();
         }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

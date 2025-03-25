@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin")]
 
     public class CustomersController : ElephantController
     {
@@ -21,7 +21,7 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             _context = context;
         }
-        [Authorize(Roles = "Admin,Sales,Read Only")]
+        [Authorize(Roles = "admin,sales,read only")]
 
         public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
@@ -94,7 +94,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(pagedData);
         }
-        [Authorize(Roles = "Admin,Sales,Read Only")]
+        [Authorize(Roles = "admin,sales,read only")]
 
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
+    [Authorize(Roles = "admin,production")]
     public class GanttSchedulesController : ElephantController
     {
         private readonly HaverContext _context;
@@ -97,7 +98,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(ganttSchedule);
         }
-        [Authorize(Roles = "Admin,Production")]
+        [Authorize(Roles = "admin,production")]
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -116,7 +117,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Production")]
+        [Authorize(Roles = "admin,production")]
 
         public async Task<IActionResult> Edit(int id, [Bind("GanttID,SalesOrderID,MachineID, PreOrdersExpected,ReadinessToShipExpected,PromiseDate,DeadlineDate,NCR,EngineeringOnly")] GanttSchedule ganttSchedule)
         {
@@ -141,14 +142,14 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             return View(ganttSchedule);
         }
-        [Authorize(Roles = "Admin,Production")]
+        [Authorize(Roles = "admin,production")]
 
         public IActionResult Create()
         {
             ViewData["SalesOrderID"] = new SelectList(_context.SalesOrders, "SalesOrderID", "OrderNumber");
             return View();
         }
-        [Authorize(Roles = "Admin,Production")]
+        [Authorize(Roles = "admin,production")]
 
         public async Task<IActionResult> CreateKickoffMeeting([Bind("GanttID,MeetingSummary")] KickoffMeeting kickoffMeeting)
         {
@@ -159,7 +160,7 @@ namespace Haver_Boecker_Niagara.Controllers
             }
             return RedirectToAction("Details", new {ID = kickoffMeeting.GanttID});
         }
-        [Authorize(Roles = "Admin,Production")]
+        [Authorize(Roles = "admin,production")]
 
         public async Task<IActionResult> CreateMilestone([Bind("Name,KickOfMeetingID,EndDate")] Milestone milestone)
         {

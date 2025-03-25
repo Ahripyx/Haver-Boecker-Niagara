@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class VendorsController : ElephantController
     {
         private readonly HaverContext _context;
@@ -21,7 +22,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Vendors
-        [Authorize(Roles = "Admin,Sales,Production")]
+        [Authorize(Roles = "admin,sales,production")]
 
         public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchPhone, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
@@ -95,7 +96,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Vendors/Details/5
-        [Authorize(Roles = "Admin,Sales,Production")]
+        [Authorize(Roles = "admin,sales,production")]
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -111,7 +112,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Sales,Production")]
+        [Authorize(Roles = "admin,sales,production")]
 
         public async Task<IActionResult> Create([Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Vendor vendor)
         {
@@ -128,7 +129,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
 
         // GET: Vendors/Edit/5
-        [Authorize(Roles = "Admin,Sales,Production")]
+        [Authorize(Roles = "admin,sales,production")]
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -140,7 +141,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Sales,Production")]
+        [Authorize(Roles = "admin,sales,production")]
 
         public async Task<IActionResult> Edit(int id, [Bind("VendorID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Vendor vendor)
         {
@@ -168,7 +169,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Vendors/Delete/5
-        [Authorize(Roles = "Admin,Sales,Production")]
+        [Authorize(Roles = "admin,sales,production")]
 
         public async Task<IActionResult> Delete(int? id)
         {
@@ -183,7 +184,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Vendors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Sales,Production")]
+        [Authorize(Roles = "admin,sales,production")]
 
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
