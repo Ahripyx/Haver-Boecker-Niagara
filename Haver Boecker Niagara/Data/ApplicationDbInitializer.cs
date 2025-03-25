@@ -54,45 +54,144 @@ namespace Haver_Boecker_Niagara.Data
             #endregion
 
             #region Seed Users
-            if (SeedSampleData)
+            using (var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>())
             {
-                using (var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>())
+                try
                 {
-                    try
+                    string defaultPassword = "Pa55w@rd";
+
+                    if (userManager.FindByEmailAsync("admin@outlook.com").Result == null)
                     {
-                        var users = new[]
+                        IdentityUser user = new IdentityUser
                         {
-                            new { UserName = "admin@haver.com", Password = "Admin@123", Role = "Admin" },
-                            new { UserName = "sales@haver.com", Password = "Sales@123", Role = "Sales" },
-                            new { UserName = "engineering@haver.com", Password = "Engineering@123", Role = "Engineering" },
-                            new { UserName = "procurement@haver.com", Password = "Procurement@123", Role = "Procurement" },
-                            new { UserName = "production@haver.com", Password = "Production@123", Role = "Production" },
-                            new { UserName = "pic@haver.com", Password = "PIC@123", Role = "PIC" },
-                            new { UserName = "readonly@haver.com", Password = "ReadOnly@123", Role = "Read Only" }
+                            UserName = "admin@outlook.com",
+                            Email = "admin@outlook.com",
+                            EmailConfirmed = true
                         };
 
-                        foreach (var user in users)
+                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
+
+                        if (result.Succeeded)
                         {
-                            var existingUser = await userManager.FindByEmailAsync(user.UserName);
-                            if (existingUser == null)
-                            {
-                                var identityUser = new IdentityUser { UserName = user.UserName, Email = user.UserName };
-                                var result = await userManager.CreateAsync(identityUser, user.Password);
-                                if (result.Succeeded)
-                                {
-                                    await userManager.AddToRoleAsync(identityUser, user.Role);
-                                }
-                            }
+                            userManager.AddToRoleAsync(user, "Admin").Wait();
                         }
                     }
-                    catch (Exception ex)
+                    if (userManager.FindByEmailAsync("sales@outlook.com").Result == null)
                     {
-                        Debug.WriteLine(ex.GetBaseException().Message);
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "sales@outlook.com",
+                            Email = "sales@outlook.com",
+                            EmailConfirmed = true
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
+
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "sales").Wait();
+                        }
+                    }
+                    if (userManager.FindByEmailAsync("Engineering@outlook.com").Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "Engineering@outlook.com",
+                            Email = "Engineering@outlook.com",
+                            EmailConfirmed = true
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
+
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "Engineering").Wait();
+                        }
+                    }
+                    if (userManager.FindByEmailAsync("Procurement@outlook.com").Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "Procurement@outlook.com",
+                            Email = "Procurement@outlook.com",
+                            EmailConfirmed = true
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
+
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "Procurement").Wait();
+                        }
+                    }
+                    if (userManager.FindByEmailAsync("Production@outlook.com").Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "Production@outlook.com",
+                            Email = "Production@outlook.com",
+                            EmailConfirmed = true
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
+
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "PIC").Wait();
+                        }
+                    }
+                    if (userManager.FindByEmailAsync("PIC@outlook.com").Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "PIC@outlook.com",
+                            Email = "PIC@outlook.com",
+                            EmailConfirmed = true
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
+
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "").Wait();
+                        }
+                    }
+                    if (userManager.FindByEmailAsync("super@outlook.com").Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "super@outlook.com",
+                            Email = "super@outlook.com",
+                            EmailConfirmed = true
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
+
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "Supervisor").Wait();
+                        }
+                    }
+                    if (userManager.FindByEmailAsync("user@outlook.com").Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = "user@outlook.com",
+                            Email = "user@outlook.com",
+                            EmailConfirmed = true
+                        };
+
+                        IdentityResult result = userManager.CreateAsync(user, defaultPassword).Result;
+
                     }
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.GetBaseException().Message);
+                }
             }
-            #endregion
         }
+        #endregion
     }
-
 }
+
