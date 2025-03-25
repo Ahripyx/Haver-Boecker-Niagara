@@ -15,6 +15,7 @@ builder.Services.AddDbContext<HaverContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 if (builder.Environment.IsDevelopment())
@@ -61,6 +62,8 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     HaverInitializer.Initialize(services);
+    ApplicationDbInitializer.Initialize(services);
+
 }
 
 app.Run();
