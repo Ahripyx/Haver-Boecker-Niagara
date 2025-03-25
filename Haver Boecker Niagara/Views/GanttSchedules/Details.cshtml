@@ -37,25 +37,25 @@
         <div class="timeline-item">
             <div class="milestone-dot"></div>
             <div class="timeline-content">
-                <strong>Pre-Orders Expected:</strong> @Model.PreOrdersExpected?.ToString("dddd, MMM dd yyyy")
+                <strong>Pre-Orders Expected:</strong> @(Model.PreOrdersExpected?.ToString("dddd, MMM dd yyyy") ?? "N/A")
             </div>
         </div>
         <div class="timeline-item">
             <div class="milestone-dot"></div>
             <div class="timeline-content">
-                <strong>Readiness to Deliver Expected:</strong> @Model.ReadinessToShipExpected?.ToString("dddd, MMM dd yyyy")
+                <strong>Readiness to Deliver Expected:</strong> @(Model.ReadinessToShipExpected?.ToString("dddd, MMM dd yyyy") ?? "N/A")
             </div>
         </div>
         <div class="timeline-item">
             <div class="milestone-dot"></div>
             <div class="timeline-content">
-                <strong>Promised Date:</strong> @Model.PromiseDate.ToString("dddd, MMM dd yyyy")
+                <strong>Promised Date:</strong> @(Model.PromiseDate.ToString("dddd, MMM dd yyyy") ?? "N/A")
             </div>
         </div>
         <div class="timeline-item">
             <div class="milestone-dot"></div>
             <div class="timeline-content">
-                <strong>Need-by Date:</strong> @Model.DeadlineDate?.ToString("dddd, MMM dd yyyy")
+                <strong>Need-by Date:</strong> @(Model.DeadlineDate?.ToString("dddd, MMM dd yyyy") ?? "N/A")
             </div>
         </div>
     </div>

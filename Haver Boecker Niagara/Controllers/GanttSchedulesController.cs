@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,production")]
     public class GanttSchedulesController : ElephantController
     {
         private readonly HaverContext _context;

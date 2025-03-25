@@ -68,13 +68,18 @@
                         <li class="nav-item ms-2">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
                         </li>
-                        <li class="nav-item ms-2">
-                            <a class="nav-link" asp-area="" asp-controller="SalesOrders" asp-action="Index">Operations Schedule</a>
-                        </li>
-
-                        <li class="nav-item ms-2">
-                            <a class="nav-link" asp-area="" asp-controller="GanttSchedules" asp-action="Index">Gantt</a>
-                        </li>
+                        @if (!User.Identity.IsAuthenticated || User.IsInRole("sales"))
+                        {
+                            <li class="nav-item ms-2">
+                                <a class="nav-link" asp-area="" asp-controller="SalesOrders" asp-action="Index">Operations Schedule</a>
+                            </li>
+                        }
+                        @if (!User.Identity.IsAuthenticated || User.IsInRole("production"))
+                        {
+                            <li class="nav-item ms-2">
+                                <a class="nav-link" asp-area="" asp-controller="GanttSchedules" asp-action="Index">Gantt</a>
+                            </li>
+                        }
                     </ul>
                 </div>
                 <div class="popup-conteiner">

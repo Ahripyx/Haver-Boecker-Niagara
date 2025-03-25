@@ -76,7 +76,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await ApplicationDbInitializer.Initialize(services);
-    HaverInitializer.Initialize(services, true, true, true);
+    HaverInitializer.Initialize(services, false, true, true);
 
 }
 
