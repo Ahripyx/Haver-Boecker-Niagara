@@ -1005,6 +1005,9 @@ table-layout: fixed;
     gap: 10px;
     margin-top: 20px; 
 }
+.progress-bar {
+    transition: width 0.5s ease-in-out;
+}
 /*Progress line*/
 /*.progress-line {
     height: 6px;

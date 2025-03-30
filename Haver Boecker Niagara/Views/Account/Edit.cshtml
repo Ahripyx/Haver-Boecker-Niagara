@@ -1,21 +1,31 @@
 ﻿@model Microsoft.AspNetCore.Identity.IdentityUser
 
-<h2>Edit Account</h2>
-
+<h1>Edit Account</h1>
+<hr />
+<div class="p-4 shadow-sm card-container">
 <form asp-action="Edit">
-    <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="UserName" class="control-label"></label>
-        <input asp-for="UserName" class="form-control" />
-        <span asp-validation-for="UserName" class="text-danger"></span>
-    </div>
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+        </div>
+            <input type="hidden" asp-for="Id" />
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <div class="form-group">
+                <a asp-action="Index" class="btn btn-primary-close">Close</a>
+                <button type="submit" value="Edit" class="btn btn-primary btn-edit" id="btnEdit">Save</button>
+            </div>
+        </div>
     </div>
 </form>
-<a asp-action="Index">Back to List</a>
+</div>
