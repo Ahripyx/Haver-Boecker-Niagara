@@ -70,13 +70,13 @@
                         <li class="nav-item ms-2">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
                         </li>
-                        @if (!User.Identity.IsAuthenticated || User.IsInRole("sales"))
+                        @if (!User.Identity.IsAuthenticated || User.IsInRole("sales") || User.IsInRole("admin"))
                         {
                             <li class="nav-item ms-2">
                                 <a class="nav-link" asp-area="" asp-controller="SalesOrders" asp-action="Index">Operations Schedule</a>
                             </li>
                         }
-                        @if (!User.Identity.IsAuthenticated || User.IsInRole("production"))
+                        @if (!User.Identity.IsAuthenticated || User.IsInRole("production") || User.IsInRole("admin"))
                         {
                             <li class="nav-item ms-2">
                                 <a class="nav-link" asp-area="" asp-controller="GanttSchedules" asp-action="Index">Gantt</a>
