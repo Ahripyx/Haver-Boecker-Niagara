@@ -19,16 +19,16 @@ namespace Haver_Boecker_Niagara.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(string? searchUsername, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Username")
+        public async Task<IActionResult> Index(string? searchName, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Username")
         {
             string[] sortOptions = { "Username", "Email" };
             int filterCount = 0; 
 
             var users = _userManager.Users.AsNoTracking();
 
-            if (!string.IsNullOrEmpty(searchUsername))
+            if (!string.IsNullOrEmpty(searchName))
             {
-                users = users.Where(u => EF.Functions.Like(u.UserName, $"%{searchUsername}%"));
+                users = users.Where(u => EF.Functions.Like(u.UserName, $"%{searchName}%"));
                 filterCount++;
             }
             if (!string.IsNullOrEmpty(searchEmail))
