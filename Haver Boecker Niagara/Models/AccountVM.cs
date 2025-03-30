@@ -9,6 +9,7 @@ namespace Haver_Boecker_Niagara.Models
         public string Email { get; set; }
 
         [Required]
+        [Display(Name ="User Name")]
         public string UserName { get; set; }
 
         [Required]
