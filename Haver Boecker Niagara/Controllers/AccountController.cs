@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Haver_Boecker_Niagara.Utilities;
+using Haver_Boecker_Niagara.CustomControllers;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
     [Authorize(Roles = "admin")]
-    public class AccountController : Controller
+    public class AccountController : ElephantController
     {
         private readonly UserManager<IdentityUser> _userManager;
 
@@ -16,10 +19,56 @@ namespace Haver_Boecker_Niagara.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string? searchUsername, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Username")
         {
-            var users = _userManager.Users.ToList();
-            return View(users);
+            string[] sortOptions = { "Username", "Email" };
+            int filterCount = 0; 
+
+            var users = _userManager.Users.AsNoTracking();
+
+            if (!string.IsNullOrEmpty(searchUsername))
+            {
+                users = users.Where(u => EF.Functions.Like(u.UserName, $"%{searchUsername}%"));
+                filterCount++;
+            }
+            if (!string.IsNullOrEmpty(searchEmail))
+            {
+                users = users.Where(u => EF.Functions.Like(u.Email, $"%{searchEmail}%"));
+                filterCount++;
+            }
+
+            if (filterCount > 0)
+            {
+                ViewData["Filtering"] = "btn-danger";
+                ViewData["NumberFilters"] = $"({filterCount} Filter{(filterCount > 1 ? "s" : "")} Applied)";
+                ViewData["ShowFilter"] = "show";
+            }
+
+            if (!string.IsNullOrEmpty(actionButton) && sortOptions.Contains(actionButton))
+            {
+                page = 1;
+                if (actionButton == sortField)
+                {
+                    sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                }
+                sortField = actionButton;
+            }
+
+            users = sortField switch
+            {
+                "Username" => sortDirection == "asc" ? users.OrderBy(u => u.UserName) : users.OrderByDescending(u => u.UserName),
+                "Email" => sortDirection == "asc" ? users.OrderBy(u => u.Email) : users.OrderByDescending(u => u.Email),
+                _ => sortDirection == "asc" ? users.OrderBy(u => u.UserName) : users.OrderByDescending(u => u.UserName),
+            };
+
+            ViewData["SortField"] = sortField;
+            ViewData["SortDirection"] = sortDirection;
+
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["PageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+            var pagedData =  await PaginatedList<IdentityUser>.CreateAsync(users, page ?? 1, pageSize);
+
+            return View(pagedData);
         }
 
         public async Task<IActionResult> Edit(string id)
