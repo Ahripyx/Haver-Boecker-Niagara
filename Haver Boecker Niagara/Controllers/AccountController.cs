@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Haver_Boecker_Niagara.Utilities;
 using Haver_Boecker_Niagara.CustomControllers;
+using Haver_Boecker_Niagara.Models;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -120,6 +121,21 @@ namespace Haver_Boecker_Niagara.Controllers
                     }
                 }
             }
+            return View(user);
+        }
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
             return View(user);
         }
 
