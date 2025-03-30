@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.ApplicationMigration
+namespace Haver_Boecker_Niagara.Data.IdentityMigration
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250325000404_Initial")]
-    partial class Initial
+    [Migration("20250330172230_Identity")]
+    partial class Identity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -159,11 +159,9 @@ namespace Haver_Boecker_Niagara.Data.ApplicationMigration
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
@@ -201,11 +199,9 @@ namespace Haver_Boecker_Niagara.Data.ApplicationMigration
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")

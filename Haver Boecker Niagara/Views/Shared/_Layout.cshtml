@@ -12,8 +12,9 @@
     @* <link rel="stylesheet" href="~/Haver_Boecker_Niagara.styles.css" asp-append-version="true" /> *@
 </head>
 <body>
+
     <header>
-        <nav class="navbar navbar-expand-sm ">
+        <nav class="navbar navbar-expand-sm" id="navbar">
             <div class="container-fluid">
                 <div class="logo-container">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
@@ -57,7 +58,9 @@
                                 <li class="dropdown-item">
                                     <a class="nav-link text-black" asp-area="" asp-controller="Machine" asp-action="Index">Machine</a>
                                 </li>
-
+                                <li class="dropdown-item">
+                                    <a class="nav-link text-black" asp-area="" asp-controller="Account" asp-action="Index">Users</a>
+                                </li>
 
 
                             </ul>
@@ -68,13 +71,13 @@
                         <li class="nav-item ms-2">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
                         </li>
-                        @if (!User.Identity.IsAuthenticated || User.IsInRole("sales"))
+                        @if (!User.Identity.IsAuthenticated || User.IsInRole("sales") || User.IsInRole("admin"))
                         {
                             <li class="nav-item ms-2">
                                 <a class="nav-link" asp-area="" asp-controller="SalesOrders" asp-action="Index">Operations Schedule</a>
                             </li>
                         }
-                        @if (!User.Identity.IsAuthenticated || User.IsInRole("production"))
+                        @if (!User.Identity.IsAuthenticated || User.IsInRole("production") || User.IsInRole("admin"))
                         {
                             <li class="nav-item ms-2">
                                 <a class="nav-link" asp-area="" asp-controller="GanttSchedules" asp-action="Index">Gantt</a>
@@ -149,7 +152,7 @@
         </main>
     </div>
 
-    <footer>
+    <footer class="mt-3">
         <div>
             &copy; 2025 - Haver Boecker Niagara
         </div>

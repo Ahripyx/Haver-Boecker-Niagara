@@ -91,6 +91,9 @@ namespace Haver_Boecker_Niagara.Data
                 .HasForeignKey(m => m.KickOfMeetingID)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Engineer>()
+                .HasIndex(e => new {e.FirstName, e.LastName })
+                .IsUnique();
         }
     }
 }

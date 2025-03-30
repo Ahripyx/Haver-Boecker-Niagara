@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.IdentityMigrations
+namespace Haver_Boecker_Niagara.Data.IdentityMigration
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

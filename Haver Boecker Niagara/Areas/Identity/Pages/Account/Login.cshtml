@@ -16,13 +16,14 @@
     <link rel="stylesheet" href="~/Haver_Boecker_Niagara.styles.css" asp-append-version="true" />
 </head>
 <body id="body">
+    <main class ="d-flex flex-column align-items-center justify-content-center login-page" style="height:90vh">
     <div class="main-container">
         <h1 class="main-title">Log In</h1>
 
         <form method="post">
             <div class="user-name-input">
-                <h2>Username</h2>
-                <input class="usernameinpt" asp-for="Input.Email" placeholder="example@example.com" />
+                <h2>Email</h2>
+                <input class="usernameinpt" asp-for="Input.Email" aria-required="true" placeholder="example@email.com" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
 
@@ -32,30 +33,75 @@
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
 
+            <div class="checkbox mb-3">
+                <label asp-for="Input.RememberMe" class="form-label">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    Stay logged in
+                </label>
+            </div>
+
             <div class="login-btn-container">
                 <button type="submit" class="btn-login">Log In</button>
             </div>
-            
+
             <div class="forgot-password">
                 <a asp-page="./ForgotPassword">Forgot your password?</a>
-                <a asp-page="./CreateNewAccount">Forgot your password?</a>
             </div>
+
             <div asp-validation-summary="All" class="text-danger"></div>
         </form>
     </div>
-
+    <!-- Buttons for prototype testing -->
+    <div class="test-buttons mt-4">
+        <button type="button" class="btn btn-secondary" id="btnAdminFill">Admin</button>
+        <button type="button" class="btn btn-secondary" id="btnSalesFill">Sales</button>
+        <button type="button" class="btn btn-secondary" id="btnEngineeringFill">Engineering</button>
+        <button type="button" class="btn btn-secondary" id="btnProcureFill">Procure</button>
+        <button type="button" class="btn btn-secondary" id="btnProductionFill">Production</button>
+        <button type="button" class="btn btn-secondary" id="btnPICFill">PIC</button>
+        <button type="button" class="btn btn-secondary" id="btnReadOnlyFill">RO</button>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const logoutIcon = document.querySelector('#logoutContainer');
             if (logoutIcon) {
-                console.log('Icon exist');
                 logoutIcon.classList.add('hide');
+            }
+            if (window.location.pathname.includes("Login")) {
+                let navbar = document.getElementById("navbar");
+                if (navbar) {
+                    console.log("navbar exist");
+                    navbar.style.display = "none";
+                }else{
+                    console.log(null)
+                }
             }else{
-                console.log(null)
+                console.log("Not found the location")
             }
         });
+
+        const fillData = {
+            'btnAdminFill': 'admin@outlook.com',
+            'btnSalesFill': 'sales@outlook.com',
+            'btnEngineeringFill': 'engineering@outlook.com',
+            'btnProcureFill': 'procurement@outlook.com',
+            'btnProductionFill': 'production@outlook.com',
+            'btnPICFill': 'pic@outlook.com',
+            'btnReadOnlyFill': 'readonly@outlook.com'
+        };
+
+        Object.keys(fillData).forEach(id => {
+            document.getElementById(id).addEventListener('click', function () {
+                document.querySelector('input[name="Input.Email"]').value = fillData[id];
+                document.querySelector('input[name="Input.Password"]').value = 'Pa55w@rd';
+            });
+        });
+        
+            
+     
     </script>
+    </main>
 </body>
 </html>

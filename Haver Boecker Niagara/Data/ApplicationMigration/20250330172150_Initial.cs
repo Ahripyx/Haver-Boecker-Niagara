@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.IdentityMigrations
+namespace Haver_Boecker_Niagara.Data.ApplicationMigration
 {
     /// <inheritdoc />
-    public partial class Second : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -311,6 +311,12 @@ namespace Haver_Boecker_Niagara.Data.IdentityMigrations
                 name: "IX_EngineeringPackageEngineers_EngineeringPackageID",
                 table: "EngineeringPackageEngineers",
                 column: "EngineeringPackageID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Engineers_FirstName_LastName",
+                table: "Engineers",
+                columns: new[] { "FirstName", "LastName" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GanttSchedules_SalesOrderID",
