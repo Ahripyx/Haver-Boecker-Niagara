@@ -111,7 +111,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Sales")]
+        [Authorize(Roles = "admin,sales")]
 
         public async Task<IActionResult> Create([Bind("CustomerID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Customer customer)
         {
@@ -126,7 +126,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(customer);
         }
 
-        [Authorize(Roles = "Admin,Sales")]
+        [Authorize(Roles = "admin,sales")]
 
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -139,7 +139,7 @@ namespace Haver_Boecker_Niagara.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Sales")]
+        [Authorize(Roles = "admin,sales")]
 
         public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name,ContactFirstName,ContactLastName,PhoneNumber,Email,Address,City,Country,PostalCode,CreatedAt,UpdatedAt")] Customer customer)
         {
@@ -166,7 +166,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(customer);
         }
 
-        [Authorize(Roles = "Admin,Sales")]
+        [Authorize(Roles = "admin,sales")]
 
         // GET: Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -180,7 +180,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Sales")]
+        [Authorize(Roles = "admin,sales")]
 
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

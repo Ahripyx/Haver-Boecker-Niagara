@@ -59,9 +59,10 @@
             </div>
 
             <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-secondary" id="btnAutofill">Autofill</button>
                 <a asp-action="Index" class="btn btn-primary-close">Close</a>
                 <button type="reset" class="btn btn-primary-close">Reset</button>
-                <button type="submit" value="Edit" class="btn btn-primary btn-edit">Edit</button>
+                <button type="submit" value="Edit" class="btn btn-primary btn-edit">Save</button>
             </div>
         </form>
     </div>
@@ -71,4 +72,13 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        document.getElementById('btnAutofill').addEventListener('click', function() {
+            document.querySelector('[name="PreOrdersExpected"]').value = '2025-04-30';
+            document.querySelector('[name="ReadinessToShipExpected"]').value = '2025-05-30';
+            document.querySelector('[name="PromiseDate"]').value = '2025-06-30';
+            document.querySelector('[name="DeadlineDate"]').value = '2025-07-30';
+            document.querySelector('[name="NCR"]').value = 'NCR-1234';
+        });
+    </script>
 }
