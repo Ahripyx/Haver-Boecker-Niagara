@@ -1,66 +1,108 @@
 ﻿@page
 @model LoginModel
 @{
-    ViewData["Title"] = "Log in";
+	ViewData["Title"] = "Log in";
 }
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Haver_Boecker_Niagara</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/menu.css" asp-append-version="true" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/Haver_Boecker_Niagara.styles.css" asp-append-version="true" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - Haver_Boecker_Niagara</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/menu.css" asp-append-version="true" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+	<link rel="stylesheet" href="~/Haver_Boecker_Niagara.styles.css" asp-append-version="true" />
 </head>
 <body id="body">
-    <div class="main-container">
-        <h1 class="main-title">Log In</h1>
+	<div class="main-container">
+		<h1 class="main-title">Log In</h1>
 
-        <form id="account" method="post">
-            <div class="user-name-input">
-                <h2>Email</h2>
-                <input class="usernameinpt" asp-for="Input.Email" aria-required="true" placeholder="example@email.com" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
+		<form id="account" method="post">
+			<div class="user-name-input">
+				<h2>Email</h2>
+				<input class="usernameinpt" asp-for="Input.Email" aria-required="true" placeholder="example@email.com" />
+				<span asp-validation-for="Input.Email" class="text-danger"></span>
+			</div>
 
-            <div class="password-input">
-                <h2>Password</h2>
-                <input class="passwordinpt" asp-for="Input.Password" type="password" aria-required="true" placeholder="password" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
+			<div class="password-input">
+				<h2>Password</h2>
+				<input class="passwordinpt" asp-for="Input.Password" type="password" aria-required="true" placeholder="password" />
+				<span asp-validation-for="Input.Password" class="text-danger"></span>
+			</div>
 
-            <div class="checkbox mb-3">
-                <label asp-for="Input.RememberMe" class="form-label">
-                    <input class="form-check-input" asp-for="Input.RememberMe"/>
-                    Stay logged in
-                </label>
-            </div>
-            <div class="login-btn-container">
-                <button id="login-submit" type="submit" class="btn-login">Log In</button>
-            </div>
+			<div class="checkbox mb-3">
+				<label asp-for="Input.RememberMe" class="form-label">
+					<input class="form-check-input" asp-for="Input.RememberMe" />
+					Stay logged in
+				</label>
+			</div>
 
-            <div class="forgot-password">
-                <a asp-page="./ForgotPassword" class="d-block">Forgot your password?</a>
-                <a asp-page="./CreateNewAccount">Create new account?</a>
-            </div>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        </form>
-    </div>
+			<!--Buttons for prototype testing-->
+			<div>
+				<button type="button" class="btn btn-secondary" id="btnAdminFill">Admin</button>
+				<button type="button" class="btn btn-secondary" id="btnSalesFill">Sales</button>
+				<button type="button" class="btn btn-secondary" id="btnEngineeringFill">Engineering</button>
+				<button type="button" class="btn btn-secondary" id="btnProcureFill">Procure</button>
+				<button type="button" class="btn btn-secondary" id="btnProductionFill">Production</button>
+				<button type="button" class="btn btn-secondary" id="btnPICFill">PIC</button>
+				<button type="button" class="btn btn-secondary" id="btnReadOnlyFill">RO</button>
+			</div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const logoutIcon = document.querySelector('#logoutContainer');
-            if (logoutIcon) {
-                console.log('Icon exist');
-                logoutIcon.classList.add('hide');
-            } else {
-                console.log(null)
-            }
-        });
-    </script>
+			<div class="login-btn-container">
+				<button id="login-submit" type="submit" class="btn-login">Log In</button>
+			</div>
+
+			<div class="forgot-password">
+				<a asp-page="./ForgotPassword" class="d-block">Forgot your password?</a>
+				<a asp-page="./CreateNewAccount">Create new account?</a>
+			</div>
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		</form>
+	</div>
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const logoutIcon = document.querySelector('#logoutContainer');
+			if (logoutIcon) {
+				console.log('Icon exist');
+				logoutIcon.classList.add('hide');
+			} else {
+				console.log(null)
+			}
+		});
+
+		//Auto fill handlers
+		document.getElementById('btnAdminFill').addEventListener('click', function() {
+			document.querySelector('input[name="Input.Email"]').value = 'admin@outlook.com';
+			document.querySelector('input[name="Input.Password"]').value = 'Pa55w@rd';
+		});
+		document.getElementById('btnSalesFill').addEventListener('click', function() {
+			document.querySelector('input[name="Input.Email"]').value = 'sales@outlook.com';
+			document.querySelector('input[name="Input.Password"]').value = 'Pa55w@rd';
+		});
+		document.getElementById('btnEngineeringFill').addEventListener('click', function() {
+			document.querySelector('input[name="Input.Email"]').value = 'engineering@outlook.com';
+			document.querySelector('input[name="Input.Password"]').value = 'Pa55w@rd';
+		});
+		document.getElementById('btnProcureFill').addEventListener('click', function() {
+			document.querySelector('input[name="Input.Email"]').value = 'procurement@outlook.com';
+			document.querySelector('input[name="Input.Password"]').value = 'Pa55w@rd';
+		});
+		document.getElementById('btnProductionFill').addEventListener('click', function() {
+			document.querySelector('input[name="Input.Email"]').value = 'production@outlook.com';
+			document.querySelector('input[name="Input.Password"]').value = 'Pa55w@rd';
+		});
+		document.getElementById('btnPICFill').addEventListener('click', function() {
+			document.querySelector('input[name="Input.Email"]').value = 'pic@outlook.com';
+			document.querySelector('input[name="Input.Password"]').value = 'Pa55w@rd';
+		});
+		document.getElementById('btnReadOnlyFill').addEventListener('click', function() {
+			document.querySelector('input[name="Input.Email"]').value = 'readonly@outlook.com';
+			document.querySelector('input[name="Input.Password"]').value = 'Pa55w@rd';
+		});
+	</script>
 </body>
 </html>

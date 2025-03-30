@@ -88,25 +88,6 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(pagedData);
         }
 
-        // GET: Engineers/Details/5
-        [Authorize(Roles = "admin, engineering,read only")]
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var engineer = await _context.Engineers
-                .FirstOrDefaultAsync(m => m.EngineerID == id);
-            if (engineer == null)
-            {
-                return NotFound();
-            }
-
-            return View(engineer);
-        }
         [Authorize(Roles = "admin, engineering")]
 
         // GET: Engineers/Create
