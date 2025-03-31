@@ -13,8 +13,9 @@
     @* <link rel="stylesheet" href="~/Haver_Boecker_Niagara.styles.css" asp-append-version="true" /> *@
 </head>
 <body>
+
     <header>
-        <nav class="navbar navbar-expand-sm ">
+        <nav class="navbar navbar-expand-sm" id="navbar">
             <div class="container-fluid">
                 <div class="logo-container">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
@@ -24,9 +25,9 @@
                     <div class="d-flex align-items-center text-white" style="margin-right: 2rem;">
                         <partial name="_LoginPartial" />
                     </div>
-                    
+
                 </div>
-                
+
                 <div class="navbar col dropdown">
                     @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
                     {
@@ -66,7 +67,7 @@
                             </ul>
                         </div>
                     }
-                    
+
                     <ul class="nav text-nowrap">
                         <li class="nav-item ms-2">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
@@ -88,11 +89,13 @@
                 <div class="popup-conteiner">
                     <div class="popup-content">
                         <i class="fa-solid fa-circle-info close-toast" id="infoIcon"></i>
-                        <p>You are about to log out <br />
-                            Are you sure you want to do it?</p>
+                        <p>
+                            You are about to log out <br />
+                            Are you sure you want to do it?
+                        </p>
                         <div class="popup-btns">
                             <button id="btnCancel" class="btn-cancel">Cancel</button>
-                            <button id="btnLogOut" data-logut-url="@Url.Action("_Login", "Home")" >Log Out</button>
+                            <button id="btnLogOut" data-logut-url="@Url.Action("_Login", "Home")">Log Out</button>
                         </div>
                     </div>
                 </div>
@@ -100,8 +103,10 @@
                 <div class="popup-close-conteiner">
                     <div class="popup-content">
                         <i class="fa-solid fa-triangle-exclamation close-toast" id="warningIcon"></i>
-                        <p>Once you close the form this action cannot be changed <br />
-                            Are you sure you want to continue?</p>
+                        <p>
+                            Once you close the form this action cannot be changed <br />
+                            Are you sure you want to continue?
+                        </p>
                         <div class="popup-btns">
                             <button id="btnCloseCancel" class="btn-cancel">Cancel</button>
                             <button id="btnContinue">Continue</button>
@@ -148,8 +153,8 @@
         </main>
     </div>
 
-    <footer >
-        <div >
+    <footer class="mt-3">
+        <div>
             &copy; 2025 - Haver Boecker Niagara
         </div>
     </footer>

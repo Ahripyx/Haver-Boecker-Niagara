@@ -1,6 +1,7 @@
 using Haver_Boecker_Niagara.Data;
 using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace Haver_Boecker_Niagara.Controllers
             _logger = logger;
             _context = context;
         }
+        [Authorize(Roles = "admin, procurement,engineering,sales, production, pic, read only")]
         public IActionResult Index()
         {
             var TotalCustomers = _context.Customers.Count();

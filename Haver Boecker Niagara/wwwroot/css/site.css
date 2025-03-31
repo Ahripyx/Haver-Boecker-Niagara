@@ -31,7 +31,15 @@ footer {
     height: 4rem;
     width: 100%;
     text-align: center;
+    padding: 10px;
 }
+
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 
 .btn-edit-container{
     margin-left:10px;
@@ -989,6 +997,16 @@ table-layout: fixed;
 
 .primary-text-container{
     background-color: var(--blue);
+}
+.test-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px; 
+}
+.progress-bar {
+    transition: width 0.5s ease-in-out;
 }
 /*Progress line*/
 /*.progress-line {

@@ -5,7 +5,6 @@
 }
 
 <h1>Gantt Schedule Details</h1>
-<hr />
 <div class="p-4 shadow-sm card-container mb-3">
     <div class="row">
         <div class="col-md-6">
@@ -77,19 +76,6 @@
                                progressPercentage >= 30 ? "bg-warning" : "bg-danger";
     }
 
-
-        @{
-            var CalidMilestones = Model.KickoffMeetings?
-                .SelectMany(k => k.Milestones)
-                .ToList() ?? new List<Haver_Boecker_Niagara.Models.Milestone>();
-
-            var TotalMilestones = validMilestones.Count;
-            var CompletedMilestones = validMilestones.Count(m => m.Status == Haver_Boecker_Niagara.Models.Status.Closed);
-            var ProgressPercentage = totalMilestones > 0 ? (completedMilestones * 100) / totalMilestones : 0;
-
-            var ProgressColorBar = progressPercentage >= 70 ? "bg-success" :
-                                   progressPercentage >= 30 ? "bg-warning" : "bg-danger";
-        }
         @if (totalMilestones > 0)
         {
 
@@ -153,7 +139,7 @@
         @foreach (var milestone in validMilestones ?? new List<Haver_Boecker_Niagara.Models.Milestone>())
         {
             var isCompleted = milestone.Status == Haver_Boecker_Niagara.Models.Status.Closed;
-            <div class="milestone-dot @(isCompleted ? "completed" : "pending")" title="@milestone.Name"></div>
+            <div class=" @(isCompleted ? "completed" : "pending")" title="@milestone.Name"></div>
         }
     </div>
     <div class="timeline">
@@ -168,40 +154,43 @@
     </div>
 </div>
 <div class="p-4 shadow-sm card-container mb-3">
-    <hr />
+
     @if (Model.KickoffMeetings != null && Model.KickoffMeetings.Any())
     {
-        <h4>Lastest Kickoff Meetings</h4>
+        var latestKom = Model.KickoffMeetings.OrderByDescending(k => k.MeetingDate).FirstOrDefault();
 
-        @foreach (var Kom in Model.KickoffMeetings)
+        if (latestKom != null)
         {
+            <h4>Latest Kickoff Meeting</h4>
+            <hr />
             <div class="card mt-3" id="komMainCard">
                 <div class="card-header text-white primary-text-container">
-                    Kickoff Meeting - @Kom.MeetingDate.ToString("dddd, dd MMMM, yyyy")
+                    Kickoff Meeting - @latestKom.MeetingDate.ToString("dddd, dd MMMM, yyyy")
                 </div>
                 <div class="card-body">
-                    <p><strong>Summary:</strong> @Kom.MeetingSummary</p>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#komDetailsModal-@Kom.MeetingID">
+                    <p><strong>Summary:</strong> @latestKom.MeetingSummary</p>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#komDetailsModal-@latestKom.MeetingID">
                         View Details
                     </button>
                 </div>
             </div>
-            <div class="modal fade" id="komDetailsModal-@Kom.MeetingID" tabindex="-1" aria-labelledby="komDetailsLabel-@Kom.MeetingID" aria-hidden="true">
+
+            <div class="modal fade" id="komDetailsModal-@latestKom.MeetingID" tabindex="-1" aria-labelledby="komDetailsLabel-@latestKom.MeetingID" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="komDetailsLabel-@Kom.MeetingID">Kickoff Meeting Details</h5>
+                            <h5 class="modal-title" id="komDetailsLabel-@latestKom.MeetingID">Kickoff Meeting Details</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>Meeting Date:</strong> @Kom.MeetingDate.ToString("dddd, dd MMMM, yyyy")</p>
-                            <p><strong>Meeting Summary:</strong> @Kom.MeetingSummary</p>
+                            <p><strong>Meeting Date:</strong> @latestKom.MeetingDate.ToString("dddd, dd MMMM, yyyy")</p>
+                            <p><strong>Meeting Summary:</strong> @latestKom.MeetingSummary</p>
 
                             <h6>Milestones</h6>
-                            @if (Kom.Milestones != null && Kom.Milestones.Any())
+                            @if (latestKom.Milestones != null && latestKom.Milestones.Any())
                             {
                                 <ul class="list-group">
-                                    @foreach (var milestone in Kom.Milestones)
+                                    @foreach (var milestone in latestKom.Milestones)
                                     {
                                         <li class="list-group-item">
                                             <strong>@milestone.Name</strong> - @milestone.Status
@@ -213,18 +202,17 @@
                             {
                                 <p>No milestones available.</p>
                             }
-
                         </div>
                     </div>
                 </div>
             </div>
-
+        }
+        else
+        {
+            <p>No kickoff meetings available.</p>
         }
     }
-    else
-    {
-        <p>No kickoff meetings available.</p>
-    }
+
 </div>
 @if (!Model.EngineeringOnly)
 {
