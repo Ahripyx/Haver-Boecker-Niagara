@@ -8,17 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-<<<<<<<< HEAD:Haver Boecker Niagara/Data/HaverMigrations/20250330200457_Initial.Designer.cs
 namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250330200457_Initial")]
-========
-namespace Haver_Boecker_Niagara.Data.ApplicationMigration
-{
-    [DbContext(typeof(HaverContext))]
-    [Migration("20250330172150_Initial")]
->>>>>>>> 2bee07d67003f1310baf317945d79d8bf8ffa3f4:Haver Boecker Niagara/Data/ApplicationMigration/20250330172150_Initial.Designer.cs
+    [Migration("20250331010858_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

@@ -7,11 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-<<<<<<<< HEAD:Haver Boecker Niagara/Data/HaverMigrations/HaverContextModelSnapshot.cs
 namespace Haver_Boecker_Niagara.Data.HaverMigrations
-========
-namespace Haver_Boecker_Niagara.Data.ApplicationMigration
->>>>>>>> 2bee07d67003f1310baf317945d79d8bf8ffa3f4:Haver Boecker Niagara/Data/ApplicationMigration/HaverContextModelSnapshot.cs
 {
     [DbContext(typeof(HaverContext))]
     partial class HaverContextModelSnapshot : ModelSnapshot
