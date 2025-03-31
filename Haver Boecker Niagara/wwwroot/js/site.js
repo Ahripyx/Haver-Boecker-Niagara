@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const btnContinue = document.querySelector('#btnContinue');
     const btnFitler = document.querySelector('#btnFilter');
 
+    
     /*//////////////////////////////////////
     Toast Notifications 
     *///////////////////////////////////////
@@ -145,9 +146,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
             });
         }
         if (btnLogOut) { 
-            btnLogOut.addEventListener('click', () => {
-                const logoutUrl = btnLogOut.getAttribute("data-logut-url");
-                window.location.href = logoutUrl;
+            btnLogOut.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                document.getElementById("logoutForm").submit(); 
             });
         }
     }
