@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.Migrations
+namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250325050248_Initial")]
+    [Migration("20250330200457_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -86,6 +86,9 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("EngineerID");
+
+                    b.HasIndex("FirstName", "LastName")
+                        .IsUnique();
 
                     b.ToTable("Engineers");
                 });

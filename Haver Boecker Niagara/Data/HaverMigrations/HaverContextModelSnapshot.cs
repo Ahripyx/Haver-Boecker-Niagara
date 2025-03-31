@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.Migrations
+namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
     partial class HaverContextModelSnapshot : ModelSnapshot
@@ -83,6 +83,9 @@ namespace Haver_Boecker_Niagara.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("EngineerID");
+
+                    b.HasIndex("FirstName", "LastName")
+                        .IsUnique();
 
                     b.ToTable("Engineers");
                 });
