@@ -280,66 +280,8 @@ namespace Haver_Boecker_Niagara.Data
                         }
                         context.SaveChanges();
 
-                        if (!context.KickoffMeetings.Any())
-                        {
-                            var gantts = context.GanttSchedules.ToList();
+                      
 
-                            if (!gantts.Any())
-                            {
-                                Console.WriteLine(" There is any gantt schedules on the database");
-                                return;
-                            }
-
-                            List<KickoffMeeting> kickoffMeetings = new();
-                            Random rnd = new();
-
-                            foreach (var gantt in gantts)
-                            {
-                              
-
-                                for (int i = 1; i <= 3; i++)
-                                {
-                                    kickoffMeetings.Add(new KickoffMeeting
-                                    {
-                                        GanttID = gantt.GanttID,
-                                        MeetingSummary = $"Kickoff Meeting {i} for Gantt {gantt.GanttID}",
-                                        MeetingDate = new DateOnly(2024, rnd.Next(1, 12), rnd.Next(1, 28))
-                                    });
-                                }
-                            }
-
-                            context.KickoffMeetings.AddRange(kickoffMeetings);
-                            context.SaveChanges();
-
-                        }
-                        else
-                        {
-                            Console.WriteLine("There are already kom on the database");
-                        }
-
-                        if (!context.Milestones.Any())
-                        {
-                            var kickoffMeetings = context.KickoffMeetings.ToList();
-                            List<Milestone> milestones = new();
-                            
-                            foreach (var kom in kickoffMeetings)
-                            {
-                                for (int i = 0; i < 10; i++)
-                                {
-                                    milestones.Add(new Milestone
-                                    {
-                                        KickOfMeetingID = kom.MeetingID,
-                                        Name = (Task)(i % Enum.GetValues(typeof(Task)).Length), // Assigning an enum task
-                                        StartDate = DateTime.UtcNow.AddDays(i),
-                                        EndDate = DateTime.UtcNow.AddDays(i + 5),
-                                        ActualCompletionDate = DateTime.UtcNow.AddDays(i + 7),
-                                        Status = (Status)(i % Enum.GetValues(typeof(Status)).Length)
-                                    });
-                                }
-                            }
-                            context.Milestones.AddRange(milestones);
-                            context.SaveChanges();
-                        }
 
                     }
                     catch (Exception ex)

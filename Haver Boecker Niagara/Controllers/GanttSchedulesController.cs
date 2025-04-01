@@ -6,6 +6,7 @@ using Haver_Boecker_Niagara.Models;
 using Haver_Boecker_Niagara.Utilities;
 using Haver_Boecker_Niagara.CustomControllers;
 using Microsoft.AspNetCore.Authorization;
+using Haver_Boecker_Niagara.Future_Models;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -175,7 +176,62 @@ namespace Haver_Boecker_Niagara.Controllers
             return RedirectToAction("Details", new {ID = redirectID});
         }
         [Authorize(Roles = "Admin,Sales")]
+        [HttpGet]
+        public async Task<IActionResult> GetTasks()
+        {
+            var tasks = await _context.GanttSchedules
+                .Include(g => g.KickoffMeetings)
+                .ThenInclude(k => k.Milestones)
+                .SelectMany(g => g.KickoffMeetings.SelectMany(km => km.Milestones.Select(m => new
+                {
+                    id = m.MilestoneID,
+                    name = m.Name.ToString(),
+                    start = m.StartDate.HasValue ? m.StartDate.Value.ToString("yyyy-MM-dd") : "N/A",
+                    end = m.EndDate.HasValue ? m.EndDate.Value.ToString("yyyy-MM-dd") : "N/A", 
+                    progress = m.Status == Status.Closed ? 100 : 0
+                })))
+                .ToListAsync();
 
+            return Json(tasks);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateTask([FromBody] TaskUpdateModel model)
+        {
+            if (model == null)
+            {
+                return BadRequest("Invalid task data.");
+            }
+
+            var milestone = await _context.Milestones.FindAsync(model.ID);
+            if (milestone == null)
+            {
+                return NotFound();
+            }
+
+            milestone.StartDate = DateTime.Parse(model.StartDate);
+            milestone.EndDate = DateTime.Parse(model.EndDate);
+            milestone.Status = model.Progress == 100 ? Status.Closed : Status.Open; 
+
+            try
+            {
+                _context.Update(milestone);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Milestones.Any(e => e.MilestoneID == milestone.MilestoneID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Json(new { success = true });
+        }
         public async Task<IActionResult> GetMilestoneModal(int id)
         {
             return PartialView("_milestoneModal", new Milestone {KickOfMeetingID = id});
