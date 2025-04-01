@@ -350,7 +350,7 @@ body {
     background-color: rgba(0, 47, 95, 0.05);
     padding: 20px;
     border-radius: 10px;
-    margin-top: 5%;
+    margin-top: 3%;
     box-shadow: 6px 8px 10px rgba(0, 0, 0, 0.4);
     box-sizing: border-box;
     display: flex;
@@ -1034,6 +1034,9 @@ table-layout: fixed;
     background-color: lightgray;
 }*/
 /*Percentiles*/
+.logo-login{
+    width: 13rem;
+}
 .one-percentil {
     left: 1%;
     top: -10px;

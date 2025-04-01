@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.IdentityMigration
+namespace Haver_Boecker_Niagara.Data.IdentotyMigration
 {
     /// <inheritdoc />
     public partial class Identity : Migration
