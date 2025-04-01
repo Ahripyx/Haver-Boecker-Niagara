@@ -14,10 +14,11 @@ namespace Haver_Boecker_Niagara.Controllers
     public class AccountController : ElephantController
     {
         private readonly UserManager<IdentityUser> _userManager;
-
-        public AccountController(UserManager<IdentityUser> userManager)
+        private readonly ILogger<AccountController> _logger;
+        public AccountController(UserManager<IdentityUser> userManager, ILogger<AccountController> logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index(string? searchName, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Username")
@@ -71,7 +72,48 @@ namespace Haver_Boecker_Niagara.Controllers
 
             return View(pagedData);
         }
+        
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(AccountVM model)
+        {
 
+            if (!ModelState.IsValid)
+            {
+   
+                return View(model);
+            }
+
+            var user = new IdentityUser { UserName = model.UserName, Email = model.Email, EmailConfirmed = true };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+
+            if (result.Succeeded)
+            {
+                
+                await _userManager.AddToRoleAsync(user, model.RoleName);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    Console.WriteLine(error.Description);
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+     
+            return View(model);
+
+        }
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
