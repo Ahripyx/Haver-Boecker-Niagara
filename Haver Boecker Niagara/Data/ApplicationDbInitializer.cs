@@ -23,6 +23,8 @@ namespace Haver_Boecker_Niagara.Data
 
             string[] roleNames = { "Admin", "Sales", "Engineering", "Procurement", "Production", "PIC", "Read Only" };
 
+
+
             
             #region Seed Roles
             if (SeedSampleData)
