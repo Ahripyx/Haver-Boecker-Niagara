@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    [Authorize(Roles = "admin")]
 
     public class CustomersController : ElephantController
     {
@@ -23,7 +22,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
         [Authorize(Roles = "admin,sales,read only")]
 
-        public async Task<IActionResult> Index(string? searchName, string? searchContact, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
+        public async Task<IActionResult> Index(string? searchName, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Name")
         {
             string[] sortOptions = { "Name", "ContactPerson", "PhoneNumber", "Email", "Address", "City", "State", "Country", "PostalCode" };
             ViewData["Filtering"] = "btn-outline-secondary";
@@ -34,27 +33,6 @@ namespace Haver_Boecker_Niagara.Controllers
             if (!string.IsNullOrEmpty(searchName))
             {
                 customers = customers.Where(c => EF.Functions.Like(c.Name, $"%{searchName}%"));
-                filterCount++;
-            }
-            if (!string.IsNullOrEmpty(searchContact))
-            {
-                var nameParts = searchContact.Split(' ');
-
-                if (nameParts.Length == 1)
-                {
-                    customers = customers.Where(c => EF.Functions.Like(c.ContactFirstName, $"%{searchContact}%")
-                                                  || EF.Functions.Like(c.ContactLastName, $"%{searchContact}%"));
-                }
-                else if (nameParts.Length >= 2)
-                {
-                    customers = customers.Where(c => EF.Functions.Like(c.ContactFirstName, $"%{nameParts[0]}%")
-                                                  && EF.Functions.Like(c.ContactLastName, $"%{nameParts[1]}%"));
-                }
-                filterCount++;
-            }
-            if (!string.IsNullOrEmpty(searchEmail))
-            {
-                customers = customers.Where(c => EF.Functions.Like(c.Email, $"%{searchEmail}%"));
                 filterCount++;
             }
 
@@ -78,10 +56,6 @@ namespace Haver_Boecker_Niagara.Controllers
             customers = sortField switch
             {
                 "Name" => sortDirection == "asc" ? customers.OrderBy(c => c.Name) : customers.OrderByDescending(c => c.Name),
-                "ContactPerson" => sortDirection == "asc"
-                    ? customers.OrderBy(c => c.ContactFirstName).ThenBy(c => c.ContactLastName)
-                    : customers.OrderByDescending(c => c.ContactFirstName).ThenByDescending(c => c.ContactLastName),
-                "Email" => sortDirection == "asc" ? customers.OrderBy(c => c.Email) : customers.OrderByDescending(c => c.Email),
                 _ => sortDirection == "asc" ? customers.OrderBy(c => c.Name) : customers.OrderByDescending(c => c.Name),
             };
 

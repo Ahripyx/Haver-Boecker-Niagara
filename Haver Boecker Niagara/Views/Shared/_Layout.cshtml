@@ -29,8 +29,7 @@
                 </div>
 
                 <div class="navbar col dropdown">
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
-                    {
+                    
                         <button style="box-shadow: none !important" type="button"
                                 class="btn text-white dropdown-toggle" data-bs-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false"
@@ -42,12 +41,18 @@
                         <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
 
                             <ul class="d-flex flex-column text-nowrap ps-0 mb-0 pb-0">
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                            {
                                 <li class="dropdown-item">
                                     <a class="nav-link text-black" asp-area="" asp-controller="PurchaseOrders" asp-action="Index">Purchase Orders</a>
                                 </li>
+                            }
                                 <li class="dropdown-item">
                                     <a class="nav-link text-black" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
                                 </li>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("admin")){
+
+                            
                                 <li class="dropdown-item">
                                     <a class="nav-link text-black" asp-area="" asp-controller="Engineers" asp-action="Index">Engineers</a>
                                 </li>
@@ -62,7 +67,7 @@
                                 <li class="dropdown-item">
                                     <a class="nav-link text-black" asp-area="" asp-controller="Account" asp-action="Index">Users</a>
                                 </li>
-
+                            }
 
                             </ul>
                         </div>
