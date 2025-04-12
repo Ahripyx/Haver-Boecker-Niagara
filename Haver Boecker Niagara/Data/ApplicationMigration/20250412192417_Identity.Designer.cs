@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Haver_Boecker_Niagara.Data.ApplicationMigration
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250412190708_Identity")]
+    [Migration("20250412192417_Identity")]
     partial class Identity
     {
         /// <inheritdoc />
