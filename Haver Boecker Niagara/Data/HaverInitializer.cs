@@ -1,4 +1,4 @@
-﻿using Haver_Boecker_Niagara.Models;
+using Haver_Boecker_Niagara.Models;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -280,8 +280,42 @@ namespace Haver_Boecker_Niagara.Data
                         }
                         context.SaveChanges();
 
-                      
+                        if (!context.KickoffMeetings.Any())
+                        {
+                            var gantts = context.GanttSchedules.ToList();
 
+                            if (!gantts.Any())
+                            {
+                                Console.WriteLine(" There is any gantt schedules on the database");
+                                return;
+                            }
+
+                            List<KickoffMeeting> kickoffMeetings = new();
+                            Random rnd = new();
+
+                            foreach (var gantt in gantts)
+                            {
+
+
+                                for (int i = 1; i <= 3; i++)
+                                {
+                                    kickoffMeetings.Add(new KickoffMeeting
+                                    {
+                                        GanttID = gantt.GanttID,
+                                        MeetingSummary = $"Kickoff Meeting {i} for Gantt {gantt.GanttID}",
+                                        MeetingDate = new DateOnly(2024, rnd.Next(1, 12), rnd.Next(1, 28))
+                                    });
+                                }
+                            }
+
+                            context.KickoffMeetings.AddRange(kickoffMeetings);
+                            context.SaveChanges();
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("There are already kom on the database");
+                        }
 
                     }
                     catch (Exception ex)

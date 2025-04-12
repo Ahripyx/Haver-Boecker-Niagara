@@ -175,62 +175,90 @@ namespace Haver_Boecker_Niagara.Controllers
             var redirectID = _context.KickoffMeetings.Find(milestone.KickOfMeetingID).GanttID;
             return RedirectToAction("Details", new {ID = redirectID});
         }
-        [Authorize(Roles = "Admin,Sales")]
+        [Authorize(Roles = "admin,production")]
         [HttpGet]
-        public async Task<IActionResult> GetTasks()
+        [Produces("application/json")]
+        [Route("GanttSchedules/GetTasks/{id}")] 
+        public async Task<IActionResult> GetTasks(int id)
         {
-            var tasks = await _context.GanttSchedules
-                .Include(g => g.KickoffMeetings)
-                .ThenInclude(k => k.Milestones)
-                .SelectMany(g => g.KickoffMeetings.SelectMany(km => km.Milestones.Select(m => new
-                {
-                    id = m.MilestoneID,
-                    name = m.Name.ToString(),
-                    start = m.StartDate.HasValue ? m.StartDate.Value.ToString("yyyy-MM-dd") : "N/A",
-                    end = m.EndDate.HasValue ? m.EndDate.Value.ToString("yyyy-MM-dd") : "N/A", 
-                    progress = m.Status == Status.Closed ? 100 : 0
-                })))
-                .ToListAsync();
+            try
+            {
+                // Verify access to the schedule
+                var hasAccess = await _context.GanttSchedules
+                    .AnyAsync(g => g.GanttID == id);
 
-            return Json(tasks);
+                if (!hasAccess)
+                {
+                    Response.ContentType = "application/json";
+                    return Json(new { error = "Access denied" });
+                }
+
+                // Get tasks with null checks
+                var tasks = await _context.GanttSchedules
+                    .Where(g => g.GanttID == id)
+                    .SelectMany(g => g.KickoffMeetings)
+                    .SelectMany(km => km.Milestones)
+                    .Select(m => new
+                    {
+                        id = m.MilestoneID,
+                        name = m.Name.ToString(),
+                        start = m.StartDate.HasValue ?
+                    m.StartDate.Value.ToString("yyyy-MM-dd") :
+                    DateTime.Today.ToString("yyyy-MM-dd"),
+                        end = m.EndDate.HasValue ?
+                    m.EndDate.Value.ToString("yyyy-MM-dd") :
+                    DateTime.Today.AddDays(7).ToString("yyyy-MM-dd"),
+                        progress = m.Status == Status.Closed ? 100 : 0,
+                        dependencies = ""
+                    })
+                    .ToListAsync();
+
+                Response.ContentType = "application/json";
+                return Json(tasks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Internal server error" });
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateTask([FromBody] TaskUpdateModel model)
+        public async Task<IActionResult> UpdateTask(TaskUpdateModel model)
         {
-            if (model == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid task data.");
+                return BadRequest(ModelState);
             }
-
-            var milestone = await _context.Milestones.FindAsync(model.ID);
-            if (milestone == null)
-            {
-                return NotFound();
-            }
-
-            milestone.StartDate = DateTime.Parse(model.StartDate);
-            milestone.EndDate = DateTime.Parse(model.EndDate);
-            milestone.Status = model.Progress == 100 ? Status.Closed : Status.Open; 
 
             try
             {
+                var milestone = await _context.Milestones.FindAsync(model.ID);
+                if (milestone == null)
+                {
+                    return NotFound($"Milestone with ID {model.ID} not found");
+                }
+
+                if (DateTime.TryParse(model.StartDate, out var startDate))
+                {
+                    milestone.StartDate = startDate;
+                }
+
+                if (DateTime.TryParse(model.EndDate, out var endDate))
+                {
+                    milestone.EndDate = endDate;
+                }
+
+                milestone.Status = model.Progress >= 100 ? Status.Closed : Status.Open;
+
                 _context.Update(milestone);
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Milestones.Any(e => e.MilestoneID == milestone.MilestoneID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return Json(new { success = true });
+                return Json(new { success = true, message = "Task updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error updating task: {ex.Message}");
+            }
         }
         public async Task<IActionResult> GetMilestoneModal(int id)
         {
