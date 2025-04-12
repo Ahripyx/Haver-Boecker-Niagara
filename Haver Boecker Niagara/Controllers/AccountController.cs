@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Haver_Boecker_Niagara.Utilities;
 using Haver_Boecker_Niagara.CustomControllers;
 using Haver_Boecker_Niagara.Models;
+using Haver_Boecker_Niagara.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
@@ -14,11 +16,13 @@ namespace Haver_Boecker_Niagara.Controllers
     public class AccountController : ElephantController
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<AccountController> _logger;
-        public AccountController(UserManager<IdentityUser> userManager, ILogger<AccountController> logger)
+        public AccountController(UserManager<IdentityUser> userManager, ILogger<AccountController> logger, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index(string? searchName, string? searchEmail, int? page, int? pageSizeID, string? actionButton, string sortDirection = "asc", string sortField = "Username")
@@ -122,63 +126,73 @@ namespace Haver_Boecker_Niagara.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(id);
+            var roles = await _userManager.GetRolesAsync(user);
+            var allRoles = _roleManager.Roles.Select(r => new SelectListItem
+            {
+                Text = r.Name,
+                Value = r.Name
+            }).ToList();
+
+            var viewModel = new EditUsersViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                SelectedRoles = roles.ToList(),
+                AvailableRoles = allRoles
+            };
             if (user == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Email,UserName")] IdentityUser user)
+        public async Task<IActionResult> Edit(EditUsersViewModel model)
         {
-            if (id != user.Id)
+            if (model.Id == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                var existingUser = await _userManager.FindByIdAsync(id);
-                if (existingUser == null)
-                {
-                    return NotFound();
-                }
-
-                existingUser.Email = user.Email;
-                existingUser.UserName = user.UserName;
-
-                var result = await _userManager.UpdateAsync(existingUser);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-            }
-            return View(user);
-        }
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+           
+            user.Email = model.Email;
+            user.UserName = model.UserName;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+               
+                model.AvailableRoles = _roleManager.Roles.Select(r => new SelectListItem
+                {
+                    Text = r.Name,
+                    Value = r.Name
+                }).ToList();
+
+                return View(model);
+            }
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            var rolesToAdd = model.SelectedRoles ?? new List<string>();
+
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            await _userManager.AddToRolesAsync(user, rolesToAdd);
+
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(string id)
