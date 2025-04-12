@@ -11,7 +11,6 @@ namespace Haver_Boecker_Niagara.Models
 
         [Required]
         [DisplayName("Meeting Summary")]
-        [MinLength(10, ErrorMessage = "Meeting Summary must be at least 10 characters long.")]
         [MaxLength(250, ErrorMessage = "Meeting Summary cannot be longer than 250 characters.")]
         public string MeetingSummary { get; set; }
         public DateOnly MeetingDate { get; set; }
