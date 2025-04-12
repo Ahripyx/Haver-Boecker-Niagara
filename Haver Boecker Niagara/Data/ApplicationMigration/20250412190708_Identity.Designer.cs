@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.ApplicationMigrations
+namespace Haver_Boecker_Niagara.Data.ApplicationMigration
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250401004848_Second")]
-    partial class Second
+    [Migration("20250412190708_Identity")]
+    partial class Identity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

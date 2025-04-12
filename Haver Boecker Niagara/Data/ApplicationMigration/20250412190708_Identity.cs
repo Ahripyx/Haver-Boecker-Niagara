@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.ApplicationMigrations
+namespace Haver_Boecker_Niagara.Data.ApplicationMigration
 {
     /// <inheritdoc />
-    public partial class Second : Migration
+    public partial class Identity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
