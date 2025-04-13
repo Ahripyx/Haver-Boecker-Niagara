@@ -21,7 +21,7 @@ namespace Haver_Boecker_Niagara.Models {
         public bool NamePlateStatus { get; set; } = false;
 
         [DisplayName("Size")]
-        public int MachineSize { get; set; }
+        public string MachineSize { get; set; }
 
         [Required]
         [DisplayName("Class")]
