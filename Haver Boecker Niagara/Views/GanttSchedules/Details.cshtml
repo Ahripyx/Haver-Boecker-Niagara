@@ -138,21 +138,21 @@
         <button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#komModal">
             + Create Kickoff Meeting
         </button>
-        int i = 0;
-        <div class="timeline">
-            @foreach (var Kom in Model.KickoffMeetings)
-            {
-                i++;
+
+        var latestKickoffMeeting = Model.KickoffMeetings.OrderByDescending(k => k.MeetingDate).FirstOrDefault();
+        @if (latestKickoffMeeting != null)
+        {
+            <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-content justify-content-between d-flex">
-                        <span class="my-auto"><strong>Kickoff Meeting @i:</strong> @(Kom.Milestones?.Count ?? 0) Milestones</span>
-                        <button type="button" value="@Kom.MeetingID" class="addMilestoneBtn btn btn-success mt-3">
+                        <span class="my-auto"><strong>Kickoff Meeting:</strong> @(latestKickoffMeeting.Milestones?.Count ?? 0) Milestones</span>
+                        <button type="button" value="@latestKickoffMeeting.MeetingID" class="addMilestoneBtn btn btn-success mt-3">
                             + Add Milestone
                         </button>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     }
 
     <div class="d-flex justify-content-between">
@@ -163,13 +163,15 @@
         }
     </div>
     <div class="timeline">
-        <div class="timeline-item">
-            <div class="timeline-dot milestone-dot @(ViewData["MilestoneStatus"] != null && (Status)ViewData["MilestoneStatus"] == Status.Open ? "status-open" : "status-closed")">
+        @foreach (var milestone in validMilestones ?? new List<Haver_Boecker_Niagara.Models.Milestone>())
+        {
+            <div class="timeline-item">
+                <div class="timeline-dot milestone-dot @(milestone.Status == Haver_Boecker_Niagara.Models.Status.Open ? "status-open" : "status-closed")"></div>
+                <div class="timeline-content">
+                    <strong>@milestone.Name:</strong> @milestone.Status - @(milestone.EndDate?.ToString("dddd, MMM dd yyyy") ?? "N/A")
+                </div>
             </div>
-            <div class="timeline-content">
-                <strong>Latest Milestone:</strong> @Model.LatestMilestone
-            </div>
-        </div>
+        }
     </div>
 </div>
 

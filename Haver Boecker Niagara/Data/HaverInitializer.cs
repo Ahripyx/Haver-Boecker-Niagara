@@ -170,6 +170,11 @@ namespace Haver_Boecker_Niagara.Data
                                     "Ensure that all assembly steps are followed as per the provided guidelines to maintain quality standards."
                                 };
 
+                            string[] machineSizes = {
+                                    "3' X 4'", "4' X 5'", "5' X 6'", "6' X 7'", "7' X 8'",
+                                    "8' X 9'", "9' X 10'", "10' X 11'", "11' X 12'", "12' X 13'"
+                                };
+
                             Random rnd = new Random();
 
                             for (int i = 1; i <= 30; i++)
@@ -177,7 +182,7 @@ namespace Haver_Boecker_Niagara.Data
                                 context.Machines.Add(new Machine
                                 {
                                     SerialNumber = $"SN-{1000 + i}",
-                                    MachineSize = 300 + (i * 10),
+                                    MachineSize = machineSizes[rnd.Next(machineSizes.Length)],
                                     MachineClass = "T",
                                     MachineSizeDesc = $"Size {i}",
                                     InternalPONumber = $"PO-{2000 + i}",

@@ -47,7 +47,7 @@ namespace Haver_Boecker_Niagara.Controllers
                 .OrderBy(g => g.Size)
                 .ToList();
             var totalMachines = _context.Machines.Count();
-            var machineSizes = new Dictionary<int, int>();
+            var machineSizes = new Dictionary<string, int>();
             foreach (var i in machineBySize)
             {
                 machineSizes[i.Size] = i.Count;
