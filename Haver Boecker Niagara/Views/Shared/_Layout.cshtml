@@ -41,7 +41,8 @@
                         <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
 
                             <ul class="d-flex flex-column text-nowrap ps-0 mb-0 pb-0">
-                            @if (User.Identity.IsAuthenticated && User.IsInRole("admin")){
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("admin") || User.IsInRole("procurement") || User.IsInRole("pic") || User.IsInRole("read only"))
+                            {
                                 <li class="dropdown-item">
                                     <a class="nav-link text-black" asp-area="" asp-controller="PurchaseOrders" asp-action="Index">Purchase Orders</a>
                                 </li>
