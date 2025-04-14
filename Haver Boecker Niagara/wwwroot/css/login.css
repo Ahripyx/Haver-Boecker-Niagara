@@ -3,16 +3,17 @@
     background-color: #f8f9fa;
     margin: 0;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     min-height: 100vh;
 }
+
 h2 {
     font-size: large;
 }
 
 input {
     border-radius: 0.5rem;
-    background-color: #eef2f3; 
+    background-color: #eef2f3;
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
@@ -26,7 +27,7 @@ input {
     }
 
 main {
-    flex: 1; 
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,7 +37,7 @@ main {
     background: #ffffff;
     padding: 2rem;
     border-radius: 1rem;
-    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2); 
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
     width: fit-content;
     min-width: 350px;
 }
@@ -93,10 +94,13 @@ main {
         text-decoration: underline;
     }
 
-#footerContainer{
+#footerContainer {
     display: none !important;
 }
 
-.hide{
+.hide {
     display: none !important;
+}
+logo-login {
+    width: 14rem;
 }

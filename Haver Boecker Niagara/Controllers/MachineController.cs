@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin, engineering, production, pic, read only")]
 
     public class MachineController : ElephantController
     {
@@ -25,7 +25,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine
-        [Authorize(Roles = "admin, engineering")]
+        [Authorize(Roles = "admin, engineering, production, pic, read only")]
         public async Task<IActionResult> Index
         (
             int? pageSizeID, 
@@ -110,7 +110,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine/Details/5
-        [Authorize(Roles = "admin, production, pic, engineering")]
+        [Authorize(Roles = "admin, engineering, production, pic, read only")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -157,7 +157,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine/Edit/5
-        [Authorize(Roles = "admin, production, pic, Read Only")]
+        [Authorize(Roles = "admin, production, pic")]
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -212,7 +212,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine/Delete/5
-        [Authorize(Roles = "Admin, Production")]
+        [Authorize(Roles = "admin, production")]
 
         public async Task<IActionResult> Delete(int? id)
         {
@@ -234,7 +234,7 @@ namespace Haver_Boecker_Niagara.Controllers
         // POST: Machine/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Production")]
+        [Authorize(Roles = "admin, production")]
 
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

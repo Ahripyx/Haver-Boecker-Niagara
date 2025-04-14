@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,sales,production")]
     public class VendorsController : ElephantController
     {
         private readonly HaverContext _context;

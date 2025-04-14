@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Haver_Boecker_Niagara.Controllers
 {
-    [Authorize(Roles = "admin,sales")]
+    [Authorize(Roles = "admin,sales,engineering,procurement ,production ,pic  ,read only")]
     public class SalesOrdersController : ElephantController
     {
         private readonly HaverContext _context;
@@ -30,7 +30,7 @@ namespace Haver_Boecker_Niagara.Controllers
         {
             _context = context;
         }
-        [Authorize(Roles = "admin,sales,Engineering,Procurement ,Production ,PIC  ,Read Only")]
+        [Authorize(Roles = "admin,sales,engineering,procurement ,production ,pic  ,read only")]
         public async Task<IActionResult> Index(
             string? searchOrderNo,
             string? searchCustomer,
@@ -116,7 +116,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
 
-        [Authorize(Roles = "admin,sales,Engineering,Procurement ,Production ,PIC  ,Read Only")]
+        [Authorize(Roles = "admin,sales,engineering,procurement ,production ,pic  ,read only")]
 
         public async Task<IActionResult> Details(int? id)
         {

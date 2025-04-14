@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit Engineering Package</h1>
+<h1>Engineering Package Edit</h1>
 <hr />
 <div class="p-4 shadow-sm card-container">
     <form asp-action="Edit">
@@ -50,7 +50,7 @@
         <div class="d-flex justify-content-end gap-2 mt-4">
             <a asp-action="Details" asp-controller="SalesOrders" asp-route-id="@ViewBag.SalesOrderID" class="btn btn-primary-close">Close</a>
             <button type="reset" class="btn btn-primary-close">Reset</button>
-            <button type="submit" value="Edit" class="btn btn-primary btn-edit" id="btnEdit">Edit</button>
+            <button type="submit" value="Edit" class="btn btn-primary btn-edit" id="btnEdit">Save</button>
         </div>
         
     </form>

@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Haver_Boecker_Niagara.Data.ApplicationMigration
+namespace Haver_Boecker_Niagara.Data.IdentityMigrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250412192417_Identity")]
+    [Migration("20250414153947_Identity")]
     partial class Identity
     {
         /// <inheritdoc />

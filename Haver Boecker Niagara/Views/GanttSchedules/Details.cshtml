@@ -1,4 +1,4 @@
-﻿@model Haver_Boecker_Niagara.Models.GanttSchedule
+@model Haver_Boecker_Niagara.Models.GanttSchedule
 @{
     ViewData["Title"] = "Gantt Schedule Details";
 }
@@ -28,6 +28,7 @@
         </div>
     </div>
 </div>
+
 <div class="p-4 shadow-sm card-container mb-3">
     <h4>Schedule Details</h4>
     <hr />
@@ -96,9 +97,9 @@
     <hr />
     @{
         var validMilestones = Model.EngineeringOnly
-        ? Model.KickoffMeetings?.SelectMany(k => k.Milestones)
-        .Where(m => m.Name == Haver_Boecker_Niagara.Models.Task.EngineeringPackage).ToList()
-        : Model.KickoffMeetings?.SelectMany(k => k.Milestones).ToList();
+            ? Model.KickoffMeetings?.SelectMany(k => k.Milestones)
+            .Where(m => m.Name == Haver_Boecker_Niagara.Models.Task.EngineeringPackage).ToList()
+            : Model.KickoffMeetings?.SelectMany(k => k.Milestones).ToList();
         var totalMilestones = validMilestones?.Count ?? 0;
         var completedMilestones = validMilestones?.Count(m => m.Status == Haver_Boecker_Niagara.Models.Status.Closed) ?? 0;
         var progressPercentage = totalMilestones > 0 ? (completedMilestones * 100) / totalMilestones : 0;
@@ -138,38 +139,40 @@
         <button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#komModal">
             + Create Kickoff Meeting
         </button>
-        int i = 0;
-        <div class="timeline">
-            @foreach (var Kom in Model.KickoffMeetings)
-            {
-                i++;
+
+        var latestKickoffMeeting = Model.KickoffMeetings.OrderByDescending(k => k.MeetingDate).FirstOrDefault();
+        @if (latestKickoffMeeting != null)
+        {
+            <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-content justify-content-between d-flex">
-                        <span class="my-auto"><strong>Kickoff Meeting @i:</strong> @(Kom.Milestones?.Count ?? 0) Milestones</span>
-                        <button type="button" value="@Kom.MeetingID" class="addMilestoneBtn btn btn-success mt-3">
+                        <span class="my-auto"><strong>Kickoff Meeting:</strong> @(latestKickoffMeeting.Milestones?.Count ?? 0) Milestones</span>
+                        <button type="button" value="@latestKickoffMeeting.MeetingID" class="addMilestoneBtn btn btn-success mt-3">
                             + Add Milestone
                         </button>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     }
 
     <div class="d-flex justify-content-between">
         @foreach (var milestone in validMilestones ?? new List<Haver_Boecker_Niagara.Models.Milestone>())
         {
             var isCompleted = milestone.Status == Haver_Boecker_Niagara.Models.Status.Closed;
-            <div class="@(isCompleted ? "completed" : "pending")" title="@milestone.Name"></div>
+           @*  <div class="@(isCompleted ? "completed" : "pending")" title="@milestone.Name"></div> *@
         }
     </div>
     <div class="timeline">
-        <div class="timeline-item">
-            <div class="timeline-dot milestone-dot @(ViewData["MilestoneStatus"] != null && (Status)ViewData["MilestoneStatus"] == Status.Open ? "status-open" : "status-closed")">
+        @foreach (var milestone in validMilestones ?? new List<Haver_Boecker_Niagara.Models.Milestone>())
+        {
+            <div class="timeline-item">
+                <div class="timeline-dot milestone-dot @(milestone.Status == Haver_Boecker_Niagara.Models.Status.Open ? "status-open" : "status-closed")"></div>
+                <div class="timeline-content">
+                    <strong>@milestone.Name:</strong> @milestone.Status - @(milestone.EndDate?.ToString("dddd, MMM dd yyyy") ?? "N/A")
+                </div>
             </div>
-            <div class="timeline-content">
-                <strong>Latest Milestone:</strong> @Model.LatestMilestone
-            </div>
-        </div>
+        }
     </div>
 </div>
 
@@ -212,41 +215,40 @@ else
 @section Styles {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/frappe-gantt/0.5.0/frappe-gantt.css">
     <style>
-        .gantt .header-group text {
-            fill: black !important;
+        .gantt .header-group text { fill: black !important; }
+        .gantt .header-group { background-color: white !important; }
+        .bar-wrapper { height: 40px !important; }
+        .timeline-item { margin-bottom: 10px; }
+        .status-open .bar-progress { fill: #ffc107 !important; }
+        .status-closed .bar-progress { fill: #28a745 !important; }
+        .gantt .bar { rx: 3px; ry: 3px; }
+        .gantt .bar-wrapper { cursor: pointer; }
+        .gantt-popup {
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            font-size: 14px;
         }
-
-        .gantt .header-group {
-            background-color: white !important;
-        }
-
-        .bar-wrapper {
-            height: 40px !important;
-        }
-
-        .timeline-item {
-            margin-bottom: 10px;
-        }
-
-        .completed-task .bar-progress {
-            fill: #28a745 !important;
-        }
-
-        .pending-task .bar-progress {
-            fill: #ffc107 !important;
-        }
+        .gantt-popup strong { display: block; margin-bottom: 5px; }
+        .gantt .row { height: 40px !important; }
+        .grid-row, .grid-background { height: 40px !important; }
+        .completed { background-color: #28a745; width: 20px; height: 20px; border-radius: 50%; }
+        .pending { background-color: #ffc107; width: 20px; height: 20px; border-radius: 50%; }
+        .milestone-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .status-open { background-color: #ffc107; }
+        .status-closed { background-color: #28a745; }
     </style>
 }
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/frappe-gantt/0.5.0/frappe-gantt.min.js"></script>
     <script>
         $(document).ready(function () {
             const ganttContainer = document.getElementById("gantt_chart");
             const loader = document.getElementById("gantt_loader");
+            const yOffset = 23;
 
             if (!ganttContainer || !loader) return;
 
@@ -259,54 +261,115 @@ else
                         'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                     }
                 })
-                    .then(response => {
-                        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
-                        const contentType = response.headers.get('content-type');
-                        if (!contentType || !contentType.includes('application/json')) {
-                            return response.text().then(text => { throw new Error(text.substring(0, 100)) });
-                        }
-                        return response.json();
-                    })
-                    .then(tasks => {
-                        if (!tasks || tasks.length === 0) {
-                            loader.innerHTML = `<div class="alert alert-info">No tasks found</div>`;
-                            return;
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) throw new Error("Invalid response format");
+                    return response.json();
+                })
+                .then(tasks => {
+                    if (!tasks || tasks.length === 0) {
+                        loader.innerHTML = `<div class="alert alert-info">No tasks found</div>`;
+                        return;
+                    }
+
+                    const processedTasks = tasks.map(task => ({
+                        ...task,
+                        custom_class: task.progress === 100 ? 'status-closed' : 'status-open',
+                        _row: 0
+                    }));
+
+                    const gantt = new Gantt("#gantt_chart", processedTasks, {
+                        view_mode: 'Day',
+                        on_click: task => console.log(task),
+                        on_date_change: (task, start, end) => updateTask(task, start, end),
+                        on_progress_change: (task, progress) => updateTask(task, null, null, progress),
+                        custom_popup_html: task => `
+                            <div class="gantt-popup">
+                                <strong>${task.name}</strong>
+                                <div>Start: ${task.start}</div>
+                                <div>End: ${task.end}</div>
+                                <div>Status: ${task.progress === 100 ? 'Closed' : 'Open'}</div>
+                            </div>
+                        `
+                    });
+
+                    setTimeout(() => {
+                        function applyYOffset(el, offset) {
+                            const tag = el.tagName.toLowerCase();
+                            if (tag === "rect" || tag === "polygon") {
+                                if (tag === "rect") {
+                                    el.setAttribute("y", offset);
+                                } else {
+                                    let points = el.getAttribute("points");
+                                    if (points) {
+                                        el.setAttribute("points", points.split(" ").map(p => {
+                                            let [x, y] = p.split(",").map(Number);
+                                            return `${x},${y + offset}`;
+                                        }).join(" "));
+                                    }
+                                }
+                            } else if (tag === "g") {
+                                el.setAttribute("transform", `translate(0, ${offset})`);
+                            } else {
+                                el.style.transform = `translateY(${offset}px)`;
+                            }
                         }
 
-                        const gantt = new Gantt("#gantt_chart", tasks.map(task => ({
-                            id: task.id,
-                            name: task.name,
-                            start: task.start,
-                            end: task.end,
-                            progress: task.progress || 0,
-                            custom_class: task.progress === 100 ? 'completed-task' : 'pending-task'
-                        })), {
-                            view_mode: 'Day',
-                            custom_popup_html: task => `<b>${task.name}</b><br>Start: ${task.start}<br>End: ${task.end}<br>Progress: ${task.progress}%`
-                        });
+                        document.querySelectorAll(".bar, .bar-progress, .progress-polygon, .bar-label, .bar-wrapper, .handle, g.task")
+                            .forEach(el => applyYOffset(el, yOffset));
+
+                        document.querySelectorAll(".gantt .row, .grid-row, .grid-background")
+                            .forEach(el => el.style.height = "40px");
 
                         loader.style.display = 'none';
                         ganttContainer.style.display = 'block';
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        loader.innerHTML = `<div class="alert alert-danger"><p>${error.message}</p><button onclick="loadGanttChart()" class="btn btn-primary">Try Again</button></div>`;
-                    });
+
+                        const todayMarker = document.querySelector('.today-highlight');
+                        if (todayMarker) todayMarker.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 500);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    loader.innerHTML = `<div class="alert alert-danger"><p>${error.message}</p><button onclick="loadGanttChart()" class="btn btn-primary">Try Again</button></div>`;
+                });
+            }
+
+            function updateTask(task, start, end, progress) {
+                const updatedTask = {
+                    ID: task.id,
+                    Name: task.name,
+                    StartDate: start ? start.toISOString().split('T')[0] : task.start,
+                    EndDate: end ? end.toISOString().split('T')[0] : task.end,
+                    Progress: progress !== null ? progress : task.progress
+                };
+
+                fetch("@Url.Action("UpdateTask", "GanttSchedules")", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify(updatedTask)
+                })
+                .then(response => response.json())
+                .then(data => window.location.reload())
+                .catch(error => console.error("Update error:", error));
             }
 
             loadGanttChart();
 
             document.querySelectorAll("button[class*='addMilestoneBtn']").forEach(btn => {
-                btn.onclick = function () {
+                btn.onclick = function() {
                     $.ajax({
                         url: '@Url.Action("GetMilestoneModal", "GanttSchedules")',
                         type: 'GET',
                         data: { id: this.value },
-                        success: function (data) {
+                        success: function(data) {
                             $("#milestoneModalContainer").html(data);
                             new bootstrap.Modal(document.getElementById('milestoneModal'), { backdrop: 'static' }).show();
                         },
-                        error: function () {
+                        error: function() {
                             alert("Error loading view");
                         }
                     });

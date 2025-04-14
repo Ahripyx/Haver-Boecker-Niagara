@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Haver_Boecker_Niagara.Data.HaverMigrations
 {
     [DbContext(typeof(HaverContext))]
-    [Migration("20250412192406_Initial")]
+    [Migration("20250414153906_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -238,8 +238,9 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MachineSize")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("MachineSize")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MachineSizeDesc")
                         .IsRequired()

@@ -74,7 +74,7 @@ namespace Haver_Boecker_Niagara.Data.HaverMigrations
                     SerialNumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     InternalPONumber = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     NamePlateStatus = table.Column<bool>(type: "INTEGER", nullable: false),
-                    MachineSize = table.Column<int>(type: "INTEGER", nullable: false),
+                    MachineSize = table.Column<string>(type: "TEXT", nullable: false),
                     MachineClass = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     MachineSizeDesc = table.Column<string>(type: "TEXT", nullable: false),
                     Media = table.Column<bool>(type: "INTEGER", nullable: false),
