@@ -57,10 +57,11 @@
                                     <a class="nav-link text-black" asp-area="" asp-controller="Engineers" asp-action="Index">Engineers</a>
                                 </li>
                             }
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("admin") || User.IsInRole("sales") || User.IsInRole("production")){
                                 <li class="dropdown-item">
                                     <a class="nav-link text-black" asp-area="" asp-controller="Vendors" asp-action="Index">Vendors</a>
                                 </li>
-
+                            }
                             @if (User.Identity.IsAuthenticated && User.IsInRole("admin") || User.IsInRole("engineering")){
                                 <li class="dropdown-item">
                                     <a class="nav-link text-black" asp-area="" asp-controller="Machine" asp-action="Index">Machine</a>
