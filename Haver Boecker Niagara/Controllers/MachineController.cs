@@ -25,6 +25,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine
+        [Authorize(Roles = "admin, engineering")]
         public async Task<IActionResult> Index
         (
             int? pageSizeID, 
@@ -109,6 +110,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: Machine/Details/5
+        [Authorize(Roles = "admin, production, pic, engineering")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
