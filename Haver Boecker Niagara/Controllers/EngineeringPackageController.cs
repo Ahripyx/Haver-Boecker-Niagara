@@ -27,7 +27,7 @@ namespace Haver_Boecker_Niagara.Controllers
         }
 
         // GET: EngineeringPackage
-        [Authorize(Roles = "admin, engineering, Read Only")]
+        [Authorize(Roles = "admin, engineering, read only")]
 
         public async Task<IActionResult> Index
         (
@@ -175,7 +175,7 @@ namespace Haver_Boecker_Niagara.Controllers
             return View(pagedData);
         }
 
-        [Authorize(Roles = "admin, engineering, Read Only")]
+        [Authorize(Roles = "admin, engineering, read only")]
 
         public async Task<IActionResult> Details(int? id)
         {
