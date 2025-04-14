@@ -78,7 +78,7 @@ namespace Haver_Boecker_Niagara.Controllers
             var customer = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(m => m.CustomerID == id);
             return customer == null ? NotFound() : View(customer);
         }
-        [Authorize(Roles = "admin,Sales")]
+        [Authorize(Roles = "admin,sales")]
 
         // GET: Customers/Create
         public IActionResult Create() => View();
