@@ -163,6 +163,8 @@
         @foreach (var milestone in validMilestones ?? new List<Haver_Boecker_Niagara.Models.Milestone>())
         {
             var isCompleted = milestone.Status == Haver_Boecker_Niagara.Models.Status.Closed;
+            
+
            @*  <div class="@(isCompleted ? "completed" : "pending")" title="@milestone.Name"></div> *@
         }
     </div>
