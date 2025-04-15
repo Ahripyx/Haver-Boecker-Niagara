@@ -276,7 +276,7 @@ else
                         if (!tasks || tasks.length === 0) {
                             loader.innerHTML = `<div class="alert alert-info">No tasks found</div>`;
                             return;
-                        }a
+                        }
                         const gantt = new Gantt("#gantt_chart", tasks.map(task => ({
                             id: task.id,
                             name: task.name,
