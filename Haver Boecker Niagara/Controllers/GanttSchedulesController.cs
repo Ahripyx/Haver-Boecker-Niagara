@@ -163,10 +163,11 @@ namespace Haver_Boecker_Niagara.Controllers
         }
         [Authorize(Roles = "admin,production")]
 
-        public async Task<IActionResult> CreateMilestone([Bind("Name,KickOfMeetingID,EndDate")] Milestone milestone)
+        public async Task<IActionResult> CreateMilestone([Bind("Name,KickOfMeetingID,EndDate, Status")] Milestone milestone)
         {
+
             milestone.StartDate = DateTime.Today;
-            milestone.Status = Status.Open;
+            //milestone.Status = Status.Open;
             if (ModelState.IsValid)
             {
                 _context.Add(milestone);
