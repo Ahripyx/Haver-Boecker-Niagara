@@ -245,7 +245,6 @@ else
         .status-closed { background-color: #28a745; }
     </style>
 }
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -255,6 +254,7 @@ else
         $(document).ready(function () {
             const ganttContainer = document.getElementById("gantt_chart");
             const loader = document.getElementById("gantt_loader");
+
             if (!ganttContainer || !loader) return;
             function loadGanttChart() {
                 loader.innerHTML = `<div class="text-center"><div class="spinner-border text-primary" role="status"></div><p>Loading Gantt Chart...</p></div>`;
@@ -277,6 +277,10 @@ else
                             loader.innerHTML = `<div class="alert alert-info">No tasks found</div>`;
                             return;
                         }
+                        const earliestStartDate = tasks.reduce((earliest, task) => {
+                            const taskStartDate = new Date(task.start);
+                            return taskStartDate < earliest ? taskStartDate : earliest;
+                        }, new Date(tasks[0].start));
                         const gantt = new Gantt("#gantt_chart", tasks.map(task => ({
                             id: task.id,
                             name: task.name,
@@ -288,6 +292,9 @@ else
                             view_mode: 'Day',
                             custom_popup_html: task => `<b>${task.name}</b><br>Start: ${task.start}<br>End: ${task.end}<br>Progress: ${task.progress}%`
                         });
+                        gantt.change_view_mode('Day'); 
+                        gantt.refresh(earliestStartDate.toISOString().split('T')[0]); 
+
                         loader.style.display = 'none';
                         ganttContainer.style.display = 'block';
                     })
@@ -313,15 +320,17 @@ else
                     });
                 };
             });
+
             document.querySelectorAll(".timeline-item .milestone-dot").forEach(dot => {
                 dot.addEventListener("click", function () {
                     const milestoneName = this.closest(".timeline-item").querySelector(".timeline-content strong").textContent.trim();
-                    const milestoneId = this.dataset.milestoneId;
+                    const milestoneId = this.dataset.milestoneId; 
 
                     if (!milestoneId) {
                         console.error("Milestone ID not found for:", milestoneName);
                         return;
                     }
+
                     fetch("@Url.Action("UpdateMilestoneStatus", "GanttSchedules")", {
                         method: "POST",
                         headers: {
@@ -343,6 +352,8 @@ else
                                 timelineContent.innerHTML = `<strong>${milestoneName}:</strong> Closed - ${new Date().toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}`;
                                 this.classList.remove("status-open");
                                 this.classList.add("status-closed");
+
+                                loadGanttChart();
                             } else {
                                 alert("Failed to update milestone status.");
                             }
