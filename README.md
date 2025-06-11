@@ -3,7 +3,7 @@ This repository is for the __W25 PROG1440 Community Sponsored Project__ and is m
 
 ## BitBusters Team
 
-**Damion Murcell** (Disaster Recovery Manager, Github Manager) \
+**Ahri** (Disaster Recovery Manager, Github Manager) \
 **Denis Petruk** (Scheduler and Team Lead) \
 **Gamaliel Salvador Romualdo Eva** (Presentation Coordinator) \
 **Michael Amyotte** (Azure Hoster)
